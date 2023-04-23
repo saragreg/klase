@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TFG_profes</string>
+    <string name="titulo_inicio">Particular teachers</string>
+    <string name="registro">Register</string>
+    <string name="inicio_sesion">Log In</string>
+    <string name="usuario">User</string>
+    <string name="contra">Password</string>
+    <string name="aceptar">Accept</string>
+    <string name="error">Wrong username or password</string>
+    <string name="nombre">Name</string>
+    <string name="tel">Telephone</string>
+    <string name="galeria">Galery</string>
+    <string name="camara">Camera</string>
+
+</resources>

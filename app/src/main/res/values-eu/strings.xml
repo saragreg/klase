@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TFG_profes</string>
+    <string name="titulo_inicio">Irakasle partikularrak</string>
+    <string name="registro">Erregistroa</string>
+    <string name="inicio_sesion">Saioa Hasi</string>
+    <string name="usuario">Erabiltzaile</string>
+    <string name="contra">Pasahitza</string>
+    <string name="aceptar">Sartu</string>
+    <string name="error">Erabiltzaile-izen edo pasahitz okerra</string>
+    <string name="nombre">Izena</string>
+    <string name="tel">Zenbakia</string>
+    <string name="galeria">Galeria</string>
+    <string name="camara">Kamera</string>
+</resources>
