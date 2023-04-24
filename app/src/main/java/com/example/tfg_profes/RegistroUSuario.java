@@ -1,5 +1,6 @@
 package com.example.tfg_profes;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
@@ -7,10 +8,15 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class RegistroUSuario extends AppCompatActivity {
 
@@ -48,11 +54,44 @@ public class RegistroUSuario extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        return;
+                                    }
+                                    String token = task.getResult();
+                                    System.out.println("el token de la app es:" + token);
+                                    subirToken(token,usuInt);
+
+                                }
+                            });
+
                         }
                     }
                 });
         WorkManager.getInstance(this).enqueue(otwr);
+        Intent intent = new Intent(RegistroUSuario.this, Perfil.class);
+        startActivity(intent);
 
+    }
+
+    public void subirToken(String token, String usu){
+        Data inputData = new Data.Builder()
+                .putString("usuario", usu)
+                .putString("token",token)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDinsertToken.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
 
     }
 }
