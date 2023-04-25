@@ -7,20 +7,11 @@
     tools:context=".Perfil">
 
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="172dp"
-        android:layout_height="148dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/galeria"
         android:layout_width="193dp"
         android:layout_height="68dp"
         android:backgroundTint="@color/boton_gris"
-        android:onClick="onclick_imagen"
         android:text="@string/galeria"
         android:textColor="@color/black"
         android:textSize="20dp"
@@ -28,14 +19,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <Button
         android:id="@+id/camara"
         android:layout_width="193dp"
         android:layout_height="68dp"
         android:backgroundTint="@color/boton_gris"
-        android:onClick="onclick_camara"
         android:text="@string/camara"
         android:textColor="@color/black"
         android:textSize="20dp"
@@ -43,7 +33,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="204dp"
+        android:layout_height="282dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/perfil" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

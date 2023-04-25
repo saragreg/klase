@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 public class Login extends AppCompatActivity {
     private String contraRec="";
+    String usuIntro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity {
     }
     public void onclick_login(View v){
         TextView usu = findViewById(R.id.user);
-        String usuIntro = usu.getText().toString();
+        usuIntro = usu.getText().toString();
         System.out.println("usuario introducido: "+usuIntro);
         TextView contra = findViewById(R.id.contra);
         String contraIntro = contra.getText().toString();
@@ -61,6 +62,7 @@ public class Login extends AppCompatActivity {
                                 error.setText("error de usuario");
                             } else if (contraRec.equals(contraIntro)) {
                                 //se ha logeado correctamente
+                                //enviarnotificacion();
                                 Intent intent = new Intent(Login.this, Perfil.class);
                                 startActivity(intent);
                                 Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
@@ -74,5 +76,23 @@ public class Login extends AppCompatActivity {
         WorkManager.getInstance(this).enqueue(otwr);
 
 
+    }
+
+    private void enviarnotificacion() {
+        Data inputData = new Data.Builder()
+                .putString("usuario",usuIntro)
+                .build();
+
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDmensajes.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
     }
 }
