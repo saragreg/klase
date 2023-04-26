@@ -64,6 +64,7 @@ public class Login extends AppCompatActivity {
                                 //se ha logeado correctamente
                                 //enviarnotificacion();
                                 Intent intent = new Intent(Login.this, Perfil.class);
+                                intent.putExtra("usuario",usuIntro);
                                 startActivity(intent);
                                 Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
                             }else{

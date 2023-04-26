@@ -10,6 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -34,6 +39,7 @@ import com.google.firebase.ktx.Firebase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,16 +57,19 @@ public class Perfil extends AppCompatActivity {
     Button camara,galeria;
     String currentPhotoPath;
     StorageReference storageReference;
+    String usu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
-
+        usu=getIntent().getExtras().getString("usuario");
         selectedImage=findViewById(R.id.imageView4);
+
         camara=findViewById(R.id.camara);
         galeria=findViewById(R.id.galeria);
         storageReference= FirebaseStorage.getInstance().getReference();
+        ponerFotoPerfil(usu);
         camara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,18 +164,18 @@ public class Perfil extends AppCompatActivity {
         if (requestCode == GALLERY_REQUEST_CODE) {
             if(resultCode == this.RESULT_OK){
                 Uri contentUri=data.getData();
-                String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName= "JPEG_"+timeStamp+"."+getFileExt(contentUri);
+                //String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName= "JPEG_"+usu+"."+getFileExt(contentUri);
                 Log.d("tag","gallery url:"+ imageFileName);
                 selectedImage.setImageURI(contentUri);
 
                 //uploadimage
-                uploadImageToFirebase(imageFileName,contentUri);
+                uploadImageToFirebase(imageFileName,contentUri,imageFileName);
             }
         }
     }
 
-    private void uploadImageToFirebase(String name, Uri contentUri){
+    private void uploadImageToFirebase(String name, Uri contentUri,String imageFileName){
         StorageReference image = storageReference.child("images/"+ name);
         image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>(){
             @Override
@@ -175,6 +184,7 @@ public class Perfil extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri){
                         Log.d("tag","uploaded url:"+ uri.toString());
+                        subirUriImagen(imageFileName);
                     }
                 });
                 Toast.makeText(getApplicationContext(), "imagen subida", Toast.LENGTH_SHORT).show();
@@ -187,6 +197,26 @@ public class Perfil extends AppCompatActivity {
             }
         });
     }
+
+    private void subirUriImagen(String uri) {
+
+        Data inputData = new Data.Builder()
+                .putString("usuario", usu)
+                .putString("uri",uri)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDinsertImage.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+
+    }
     //images/image.jpg
 
     private String getFileExt(Uri contentUri){
@@ -197,8 +227,8 @@ public class Perfil extends AppCompatActivity {
 
     private File createImageFile()throws IOException{
         //se crea
-        String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileNAme= "JPEG_"+timeStamp+"_";
+        //String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileNAme= "JPEG_"+usu+"_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         //File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image= File.createTempFile( imageFileNAme,".jpg",storageDir);
@@ -226,5 +256,13 @@ public class Perfil extends AppCompatActivity {
         }
 
     }
+
+    public void ponerFotoPerfil(String usu){
+
+        Picasso.get().load("file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/JPEG_sara_565602794874129914.jpg").into(selectedImage);
+
+    }
+
+
 
 }
