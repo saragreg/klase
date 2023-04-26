@@ -54,7 +54,7 @@ public class Perfil extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE=104;
 
     ImageView selectedImage;
-    Button camara,galeria;
+    Button camara,galeria,comenzar;
     String currentPhotoPath;
     StorageReference storageReference;
     String usu;
@@ -68,8 +68,8 @@ public class Perfil extends AppCompatActivity {
 
         camara=findViewById(R.id.camara);
         galeria=findViewById(R.id.galeria);
+        comenzar=findViewById(R.id.comenzar);
         storageReference= FirebaseStorage.getInstance().getReference();
-        ponerFotoPerfil(usu);
         camara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +83,15 @@ public class Perfil extends AppCompatActivity {
             public void onClick(View view) {
                 Intent gallery=new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(gallery, GALLERY_REQUEST_CODE);
+            }
+        });
+
+        comenzar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Perfil.this, ListaProfesores.class);
+                intent.putExtra("usuario",usu);
+                startActivity(intent);
             }
         });
     }
@@ -170,12 +179,12 @@ public class Perfil extends AppCompatActivity {
                 selectedImage.setImageURI(contentUri);
 
                 //uploadimage
-                uploadImageToFirebase(imageFileName,contentUri,imageFileName);
+                uploadImageToFirebase(imageFileName,contentUri);
             }
         }
     }
 
-    private void uploadImageToFirebase(String name, Uri contentUri,String imageFileName){
+    private void uploadImageToFirebase(String name, Uri contentUri){
         StorageReference image = storageReference.child("images/"+ name);
         image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>(){
             @Override
@@ -184,7 +193,9 @@ public class Perfil extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri){
                         Log.d("tag","uploaded url:"+ uri.toString());
-                        subirUriImagen(imageFileName);
+                        Picasso.get().load(uri).into(selectedImage);
+
+                        //subirUriImagen(imageFileName);
                     }
                 });
                 Toast.makeText(getApplicationContext(), "imagen subida", Toast.LENGTH_SHORT).show();
@@ -257,11 +268,11 @@ public class Perfil extends AppCompatActivity {
 
     }
 
-    public void ponerFotoPerfil(String usu){
+    /*public void ponerFotoPerfil(String usu){
 
         Picasso.get().load("file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/JPEG_sara_565602794874129914.jpg").into(selectedImage);
 
-    }
+    }*/
 
 
 

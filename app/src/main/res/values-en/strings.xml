@@ -10,7 +10,9 @@
     <string name="error">Wrong username or password</string>
     <string name="nombre">Name</string>
     <string name="tel">Telephone</string>
-    <string name="galeria">Galery</string>
+    <string name="galeria">Gallery</string>
     <string name="camara">Camera</string>
+    <string name="perfil">Profile picture of the day</string>
+    <string name="comenzar">start</string>
 
 </resources>
