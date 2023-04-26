@@ -54,28 +54,29 @@ public class RegistroUSuario extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        return;
+                                    }
+                                    String token = task.getResult();
+                                    System.out.println("el token:" + token);
+                                    subirToken(token,usuInt);
+                                    subirProfe(usuInt);
 
+                                }
+                            });
+                            Intent intent = new Intent(RegistroUSuario.this, Menu.class);
+                            intent.putExtra("usuario",usuInt);
+                            startActivity(intent);
                         }else{
                             Toast.makeText(getApplicationContext(), "Usuario no válido", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
         WorkManager.getInstance(this).enqueue(otwr);
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    return;
-                }
-                String token = task.getResult();
-                System.out.println("el token:" + token);
-                subirToken(token,usuInt);
-                subirProfe(usuInt);
 
-            }
-        });
-        Intent intent = new Intent(RegistroUSuario.this, Perfil.class);
-        startActivity(intent);
 
     }
 

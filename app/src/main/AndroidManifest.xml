@@ -26,9 +26,6 @@
         <activity
             android:name=".Menu"
             android:exported="false" />
-        <activity
-            android:name=".InfoProfes"
-            android:exported="false" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

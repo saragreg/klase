@@ -48,7 +48,7 @@ public class AdaptadorProfesLista extends BaseAdapter {
         TextView precio=(TextView) view.findViewById(R.id.precio);
         RatingBar barra= (RatingBar) view.findViewById(R.id.ratingBar);
         nombre.setText(nombres.get(i));
-        precio.setText(precios.get(i));
+        precio.setText(precios.get(i)+"€");
         barra.setRating(Float.parseFloat(puntuaciones.get(i)));
         return view;
     }

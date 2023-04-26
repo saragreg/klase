@@ -4,32 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:scrollbarSize="@android:dimen/app_icon_size">
 
     <TextView
         android:id="@+id/nombre"
-        android:layout_width="236dp"
-        android:layout_height="75dp"
-        android:text="TextView"
-        android:textColor="@android:color/black"
-        android:textSize="20dp"
+        android:layout_width="142dp"
+        android:layout_height="56dp"
         android:gravity="center"
-        />
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/precio"
-        android:layout_width="71dp"
-        android:layout_height="65dp"
+        android:layout_width="75dp"
+        android:layout_height="64dp"
+        android:gravity="center"
         android:text="TextView"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
     <RatingBar
         android:id="@+id/ratingBar"
         style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:numStars="5" />
+        android:numStars="5"
+        android:scrollbarSize="2dp" />
 
 </LinearLayout>
