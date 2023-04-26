@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="236dp"
+        android:layout_height="75dp"
+        android:text="TextView"
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/precio"
+        android:layout_width="71dp"
+        android:layout_height="65dp"
+        android:text="TextView"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:numStars="5" />
+
+</LinearLayout>

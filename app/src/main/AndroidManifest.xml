@@ -23,17 +23,22 @@
         android:theme="@style/Theme.TFG_profes"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Menu"
+            android:exported="false" />
+        <activity
+            android:name=".InfoProfes"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/libro" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:value="#880015"/>
+            android:value="#880015" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="canal por defecto" />
-
 
         <service
             android:name=".ServicioFirebase"
@@ -78,7 +83,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 

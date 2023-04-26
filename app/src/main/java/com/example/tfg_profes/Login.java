@@ -62,8 +62,8 @@ public class Login extends AppCompatActivity {
                                 error.setText("error de usuario");
                             } else if (contraRec.equals(contraIntro)) {
                                 //se ha logeado correctamente
-                                //enviarnotificacion();
-                                Intent intent = new Intent(Login.this, Perfil.class);
+
+                                Intent intent = new Intent(Login.this, Menu.class);
                                 intent.putExtra("usuario",usuIntro);
                                 startActivity(intent);
                                 Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
@@ -79,21 +79,4 @@ public class Login extends AppCompatActivity {
 
     }
 
-    private void enviarnotificacion() {
-        Data inputData = new Data.Builder()
-                .putString("usuario",usuIntro)
-                .build();
-
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDmensajes.class).setInputData(inputData).build();
-        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-
-                        }
-                    }
-                });
-        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
-    }
 }

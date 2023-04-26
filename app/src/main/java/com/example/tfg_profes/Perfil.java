@@ -44,6 +44,8 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Perfil extends AppCompatActivity {
@@ -59,10 +61,12 @@ public class Perfil extends AppCompatActivity {
     StorageReference storageReference;
     String usu;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
+
         usu=getIntent().getExtras().getString("usuario");
         selectedImage=findViewById(R.id.imageView4);
 
@@ -86,14 +90,7 @@ public class Perfil extends AppCompatActivity {
             }
         });
 
-        comenzar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Perfil.this, ListaProfesores.class);
-                intent.putExtra("usuario",usu);
-                startActivity(intent);
-            }
-        });
+
     }
 
     private void askCameraPermissions() {
@@ -273,6 +270,8 @@ public class Perfil extends AppCompatActivity {
         Picasso.get().load("file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/JPEG_sara_565602794874129914.jpg").into(selectedImage);
 
     }*/
+
+
 
 
 

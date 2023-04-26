@@ -55,6 +55,8 @@ public class RegistroUSuario extends AppCompatActivity {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
 
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Usuario no válido", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -68,11 +70,16 @@ public class RegistroUSuario extends AppCompatActivity {
                 String token = task.getResult();
                 System.out.println("el token:" + token);
                 subirToken(token,usuInt);
+                subirProfe(usuInt);
 
             }
         });
         Intent intent = new Intent(RegistroUSuario.this, Perfil.class);
         startActivity(intent);
+
+    }
+
+    private void subirProfe(String usuInt) {
 
     }
 
