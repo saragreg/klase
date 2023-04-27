@@ -18,6 +18,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Login extends AppCompatActivity {
     private String contraRec="";
     String usuIntro;
@@ -67,9 +70,7 @@ public class Login extends AppCompatActivity {
                                 } else if (contraRec.equals(contraIntro)) {
                                     //se ha logeado correctamente
 
-                                    Intent intent = new Intent(Login.this, Menu.class);
-                                    intent.putExtra("usuario", usuIntro);
-                                    startActivity(intent);
+                                    obtenerDatosProfes(usuIntro);
                                     Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
                                 } else {
                                     //la contraseña es incorrecta
@@ -81,6 +82,38 @@ public class Login extends AppCompatActivity {
                     });
             WorkManager.getInstance(this).enqueue(otwr);
         }
+
+    }
+    public void obtenerDatosProfes(String usuInt) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoLista")
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String usuarios = workInfo.getOutputData().getString("usu");
+                            String nombre = workInfo.getOutputData().getString("nombre");
+                            String precio = workInfo.getOutputData().getString("precio");
+                            String punts = workInfo.getOutputData().getString("punt");
+
+
+                            Intent intent = new Intent(Login.this, Menu.class);
+                            intent.putExtra("usuario", usuInt);
+                            intent.putExtra("usus",usuarios);
+                            intent.putExtra("noms",nombre);
+                            intent.putExtra("precios",precio);
+                            intent.putExtra("punt",punts);
+                            startActivity(intent);
+
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
+
 
     }
 

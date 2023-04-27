@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Menu extends AppCompatActivity {
-    ArrayList<String> usus;
-    ArrayList<String> noms;
-    ArrayList<String> precios;
-    ArrayList<String> punt;
+    String usus;
+    String noms;
+    String precios;
+    String punt;
     String usuario;
     ImageButton lisprofes,perfilbtn;
     @Override
@@ -28,16 +28,20 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         usuario=getIntent().getExtras().getString("usuario");
-        obtenerDatosProfes();
+        usus = getIntent().getExtras().getString("usus");
+        noms = getIntent().getExtras().getString("noms");
+        precios = getIntent().getExtras().getString("precios");
+        punt = getIntent().getExtras().getString("punt");
+
         lisprofes=findViewById(R.id.listabtn);
         lisprofes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Menu.this, ListaProfesores.class);
-                intent.putStringArrayListExtra("usus",usus);
-                intent.putStringArrayListExtra("noms",noms);
-                intent.putStringArrayListExtra("precios",precios);
-                intent.putStringArrayListExtra("punt",punt);
+                intent.putExtra("usus",usus);
+                intent.putExtra("noms",noms);
+                intent.putExtra("precios",precios);
+                intent.putExtra("punt",punt);
                 startActivity(intent);
             }
         });
@@ -55,38 +59,5 @@ public class Menu extends AppCompatActivity {
 
     }
 
-    public void obtenerDatosProfes() {
-        Data inputData = new Data.Builder()
-                .putString("tipo", "infoLista")
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            String usuarios = workInfo.getOutputData().getString("usu");
-                            String nombre = workInfo.getOutputData().getString("nombre");
-                            String precio = workInfo.getOutputData().getString("precio");
-                            String punts = workInfo.getOutputData().getString("punt");
 
-                            System.out.println("nombres: "+nombre);
-
-                            String[] arrayu = usuarios.split(",");
-                            String[] arrayn = nombre.split(",");
-                            String[] arrayp = precio.split(",");
-                            String[] arraypp = punts.split(",");
-
-                            usus = new ArrayList<String>(Arrays.asList(arrayu));
-                            noms = new ArrayList<String>(Arrays.asList(arrayn));
-                            precios = new ArrayList<String>(Arrays.asList(arrayp));
-                            punt = new ArrayList<String>(Arrays.asList(arraypp));
-
-                        }
-                    }
-                });
-        WorkManager.getInstance(this).enqueue(otwr);
-
-
-    }
 }

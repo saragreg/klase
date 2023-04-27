@@ -9,10 +9,12 @@ import androidx.work.WorkerParameters;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -34,6 +36,7 @@ public class conexionBDProfes extends Worker {
 
         switch (tipo) {
             case "infoLista":
+
                 infoLista();
                 Data resultados = new Data.Builder()
                         .putString("usu",usua)
@@ -42,10 +45,53 @@ public class conexionBDProfes extends Worker {
                         .putString("punt",punt)
                         .build();
                 return Result.success(resultados);
+            case "insertProf":
+                String usuario=getInputData().getString("usuario");
+                insertProf(usuario);
+                return Result.success();
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void insertProf(String usuario) {
+        String url = URL_BASE + "insert_profe.php";
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuario", usuario);
+
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
 

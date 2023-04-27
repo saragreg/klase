@@ -57,20 +57,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/comenzar"
-        android:layout_width="193dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="84dp"
-        android:backgroundTint="@color/boton_gris"
-        android:onClick="btn_login"
-        android:text="@string/comenzar"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

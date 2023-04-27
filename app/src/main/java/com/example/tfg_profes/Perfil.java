@@ -22,10 +22,14 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -41,7 +45,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,7 +80,6 @@ public class Perfil extends AppCompatActivity {
 
         camara=findViewById(R.id.camara);
         galeria=findViewById(R.id.galeria);
-        comenzar=findViewById(R.id.comenzar);
         storageReference= FirebaseStorage.getInstance().getReference();
         //ponerFotoPerfil(usu);
         camara.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +97,15 @@ public class Perfil extends AppCompatActivity {
                 startActivityForResult(gallery, GALLERY_REQUEST_CODE);
             }
         });
+
+        if (savedInstanceState != null) {
+            String ruta =savedInstanceState.getString("imagen");
+            // Decodificar la cadena Base64 a un array de bytes
+            Bitmap bitmap = BitmapFactory.decodeFile(ruta);
+
+            // Mostrar el Bitmap en un ImageView
+            selectedImage.setImageBitmap(bitmap);
+        }
 
 
     }
@@ -173,8 +187,8 @@ public class Perfil extends AppCompatActivity {
         if (requestCode == GALLERY_REQUEST_CODE) {
             if(resultCode == this.RESULT_OK){
                 Uri contentUri=data.getData();
-                //String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName= "JPEG_"+usu+"."+getFileExt(contentUri);
+                String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName= "JPEG_"+timeStamp+"."+getFileExt(contentUri);
                 Log.d("tag","gallery url:"+ imageFileName);
                 selectedImage.setImageURI(contentUri);
 
@@ -213,6 +227,7 @@ public class Perfil extends AppCompatActivity {
         Data inputData = new Data.Builder()
                 .putString("usuario", usu)
                 .putString("uri",uri)
+                .putString("tipo","insertarImagen")
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDinsertImage.class).setInputData(inputData).build();
         WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
@@ -237,8 +252,8 @@ public class Perfil extends AppCompatActivity {
 
     private File createImageFile()throws IOException{
         //se crea
-        //String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileNAme= "JPEG_"+usu+"_";
+        String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileNAme= "JPEG_"+timeStamp+"_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         //File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image= File.createTempFile( imageFileNAme,".jpg",storageDir);
@@ -267,43 +282,47 @@ public class Perfil extends AppCompatActivity {
 
     }
 
-    public void ponerFotoPerfil(String usu){
 
-        Data inputData = new Data.Builder()
-                .putString("tipo", "fotoPerfil")
-                .putString("usuario",usu)
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDinsertImage.class).setInputData(inputData).build();
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            path =workInfo.getOutputData().getString("uri");
-                            //comprobamos lo que devuelve
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-                            String[] aux1=path.split("/images%2F");
-                            System.out.println("el path que se devuelve es:"+aux1[1]);
-                            String aux2=aux1[1];
-                            System.out.println("el path que se devuelve es:"+aux2);
-                            String[] aux3=aux2.split(".jpg");
-                            System.out.println("el path que se devuelve es:"+aux3[0]);
-                            path_mod=aux3[0]+".jpg";
-                            System.out.println("el path que se devuelve es:"+path_mod);
-                            path="file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/"+path_mod;
-                            System.out.println("final:"+path);
-                        }
-                    }
-                });
-        WorkManager.getInstance(this).enqueue(otwr);
+        // Obtener el drawable del ImageView
+        Drawable drawable = selectedImage.getDrawable();
+
+        // Convertir el drawable a un Bitmap
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+
+        // Codificar el bitmap a una cadena Base64
+        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+        outState.putString("imagen",base64Image);*/
 
 
-        //Picasso.get().load(path).into(selectedImage);
-        //Picasso.get().load("file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/JPEG_sara_8222616006955887770.jpg").into(selectedImage);
+        // Crear un archivo temporal
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("image", ".jpg", getCacheDir());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Guardar el bitmap en el archivo temporal
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Obtener la ruta del archivo temporal
+        String filePath = tempFile.getAbsolutePath();
+        System.out.println(filePath);
+
+        outState.putString("imagen",filePath);
 
     }
-
-
 
 
 

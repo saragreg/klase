@@ -18,6 +18,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RegistroUSuario extends AppCompatActivity {
 
     private String usuario;
@@ -96,6 +99,7 @@ public class RegistroUSuario extends AppCompatActivity {
                             addToken(usuInt);
                             subirProfe(usuInt);
 
+
                         } else {
                             Toast.makeText(getApplicationContext(), "Usuario no válido", Toast.LENGTH_SHORT).show();
                         }
@@ -115,16 +119,27 @@ public class RegistroUSuario extends AppCompatActivity {
                 System.out.println("el token:" + token);
                 subirToken(token, usuInt);
 
-
             }
         });
-        Intent intent = new Intent(RegistroUSuario.this, Menu.class);
-        intent.putExtra("usuario", usuInt);
-        startActivity(intent);
+
     }
 
     private void subirProfe(String usuInt) {
-
+        Data inputData = new Data.Builder()
+                .putString("usuario", usuInt)
+                .putString("tipo","insertProf")
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            obtenerDatosProfes(usuInt);
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
 
     }
 
@@ -144,6 +159,41 @@ public class RegistroUSuario extends AppCompatActivity {
                     }
                 });
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+
+    }
+    public void obtenerDatosProfes(String usuInt) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoLista")
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String usuarios = workInfo.getOutputData().getString("usu");
+                            String nombre = workInfo.getOutputData().getString("nombre");
+                            String precio = workInfo.getOutputData().getString("precio");
+                            String punts = workInfo.getOutputData().getString("punt");
+
+                            System.out.println("nombres: "+nombre);
+
+                            Intent intent = new Intent(RegistroUSuario.this, Menu.class);
+                            intent.putExtra("usuario", usuInt);
+                            intent.putExtra("usus",usuarios);
+                            intent.putExtra("noms",nombre);
+                            intent.putExtra("precios",precio);
+                            intent.putExtra("punt",punts);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                    Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
+
 
     }
 }

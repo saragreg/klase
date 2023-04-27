@@ -26,10 +26,19 @@ public class ListaProfesores extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_profesores);
-        usus = getIntent().getExtras().getStringArrayList("usus");
-        noms = getIntent().getExtras().getStringArrayList("noms");
-        precios = getIntent().getExtras().getStringArrayList("precios");
-        punt = getIntent().getExtras().getStringArrayList("punt");
+        String usuarios = getIntent().getExtras().getString("usus");
+        String nombre = getIntent().getExtras().getString("noms");
+        String precio = getIntent().getExtras().getString("precios");
+        String punts = getIntent().getExtras().getString("punt");
+        String[] arrayu = usuarios.split(",");
+        String[] arrayn = nombre.split(",");
+        String[] arrayp = precio.split(",");
+        String[] arraypp = punts.split(",");
+
+        usus = new ArrayList<String>(Arrays.asList(arrayu));
+        noms = new ArrayList<String>(Arrays.asList(arrayn));
+        precios = new ArrayList<String>(Arrays.asList(arrayp));
+        punt = new ArrayList<String>(Arrays.asList(arraypp));
 
         ListView lisprofes = findViewById(R.id.listView);
         AdaptadorProfesLista eladap = new AdaptadorProfesLista(getApplicationContext(), noms, precios, punt);
@@ -68,8 +77,5 @@ public class ListaProfesores extends AppCompatActivity {
                     }
                 });
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
-    }
-    public void pulsarProfe(View v){
-
     }
 }
