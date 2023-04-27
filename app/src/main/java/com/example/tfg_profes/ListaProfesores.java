@@ -43,7 +43,7 @@ public class ListaProfesores extends AppCompatActivity {
         ListView lisprofes = findViewById(R.id.listView);
         AdaptadorProfesLista eladap = new AdaptadorProfesLista(getApplicationContext(), noms, precios, punt);
         lisprofes.setAdapter(eladap);
-        /*lisprofes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lisprofes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -52,7 +52,7 @@ public class ListaProfesores extends AppCompatActivity {
                 eladap.notifyDataSetChanged();
                 return true;
             }
-        });*/
+        });
         lisprofes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

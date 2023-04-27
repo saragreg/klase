@@ -29,7 +29,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -291,15 +290,6 @@ public class Perfil extends AppCompatActivity {
 
         // Convertir el drawable a un Bitmap
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-
-        // Codificar el bitmap a una cadena Base64
-        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-        outState.putString("imagen",base64Image);*/
-
 
         // Crear un archivo temporal
         File tempFile = null;
