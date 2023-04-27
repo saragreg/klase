@@ -26,6 +26,8 @@ public class conexionBDWebService extends Worker {
     private String URL_BASE = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/";
 
     String contra;
+    private String usuario;
+
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
@@ -44,7 +46,10 @@ public class conexionBDWebService extends Worker {
                 String nom = getInputData().getString("nom");
                 String tel = getInputData().getString("tel");
                 registroUsu(usu,contraReg,nom,tel);
-                break;
+                Data resreg = new Data.Builder()
+                        .putString("res",usuario)
+                        .build();
+                return Result.success(resreg);
             case "login":
                 String usuInt = getInputData().getString("usuario");
                 System.out.println("lo que llega es: "+usuInt);
@@ -57,7 +62,6 @@ public class conexionBDWebService extends Worker {
                 return Result.failure();
         }
 
-        return Result.success();
     }
 
 
@@ -90,6 +94,12 @@ public class conexionBDWebService extends Worker {
                     result += line;
                 }
                 bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    usuario = jsonArray.getJSONObject(i).getString("res");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

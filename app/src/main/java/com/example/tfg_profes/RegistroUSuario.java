@@ -20,6 +20,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class RegistroUSuario extends AppCompatActivity {
 
+    private String usuario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +41,19 @@ public class RegistroUSuario extends AppCompatActivity {
 
         TextView tel = findViewById(R.id.editTextPhone);
         String telInt = tel.getText().toString();
+        if (usuInt.equals("")|| contra.equals("")|| nom.equals("")|| tel.equals("")){
+            Toast.makeText(this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+        }else {
+            comprobarUsu(usuInt, contraInt,nomInt,telInt);
 
+        }
+
+    }
+
+    private void comprobarUsu(String usuInt, String contraInt, String nomInt, String telInt) {
         Data inputData = new Data.Builder()
-                .putString("tipo", "registroUsu")
-                .putString("usu",usuInt)
-                .putString("contra",contraInt)
-                .putString("nom",nomInt)
-                .putString("tel",telInt)
+                .putString("tipo", "login")
+                .putString("usuario",usuInt)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
@@ -53,34 +61,70 @@ public class RegistroUSuario extends AppCompatActivity {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-                            Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
-                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                                @Override
-                                public void onComplete(@NonNull Task<String> task) {
-                                    if (!task.isSuccessful()) {
-                                        return;
-                                    }
-                                    String token = task.getResult();
-                                    System.out.println("el token:" + token);
-                                    subirToken(token,usuInt);
-                                    subirProfe(usuInt);
+                            String contraRec = workInfo.getOutputData().getString("res");
+                            //comprobamos que no existe el usuario
+                            if (contraRec.equals("mal")) {
+                                //el usuario no existe
+                                insertarUsu(usuInt,contraInt,nomInt,telInt);
 
-                                }
-                            });
-                            Intent intent = new Intent(RegistroUSuario.this, Menu.class);
-                            intent.putExtra("usuario",usuInt);
-                            startActivity(intent);
-                        }else{
+                            } else {
+                                //la contraseña es incorrecta
+                                Toast.makeText(getApplicationContext(), "El usuario ya existe", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
+    private void insertarUsu(String usuInt, String contraInt, String nomInt, String telInt) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "registroUsu")
+                .putString("usu", usuInt)
+                .putString("contra", contraInt)
+                .putString("nom", nomInt)
+                .putString("tel", telInt)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                            Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+                            addToken(usuInt);
+                            subirProfe(usuInt);
+
+                        } else {
                             Toast.makeText(getApplicationContext(), "Usuario no válido", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-        WorkManager.getInstance(this).enqueue(otwr);
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
+    private void addToken(String usuInt) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+                System.out.println("el token:" + token);
+                subirToken(token, usuInt);
 
 
+            }
+        });
+        Intent intent = new Intent(RegistroUSuario.this, Menu.class);
+        intent.putExtra("usuario", usuInt);
+        startActivity(intent);
     }
 
     private void subirProfe(String usuInt) {
+
 
     }
 
