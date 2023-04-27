@@ -24,10 +24,10 @@
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="388dp"
-        android:layout_height="472dp"
+        android:layout_width="370dp"
+        android:layout_height="393dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
