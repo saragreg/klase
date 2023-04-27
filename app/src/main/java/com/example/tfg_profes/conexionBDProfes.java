@@ -42,57 +42,12 @@ public class conexionBDProfes extends Worker {
                         .putString("punt",punt)
                         .build();
                 return Result.success(resultados);
-            case "infoProfe":
-                String usu = getInputData().getString("usuario");
-                infoProfe(usu);
-
-                return Result.success();
             default:
                 return Result.failure();
         }
 
     }
 
-    private void infoProfe(String usu) {
-        String url = URL_BASE + "login.php?usuario="+usu;
-        System.out.println("url: "+url);
-        HttpURLConnection urlConnection = null;
-        try {
-            URL requestUrl = new URL(url);
-            urlConnection = (HttpURLConnection) requestUrl.openConnection();
-            urlConnection.setRequestMethod("GET");
-
-            int statusCode = urlConnection.getResponseCode();
-            if (statusCode == 200) {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                String line, result = "";
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    result += line;
-                }
-                bufferedReader.close();
-
-                JSONArray jsonArray = new JSONArray(result);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    nombre = jsonArray.getJSONObject(i).getString("nombre");
-                    precio = jsonArray.getJSONObject(i).getString("precio");
-                    nombre = jsonArray.getJSONObject(i).getString("nombre");
-                    nombre = jsonArray.getJSONObject(i).getString("nombre");
-                    nombre = jsonArray.getJSONObject(i).getString("nombre");
-                    nombre = jsonArray.getJSONObject(i).getString("nombre");
-                }
-
-
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
-    }
 
     private void infoLista() {
         String url = URL_BASE + "infoListaProf.php";

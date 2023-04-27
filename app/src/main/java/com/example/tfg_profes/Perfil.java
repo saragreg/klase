@@ -60,6 +60,8 @@ public class Perfil extends AppCompatActivity {
     String currentPhotoPath;
     StorageReference storageReference;
     String usu;
+    String path;
+    String path_mod;
 
 
     @Override
@@ -74,6 +76,7 @@ public class Perfil extends AppCompatActivity {
         galeria=findViewById(R.id.galeria);
         comenzar=findViewById(R.id.comenzar);
         storageReference= FirebaseStorage.getInstance().getReference();
+        //ponerFotoPerfil(usu);
         camara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,8 +194,7 @@ public class Perfil extends AppCompatActivity {
                     public void onSuccess(Uri uri){
                         Log.d("tag","uploaded url:"+ uri.toString());
                         Picasso.get().load(uri).into(selectedImage);
-
-                        //subirUriImagen(imageFileName);
+                        subirUriImagen(uri.toString());
                     }
                 });
                 Toast.makeText(getApplicationContext(), "imagen subida", Toast.LENGTH_SHORT).show();
@@ -265,11 +267,41 @@ public class Perfil extends AppCompatActivity {
 
     }
 
-    /*public void ponerFotoPerfil(String usu){
+    public void ponerFotoPerfil(String usu){
 
-        Picasso.get().load("file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/JPEG_sara_565602794874129914.jpg").into(selectedImage);
+        Data inputData = new Data.Builder()
+                .putString("tipo", "fotoPerfil")
+                .putString("usuario",usu)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDinsertImage.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            path =workInfo.getOutputData().getString("uri");
+                            //comprobamos lo que devuelve
 
-    }*/
+                            String[] aux1=path.split("/images%2F");
+                            System.out.println("el path que se devuelve es:"+aux1[1]);
+                            String aux2=aux1[1];
+                            System.out.println("el path que se devuelve es:"+aux2);
+                            String[] aux3=aux2.split(".jpg");
+                            System.out.println("el path que se devuelve es:"+aux3[0]);
+                            path_mod=aux3[0]+".jpg";
+                            System.out.println("el path que se devuelve es:"+path_mod);
+                            path="file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/"+path_mod;
+                            System.out.println("final:"+path);
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
+
+
+        //Picasso.get().load(path).into(selectedImage);
+        //Picasso.get().load("file:///storage/emulated/0/Android/data/com.example.tfg_profes/files/Pictures/JPEG_sara_8222616006955887770.jpg").into(selectedImage);
+
+    }
 
 
 

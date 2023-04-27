@@ -43,39 +43,44 @@ public class Login extends AppCompatActivity {
         String contraIntro = contra.getText().toString();
         System.out.println("contra introducido: "+contraIntro);
 
-        TextView error = findViewById(R.id.error);
+        if (usuIntro.equals("") || contra.equals("")){
+            Toast.makeText(this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+        }else {
 
-        Data inputData = new Data.Builder()
-                .putString("tipo", "login")
-                .putString("usuario",usuIntro)
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            contraRec =workInfo.getOutputData().getString("contra");
-                            //comprobamos que existe el usuario
-                            if (contraRec.equals("")){
-                                //el usuario no existe
-                                error.setText("error de usuario");
-                            } else if (contraRec.equals(contraIntro)) {
-                                //se ha logeado correctamente
+            TextView error = findViewById(R.id.error);
 
-                                Intent intent = new Intent(Login.this, Menu.class);
-                                intent.putExtra("usuario",usuIntro);
-                                startActivity(intent);
-                                Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
-                            }else{
-                                //la contraseña es incorrecta
-                                error.setText("@string/error");
+            Data inputData = new Data.Builder()
+                    .putString("tipo", "login")
+                    .putString("usuario", usuIntro)
+                    .build();
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+            WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                    .observe(this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                contraRec = workInfo.getOutputData().getString("res");
+                                //comprobamos que existe el usuario
+                                if (contraRec.equals("mal")) {
+                                    //el usuario no existe
+                                    Toast.makeText(getApplicationContext(), "El usuario no existe", Toast.LENGTH_SHORT).show();
+                                } else if (contraRec.equals(contraIntro)) {
+                                    //se ha logeado correctamente
+
+                                    Intent intent = new Intent(Login.this, Menu.class);
+                                    intent.putExtra("usuario", usuIntro);
+                                    startActivity(intent);
+                                    Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    //la contraseña es incorrecta
+                                    Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrectas", Toast.LENGTH_SHORT).show();
+
+                                }
                             }
                         }
-                    }
-                });
-        WorkManager.getInstance(this).enqueue(otwr);
-
+                    });
+            WorkManager.getInstance(this).enqueue(otwr);
+        }
 
     }
 

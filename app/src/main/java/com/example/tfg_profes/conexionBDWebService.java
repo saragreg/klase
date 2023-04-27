@@ -50,7 +50,7 @@ public class conexionBDWebService extends Worker {
                 System.out.println("lo que llega es: "+usuInt);
                 login(usuInt);
                 Data resultados = new Data.Builder()
-                        .putString("contra",contra)
+                        .putString("res",contra)
                         .build();
                 return Result.success(resultados);
             default:
@@ -125,7 +125,7 @@ public class conexionBDWebService extends Worker {
                 JSONArray jsonArray = new JSONArray(result);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    contra = jsonArray.getJSONObject(i).getString("contra");
+                    contra = jsonArray.getJSONObject(i).getString("res");
                 }
 
 
