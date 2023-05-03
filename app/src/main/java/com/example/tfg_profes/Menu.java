@@ -28,21 +28,12 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         usuario=getIntent().getExtras().getString("usuario");
-        usus = getIntent().getExtras().getString("usus");
-        noms = getIntent().getExtras().getString("noms");
-        precios = getIntent().getExtras().getString("precios");
-        punt = getIntent().getExtras().getString("punt");
 
         lisprofes=findViewById(R.id.listabtn);
         lisprofes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Menu.this, ListaProfesores.class);
-                intent.putExtra("usus",usus);
-                intent.putExtra("noms",noms);
-                intent.putExtra("precios",precios);
-                intent.putExtra("punt",punt);
-                startActivity(intent);
+                obtenerDatosProfes(usuario);
             }
         });
         perfilbtn=findViewById(R.id.perfilbtn);
@@ -54,7 +45,38 @@ public class Menu extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    public void obtenerDatosProfes(String usuInt) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoLista")
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String usuarios = workInfo.getOutputData().getString("usu");
+                            String nombre = workInfo.getOutputData().getString("nombre");
+                            String precio = workInfo.getOutputData().getString("precio");
+                            String punts = workInfo.getOutputData().getString("punt");
+
+                            System.out.println("punt: "+punts);
+
+                            Intent intent = new Intent(Menu.this, ListaProfesores.class);
+                            intent.putExtra("usuario", usuInt);
+                            intent.putExtra("usus",usuarios);
+                            intent.putExtra("noms",nombre);
+                            intent.putExtra("precios",precio);
+                            intent.putExtra("punt",punts);
+                            startActivity(intent);
+
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
 
 
     }

@@ -17,4 +17,8 @@
     <string name="profes">IRAKASLEAK</string>
     <string name="menu">Menua</string>
     <string name="perfilp">ERABILTZAILEAREN PROFILA</string>
+    <string name="asig">Irakatsi ditzakezun gaiak</string>
+    <string name="curso">Ikastaroak</string>
+    <string name="idiom">Irakatsi dezakezun hizkuntzak</string>
+    <string name="años">Urteetako esperientzia</string>
 </resources>

@@ -17,5 +17,10 @@
     <string name="menu">Menú</string>
     <string name="perfilp">PERFIL DEL USUARIO</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="asig">Asignaturas que puede impartir</string>
+    <string name="curso">Cursos</string>
+    <string name="idiom">Idiomas en que puede impartir clases</string>
+    <string name="años">Años de experiencia</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

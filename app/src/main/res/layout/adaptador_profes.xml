@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
@@ -9,35 +9,44 @@
 
     <TextView
         android:id="@+id/nombre"
-        android:layout_width="122dp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="TextView"
-        android:textColor="@color/black"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/precio"
-        android:layout_width="75dp"
-        android:layout_height="40dp"
-        android:gravity="center"
+        android:layout_width="113dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="16dp"
         android:text="TextView"
         android:textColor="@color/black"
         android:textSize="15dp"
-        android:textStyle="bold" />
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/precio"
+        android:layout_width="67dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="16dp"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/nombre" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="48dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/perfil" />
 
     <RatingBar
         android:id="@+id/ratingBar"
         style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="64dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:numStars="5" />
+        android:layout_width="82dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="16dp"
+        android:numStars="5"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/precio" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="116dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,4 +17,8 @@
     <string name="profes">PROFES</string>
     <string name="menu">Menú</string>
     <string name="perfilp">PERFIL DE USUARIO</string>
+    <string name="asig">Asignaturas que puede impartir</string>
+    <string name="curso">Cursos</string>
+    <string name="idiom">Idiomas en que puede impartir clases</string>
+    <string name="años">Años de experiencia</string>
 </resources>

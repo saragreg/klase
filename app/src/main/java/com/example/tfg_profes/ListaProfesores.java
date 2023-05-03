@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,11 +57,50 @@ public class ListaProfesores extends AppCompatActivity {
         lisprofes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("el usuario que esta enviando es:"+usus.get(i));
-                enviarnotificacion(usus.get(i));
+                obtenerInfoProfe(usus.get(i));
             }
         });
     }
+
+    private void obtenerInfoProfe(String usu) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoProfe")
+                .putString("usuario", usu)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String usuario = workInfo.getOutputData().getString("usu");
+                            String nombre = workInfo.getOutputData().getString("nombre");
+                            String precio = workInfo.getOutputData().getString("precio");
+                            String asig = workInfo.getOutputData().getString("asig");
+                            String cursos = workInfo.getOutputData().getString("cursos");
+                            String idiomas = workInfo.getOutputData().getString("idiomas");
+                            String exp = workInfo.getOutputData().getString("exp");
+                            String punt = workInfo.getOutputData().getString("punt");
+
+                            System.out.println("cursos: "+cursos);
+                            Intent intent = new Intent(ListaProfesores.this, InfoProfes.class);
+                            intent.putExtra("usus",usuario);
+                            intent.putExtra("noms",nombre);
+                            intent.putExtra("precios",precio);
+                            intent.putExtra("asig",asig);
+                            intent.putExtra("cursos",cursos);
+                            intent.putExtra("idiomas",idiomas);
+                            intent.putExtra("exp",exp);
+                            intent.putExtra("punt",punt);
+                            startActivity(intent);
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
+    }
+
+
+
     private void enviarnotificacion(String usuIntro) {
         Data inputData = new Data.Builder()
                 .putString("usuario",usuIntro)

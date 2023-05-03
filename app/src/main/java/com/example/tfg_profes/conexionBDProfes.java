@@ -23,6 +23,10 @@ public class conexionBDProfes extends Worker {
     private String usua="";
     private String nombre="";
     private String precio="";
+    private String asig="";
+    private String cursos="";
+    private String idiomas="";
+    private String exp="";
     private String punt="";
 
     public conexionBDProfes(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -49,11 +53,65 @@ public class conexionBDProfes extends Worker {
                 String usuario=getInputData().getString("usuario");
                 insertProf(usuario);
                 return Result.success();
+            case "infoProfe":
+                String usu=getInputData().getString("usuario");
+                infoProfe(usu);
+                Data res = new Data.Builder()
+                        .putString("usu",usua)
+                        .putString("nombre",nombre)
+                        .putString("precio",precio)
+                        .putString("asig",asig)
+                        .putString("cursos",cursos)
+                        .putString("idiomas",idiomas)
+                        .putString("exp",exp)
+                        .putString("punt",punt)
+                        .build();
+                return Result.success(res);
             default:
                 return Result.failure();
         }
 
     }
+
+    private void infoProfe(String usuario) {
+        String url = URL_BASE + "infoProf.php?usuario="+usuario;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+                usua = jsonArray.getJSONObject(0).getString("usu");
+                nombre = jsonArray.getJSONObject(0).getString("nombre");
+                precio = jsonArray.getJSONObject(0).getString("precio");
+                asig = jsonArray.getJSONObject(0).getString("asig");
+                cursos = jsonArray.getJSONObject(0).getString("cursos");
+                idiomas = jsonArray.getJSONObject(0).getString("idiomas");
+                exp = jsonArray.getJSONObject(0).getString("exp");
+                punt = jsonArray.getJSONObject(0).getString("punt");
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
 
     private void insertProf(String usuario) {
         String url = URL_BASE + "insert_profe.php";

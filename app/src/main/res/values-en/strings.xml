@@ -17,5 +17,9 @@
     <string name="profes">TEACHERS</string>
     <string name="menu">Menu</string>
     <string name="perfilp">USER PROFILE</string>
+    <string name="asig">Subjects you can teach</string>
+    <string name="curso">Courses</string>
+    <string name="idiom">Languages in which you can teach</string>
+    <string name="años">Years of experience</string>
 
 </resources>
