@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TFG_profes</string>
+    <string name="app_name">Klase</string>
     <string name="titulo_inicio">Profesores Particulares</string>
     <string name="registro">Registro</string>
     <string name="inicio_sesion">Iniciar Sesión</string>
@@ -21,6 +21,30 @@
     <string name="curso">Cursos</string>
     <string name="idiom">Idiomas en que puede impartir clases</string>
     <string name="años">Años de experiencia</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="mate">Matemáticas</string>
+    <string name="lengua">Lengua Castellana y literatura</string>
+    <string name="euskera">Lengua vasca y literatura</string>
+    <string name="ingles">Inglés</string>
+    <string name="natura">Ciencias de la Naturaleza</string>
+    <string name="sociales">Ciencias Sociales, Geografía e Historia</string>
+    <string name="primaria">Educación primaria</string>
+    <string name="eso">E.S.O</string>
+    <string name="bach">Bachiller</string>
+    <string name="precio">Precio</string>
+    <string name="bio">Biología y geología</string>
+    <string name="fiki">Física y Química</string>
+    <string name="tics">TICs</string>
+    <string name="historia">Ciencias Sociales,Geografía e Historia</string>
+    <string name="latin">Latín</string>
+    <string name="tecno">Tecnología</string>
+    <string name="dibujo">Dibujo Técnico</string>
+    <string name="empresa">Iniciación al Emprendimiento</string>
+    <string name="sig">Siguiente</string>
+    <string name="repeContra">Repetir contraseña</string>
+    <string name="profesor">Profesor</string>
+    <string name="alumno">Alumno</string>
+    <string name="rol">Usted se va a registrar como:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

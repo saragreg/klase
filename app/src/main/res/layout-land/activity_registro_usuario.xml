@@ -103,7 +103,6 @@
         android:layout_width="249dp"
         android:layout_height="53dp"
         android:ems="10"
-        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.784"
         app:layout_constraintStart_toStartOf="parent"

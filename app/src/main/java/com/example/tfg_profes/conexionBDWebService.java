@@ -45,7 +45,13 @@ public class conexionBDWebService extends Worker {
                 String contraReg = getInputData().getString("contra");
                 String nom = getInputData().getString("nom");
                 String tel = getInputData().getString("tel");
-                registroUsu(usu,contraReg,nom,tel);
+                String per = getInputData().getString("perfil");
+                String token = getInputData().getString("token");
+                System.out.println("usu:"+usu);
+                System.out.println("per:"+per);
+                System.out.println("token:"+token);
+
+                registroUsu(usu,contraReg,nom,tel,per,token);
                 Data resreg = new Data.Builder()
                         .putString("res",usuario)
                         .build();
@@ -65,8 +71,9 @@ public class conexionBDWebService extends Worker {
     }
 
 
-    private void registroUsu(String usu,String contra,String nombre,String tel) {
+    private void registroUsu(String usuintro,String contraintro,String nombreintro,String telintro,String perintro,String tokenintro) {
         String url = URL_BASE + "registro_usuarios.php";
+        System.out.println(url);
 
         HttpURLConnection urlConnection = null;
         try {
@@ -77,10 +84,12 @@ public class conexionBDWebService extends Worker {
             urlConnection.setRequestProperty("Content-Type", "application/json");
 
             JSONObject parametrosJSON = new JSONObject();
-            parametrosJSON.put("usuario", usu);
-            parametrosJSON.put("contra", contra);
-            parametrosJSON.put("nom", nombre);
-            parametrosJSON.put("tel", tel);
+            parametrosJSON.put("usuario", usuintro);
+            parametrosJSON.put("contra", contraintro);
+            parametrosJSON.put("nom", nombreintro);
+            parametrosJSON.put("tel", telintro);
+            parametrosJSON.put("perfil", perintro);
+            parametrosJSON.put("token",tokenintro);
             PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
             out.print(parametrosJSON.toString());
             out.close();
@@ -149,3 +158,4 @@ public class conexionBDWebService extends Worker {
         }
     }
 }
+

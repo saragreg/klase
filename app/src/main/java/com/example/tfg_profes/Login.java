@@ -67,16 +67,20 @@ public class Login extends AppCompatActivity {
                                 if (contraRec.equals("mal")) {
                                     //el usuario no existe
                                     Toast.makeText(getApplicationContext(), "El usuario no existe", Toast.LENGTH_SHORT).show();
-                                } else if (contraRec.equals(contraIntro)) {
-                                    //se ha logeado correctamente
-                                    Intent intent = new Intent(Login.this, Menu.class);
-                                    intent.putExtra("usuario", usuIntro);
-                                    startActivity(intent);
-                                    Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //la contraseña es incorrecta
-                                    Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrectas", Toast.LENGTH_SHORT).show();
+                                }  else {// Obtiene la contraseña hasheada almacenada en la base de datos
+                                    boolean passwordMatches = PasswordHasher.checkPassword(contraIntro, contraRec);
+                                    if (passwordMatches) {
+                                        // Contraseña correcta
+                                        //se ha logeado correctamente
+                                        Intent intent = new Intent(Login.this, Menu.class);
+                                        intent.putExtra("usuario", usuIntro);
+                                        startActivity(intent);
+                                        Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // Contraseña incorrecta
+                                        Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrectas", Toast.LENGTH_SHORT).show();
 
+                                    }
                                 }
                             }
                         }

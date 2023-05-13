@@ -11,6 +11,7 @@ import androidx.work.WorkManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +24,27 @@ import java.util.Arrays;
 
 public class RegistroUSuario extends AppCompatActivity {
 
-
+    String per="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro_usuario);
+    }
+    public void onRadioButtonRol (View v) {
+// Is the button now checked?
+        boolean checked = ((RadioButton) v).isChecked();
+
+// Check which radio button was clicked
+        switch (v.getId()) {
+            case R.id.profesor:
+                if (checked)
+                    per = "p";
+                break;
+            case R.id.alumno:
+                if (checked)
+                    per = "a";
+                break;
+        }
     }
 
     public void onclick_reg(View v){
@@ -43,10 +60,13 @@ public class RegistroUSuario extends AppCompatActivity {
 
         TextView tel = findViewById(R.id.editTextPhone);
         String telInt = tel.getText().toString();
-        if (usuInt.equals("")|| contra.equals("")|| nom.equals("")|| tel.equals("")){
+        if (usuInt.equals("")|| contra.equals("")|| nom.equals("")|| tel.equals("")||per.equals("")){
             Toast.makeText(this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
         }else {
-            comprobarUsu(usuInt, contraInt,nomInt,telInt);
+            String hashedPassword = PasswordHasher.hashPassword(contraInt);
+// Código de inserción en la base de datos usando la contraseña hasheada
+
+            comprobarUsu(usuInt, hashedPassword,nomInt,telInt);
 
         }
 
@@ -67,8 +87,7 @@ public class RegistroUSuario extends AppCompatActivity {
                             //comprobamos que no existe el usuario
                             if (contraRec.equals("mal")) {
                                 //el usuario no existe
-                                insertarUsu(usuInt,contraInt,nomInt,telInt);
-
+                                addToken(usuInt,contraInt,nomInt,telInt);
                             } else {
                                 //la contraseña es incorrecta
                                 Toast.makeText(getApplicationContext(), "El usuario ya existe", Toast.LENGTH_SHORT).show();
@@ -79,13 +98,30 @@ public class RegistroUSuario extends AppCompatActivity {
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
     }
 
-    private void insertarUsu(String usuInt, String contraInt, String nomInt, String telInt) {
+    private void addToken(String usuInt, String contraInt, String nomInt, String telInt) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+                System.out.println("el token:" + token);
+                insertarUsu(usuInt,contraInt,nomInt,telInt,token);
+
+            }
+        });
+
+    }
+    private void insertarUsu(String usuInt, String contraInt, String nomInt, String telInt, String token) {
         Data inputData = new Data.Builder()
                 .putString("tipo", "registroUsu")
                 .putString("usu", usuInt)
                 .putString("contra", contraInt)
                 .putString("nom", nomInt)
                 .putString("tel", telInt)
+                .putString("perfil", per)
+                .putString("token",token)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
@@ -95,33 +131,23 @@ public class RegistroUSuario extends AppCompatActivity {
                         if (workInfo != null && workInfo.getState().isFinished()) {
 
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
-                            addToken(usuInt);
-                            subirProfe(usuInt);
 
+                            //subirProfe(usuInt);
+                            Intent intent = new Intent(RegistroUSuario.this, RegistroAsignaturas.class);
+                            intent.putExtra("usuario", usuInt);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                    Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
 
                         } else {
-                            Toast.makeText(getApplicationContext(), "Usuario no válido", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
     }
 
-    private void addToken(String usuInt) {
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    return;
-                }
-                String token = task.getResult();
-                System.out.println("el token:" + token);
-                subirToken(token, usuInt);
 
-            }
-        });
-
-    }
 
     private void subirProfe(String usuInt) {
         Data inputData = new Data.Builder()
@@ -146,7 +172,7 @@ public class RegistroUSuario extends AppCompatActivity {
 
     }
 
-    public void subirToken(String token, String usu){
+    /*public void subirToken(String token, String usu){
         Data inputData = new Data.Builder()
                 .putString("usuario", usu)
                 .putString("token",token)
@@ -163,6 +189,6 @@ public class RegistroUSuario extends AppCompatActivity {
                 });
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
 
-    }
+    }*/
 
 }

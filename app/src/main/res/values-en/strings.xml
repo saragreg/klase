@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TFG_profes</string>
+    <string name="app_name">Klase</string>
     <string name="titulo_inicio">Particular teachers</string>
     <string name="registro">Register</string>
     <string name="inicio_sesion">Log In</string>
@@ -21,5 +21,28 @@
     <string name="curso">Courses</string>
     <string name="idiom">Languages in which you can teach</string>
     <string name="años">Years of experience</string>
+    <string name="mate">Mathematics</string>
+    <string name="lengua">Spanish Language and Literature.</string>
+    <string name="euskera">Basque Language and Literature.</string>
+    <string name="ingles">English</string>
+    <string name="natura">Natural Sciences</string>
+    <string name="sociales">Social Sciences, Geography and History.</string>
+    <string name="primaria">Primary Education</string>
+    <string name="eso">Compulsory Secondary Education</string>
+    <string name="bach">Bachelor</string>
+    <string name="precio">Price</string>
+    <string name="bio">Biology and Geology</string>
+    <string name="fiki">Physics and Chemistry</string>
+    <string name="tics">TICs</string>
+    <string name="historia">Social Sciences,Geography and History</string>
+    <string name="latin">Latin</string>
+    <string name="tecno">Technology</string>
+    <string name="empresa">Initiation to Entrepreneurship</string>
+    <string name="dibujo">Technical Drawing</string>
+    <string name="sig">Next</string>
+    <string name="repeContra">Repeat password</string>
+    <string name="profesor">Teacher</string>
+    <string name="alumno">Student</string>
+    <string name="rol">You will register as:</string>
 
 </resources>

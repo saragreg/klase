@@ -24,6 +24,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".RegistroAsignaturas"
+            android:exported="false" />
+        <activity
+            android:name=".RegistroProfe"
+            android:exported="false" />
+        <activity
             android:name=".InfoProfes"
             android:exported="false" />
         <activity
