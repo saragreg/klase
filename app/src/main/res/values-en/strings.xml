@@ -45,5 +45,8 @@
     <string name="alumno">Student</string>
     <string name="rol">You will register as:</string>
     <string name="google_maps_api_key">AIzaSyBkQBo4qew97alrgzanOAyy45H93LjiHzA</string>
+    <string name="pais">Country</string>
+    <string name="ciudad">locality</string>
+    <string name="barrio">Neighborhood</string>
 
 </resources>

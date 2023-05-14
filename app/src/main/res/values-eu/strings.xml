@@ -45,4 +45,7 @@
     <string name="alumno">Ikasle</string>
     <string name="rol">Honela erregistratuko zara:</string>
     <string name="google_maps_api_key">AIzaSyBkQBo4qew97alrgzanOAyy45H93LjiHzA</string>
+    <string name="pais">Herrialdea</string>
+    <string name="ciudad">Hiria</string>
+    <string name="barrio">Auzoa</string>
 </resources>

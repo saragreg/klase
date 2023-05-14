@@ -133,8 +133,9 @@ public class RegistroUSuario extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
 
                             //subirProfe(usuInt);
-                            Intent intent = new Intent(RegistroUSuario.this, RegistroAsignaturas.class);
+                            Intent intent = new Intent(RegistroUSuario.this, RegLoc.class);
                             intent.putExtra("usuario", usuInt);
+                            intent.putExtra("per",per);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                     Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -160,7 +161,7 @@ public class RegistroUSuario extends AppCompatActivity {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-                            Intent intent = new Intent(RegistroUSuario.this, Menu.class);
+                            Intent intent = new Intent(RegistroUSuario.this, RegLoc.class);
                             intent.putExtra("usuario", usuInt);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                     Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -172,23 +173,5 @@ public class RegistroUSuario extends AppCompatActivity {
 
     }
 
-    /*public void subirToken(String token, String usu){
-        Data inputData = new Data.Builder()
-                .putString("usuario", usu)
-                .putString("token",token)
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDinsertToken.class).setInputData(inputData).build();
-        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-
-                        }
-                    }
-                });
-        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
-
-    }*/
 
 }

@@ -27,6 +27,8 @@ public class conexionBDWebService extends Worker {
 
     String contra;
     private String usuario;
+    private String latObt;
+    private String lngObt;
 
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -64,10 +66,110 @@ public class conexionBDWebService extends Worker {
                         .putString("res",contra)
                         .build();
                 return Result.success(resultados);
+            case "addLoc":
+                String usuLoc = getInputData().getString("usuario");
+                String lat = getInputData().getString("lat");
+                String lng = getInputData().getString("lng");
+
+                System.out.println("lo que llega es: "+lat);
+                addLoc(usuLoc,lat,lng);
+                return Result.success();
+            case "selectLoc":
+                String usuLocInt = getInputData().getString("usuario");
+
+                selectLoc(usuLocInt);
+                Data loc = new Data.Builder()
+                        .putString("lat",latObt)
+                        .putString("lng",lngObt)
+                        .build();
+                return Result.success(loc);
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void selectLoc(String usuLocInt) {
+        String url = URL_BASE + "selectLoc.php?usuario="+usuLocInt;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                latObt = jsonArray.getJSONObject(0).getString("lat");
+                lngObt = jsonArray.getJSONObject(0).getString("lng");
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+
+    }
+
+    private void addLoc(String usuLoc, String lat, String lng) {
+        String url = URL_BASE + "addLoc.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuario", usuLoc);
+            parametrosJSON.put("lat", lat);
+            parametrosJSON.put("lng", lng);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    usuario = jsonArray.getJSONObject(i).getString("res");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
 

@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void btn_login(View v){
-        Intent intent = new Intent(MainActivity.this, Mapa.class);
+        Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
     }
     public void btn_reg(View v){

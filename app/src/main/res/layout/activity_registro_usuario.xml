@@ -109,13 +109,14 @@
         android:id="@+id/loginbtn"
         android:layout_width="193dp"
         android:layout_height="68dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:onClick="onclick_reg"
         android:text="@string/aceptar"
         android:textColor="#EFE4B0"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/radioGroup"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="@+id/radioGroup"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 

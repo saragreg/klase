@@ -22,7 +22,7 @@ public class Menu extends AppCompatActivity {
     String precios;
     String punt;
     String usuario;
-    ImageButton lisprofes,perfilbtn;
+    ImageButton lisprofes,perfilbtn,mapabtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +41,15 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Menu.this, Perfil.class);
+                intent.putExtra("usuario",usuario);
+                startActivity(intent);
+            }
+        });
+        mapabtn=findViewById(R.id.mapa);
+        mapabtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Menu.this, Mapa.class);
                 intent.putExtra("usuario",usuario);
                 startActivity(intent);
             }
