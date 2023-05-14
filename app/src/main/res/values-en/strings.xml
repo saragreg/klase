@@ -44,5 +44,6 @@
     <string name="profesor">Teacher</string>
     <string name="alumno">Student</string>
     <string name="rol">You will register as:</string>
+    <string name="google_maps_api_key">AIzaSyBkQBo4qew97alrgzanOAyy45H93LjiHzA</string>
 
 </resources>

@@ -31,8 +31,8 @@
         android:fontFamily="@font/impact"
         android:gravity="center"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
@@ -41,14 +41,13 @@
         android:layout_height="68dp"
         android:layout_marginTop="124dp"
         android:backgroundTint="@color/boton_gris"
+        android:onClick="btn_login"
         android:text="@string/inicio_sesion"
         android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:onClick="btn_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerIdioms"
+        app:layout_constraintStart_toStartOf="@+id/spinnerIdioms"
         app:layout_constraintTop_toBottomOf="@+id/spinnerIdioms" />
 
     <Button
@@ -56,13 +55,13 @@
         android:layout_width="193dp"
         android:layout_height="68dp"
         android:layout_marginTop="52dp"
+        android:onClick="btn_reg"
         android:text="@string/registro"
         android:textColor="#EFE4B0"
-        android:textStyle="bold"
         android:textSize="20dp"
-        android:onClick="btn_reg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintStart_toStartOf="@+id/button"
         app:layout_constraintTop_toBottomOf="@+id/button" />
 
 

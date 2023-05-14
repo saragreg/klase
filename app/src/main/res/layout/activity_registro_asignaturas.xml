@@ -28,8 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="quimica"
-        tools:layout_editor_absoluteX="79dp"
-        tools:layout_editor_absoluteY="193dp" />
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="256dp" />
 
     <CheckBox
         android:id="@+id/checkBox28"
@@ -44,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="mate"
-        tools:layout_editor_absoluteX="103dp"
-        tools:layout_editor_absoluteY="120dp" />
+        tools:layout_editor_absoluteX="190dp"
+        tools:layout_editor_absoluteY="30dp" />
 
     <CheckBox
         android:id="@+id/checkBox23"
@@ -67,18 +67,19 @@
         android:id="@+id/checkBox22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:text="historia"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="60dp" />
+        app:layout_constraintStart_toStartOf="@+id/checkBox25"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox25" />
 
     <CheckBox
         android:id="@+id/checkBox30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="tics"
-        tools:layout_editor_absoluteX="190dp"
-        tools:layout_editor_absoluteY="108dp" />
+        tools:layout_editor_absoluteX="310dp"
+        tools:layout_editor_absoluteY="265dp" />
 
     <CheckBox
         android:id="@+id/checkBox31"
@@ -93,8 +94,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="latin"
-        tools:layout_editor_absoluteX="290dp"
-        tools:layout_editor_absoluteY="168dp" />
+        tools:layout_editor_absoluteX="305dp"
+        tools:layout_editor_absoluteY="390dp" />
 
     <CheckBox
         android:id="@+id/checkBox33"
@@ -119,4 +120,5 @@
         android:text="econo"
         tools:layout_editor_absoluteX="13dp"
         tools:layout_editor_absoluteY="242dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
