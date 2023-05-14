@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -71,6 +72,13 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        UiSettings uiSettings = googleMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+
+        /*float newZoomLevel = 12.5f;
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(newZoomLevel));*/
+
         obtenerLoc(usu,googleMap);
         /*if (geocodeTask != null) {
             geocodeTask.cancel(true);
@@ -114,7 +122,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
             // Centrar la cámara en el marcador y acercar el mapa
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(location)
-                    .zoom(60) // ajustar el nivel de zoom según tus necesidades
+                    .zoom(15) // ajustar el nivel de zoom según tus necesidades
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
