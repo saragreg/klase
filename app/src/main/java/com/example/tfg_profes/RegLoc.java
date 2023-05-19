@@ -35,14 +35,18 @@ public class RegLoc extends AppCompatActivity {
         usu=getIntent().getExtras().getString("usuario");
         per=getIntent().getExtras().getString("per");
         if (per.equals("a")){
-            FragmentEso fragAlu= (FragmentEso) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+            FragmentEso fragAlu= new FragmentEso();
             Bundle bundle=new Bundle();
             fragAlu.setArguments(bundle);
-        }else{
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView,fragAlu)
+                    .commit();
+        }/*else{
             FragmentBac fragProf= (FragmentBac) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
             Bundle bundle=new Bundle();
             fragProf.setArguments(bundle);
-        }
+        }*/
     }
 
     public void onClickRegLoc(View view) {

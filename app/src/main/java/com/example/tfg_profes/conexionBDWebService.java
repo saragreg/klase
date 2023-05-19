@@ -6,6 +6,8 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,10 +27,11 @@ public class conexionBDWebService extends Worker {
 
     private String URL_BASE = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/";
 
-    String contra;
+    private String contra;
+    private String perfil;
     private String usuario;
     private String latObt,lngObt;
-
+    private String usupend,usuacept;
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
@@ -63,6 +66,7 @@ public class conexionBDWebService extends Worker {
                 login(usuInt);
                 Data resultados = new Data.Builder()
                         .putString("res",contra)
+                        .putString("per",perfil)
                         .build();
                 return Result.success(resultados);
             case "addProf":
@@ -88,10 +92,100 @@ public class conexionBDWebService extends Worker {
                         .putString("lng",lngObt)
                         .build();
                 return Result.success(loca);
+            case "pendientes":
+                String profe = getInputData().getString("profe");
+                pendientes(profe);
+                Data pendientes = new Data.Builder()
+                        .putString("usupend",usupend)
+                        .build();
+                return Result.success(pendientes);
+            case "aceptados":
+                String profe2 = getInputData().getString("profe");
+                aceptados(profe2);
+                Data aceptados = new Data.Builder()
+                        .putString("usuacept",usuacept)
+                        .build();
+                return Result.success(aceptados);
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void pendientes(String profe) {
+        String url = URL_BASE + "pendientes.php?profe="+profe;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    usupend=usupend+jsonArray.getJSONObject(i).getString("usu");
+                }
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+    private void aceptados(String profe) {
+        String url = URL_BASE + "aceptados.php?profe="+profe;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("profe", profe);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    usuacept=usuacept+jsonArray.getJSONObject(i).getString("usu");
+                }
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void addProf(String usuProf, String exp,Float prec, String idiom, String cursos, String asig, String loc,String lat, String lng) {
@@ -178,9 +272,6 @@ public class conexionBDWebService extends Worker {
 
     }
 
-    private void add(String usuLoc, String lat, String lng) {
-
-    }
 
 
     private void registroUsu(String usuintro,String contraintro,String nombreintro,String telintro,String perintro,String tokenintro) {
@@ -235,7 +326,7 @@ public class conexionBDWebService extends Worker {
 
 
     private void login(String usuInt) {
-        String url = URL_BASE + "login.php?usuario="+usuInt;
+        String url = URL_BASE + "login_usuarios.php?usuario="+usuInt;
         System.out.println("url: "+url);
         HttpURLConnection urlConnection = null;
         try {
@@ -257,6 +348,7 @@ public class conexionBDWebService extends Worker {
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     contra = jsonArray.getJSONObject(i).getString("res");
+                    perfil = jsonArray.getJSONObject(i).getString("per");
                 }
 
 

@@ -63,6 +63,7 @@ public class Login extends AppCompatActivity {
                         public void onChanged(WorkInfo workInfo) {
                             if (workInfo != null && workInfo.getState().isFinished()) {
                                 contraRec = workInfo.getOutputData().getString("res");
+                                String per = workInfo.getOutputData().getString("per");
                                 //comprobamos que existe el usuario
                                 if (contraRec.equals("mal")) {
                                     //el usuario no existe
@@ -72,9 +73,16 @@ public class Login extends AppCompatActivity {
                                     if (passwordMatches) {
                                         // Contraseña correcta
                                         //se ha logeado correctamente
-                                        Intent intent = new Intent(Login.this, Menu.class);
-                                        intent.putExtra("usuario", usuIntro);
-                                        startActivity(intent);
+                                        if (per.equals("a")){
+                                            Intent intent = new Intent(Login.this, Menu.class);
+                                            intent.putExtra("usuario", usuIntro);
+                                            startActivity(intent);
+                                        }else{
+                                            Intent intent = new Intent(Login.this, LisAlumnos.class);
+                                            intent.putExtra("usuario", usuIntro);
+                                            startActivity(intent);
+                                        }
+
                                         Toast.makeText(getApplicationContext(), "Se ha logeado correctamente", Toast.LENGTH_SHORT).show();
                                     } else {
                                         // Contraseña incorrecta
