@@ -25,9 +25,9 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="317dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="84dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/impact"
         android:gravity="center"
         android:text="@string/inicio_sesion"

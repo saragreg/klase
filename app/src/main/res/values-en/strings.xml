@@ -22,23 +22,17 @@
     <string name="idiom">Languages in which you can teach</string>
     <string name="años">Years of experience</string>
     <string name="mate">Mathematics</string>
-    <string name="lengua">Spanish Language and Literature.</string>
-    <string name="euskera">Basque Language and Literature.</string>
+    <string name="lengua">Spanish</string>
+    <string name="euskera">Basque</string>
     <string name="ingles">English</string>
     <string name="natura">Natural Sciences</string>
-    <string name="sociales">Social Sciences, Geography and History.</string>
-    <string name="primaria">Primary Education</string>
-    <string name="eso">Compulsory Secondary Education</string>
+    <string name="sociales">Social Sciences</string>
+    <string name="primaria">Primary</string>
+    <string name="eso">C.S.E</string>
     <string name="bach">Bachelor</string>
     <string name="precio">Price</string>
-    <string name="bio">Biology and Geology</string>
     <string name="fiki">Physics and Chemistry</string>
     <string name="tics">TICs</string>
-    <string name="historia">Social Sciences,Geography and History</string>
-    <string name="latin">Latin</string>
-    <string name="tecno">Technology</string>
-    <string name="empresa">Initiation to Entrepreneurship</string>
-    <string name="dibujo">Technical Drawing</string>
     <string name="sig">Next</string>
     <string name="repeContra">Repeat password</string>
     <string name="profesor">Teacher</string>
@@ -48,5 +42,11 @@
     <string name="pais">Country</string>
     <string name="ciudad">locality</string>
     <string name="barrio">Neighborhood</string>
+    <string name="apoyo">School Support</string>
+    <string name="asignatura">Subjects</string>
+    <string name="idiomas">Lenguages</string>
+    <string name="cas">Spanish</string>
+    <string name="exp">Years of Experience</string>
+    <string name="numhijos">Indicate how many children you have</string>
 
 </resources>

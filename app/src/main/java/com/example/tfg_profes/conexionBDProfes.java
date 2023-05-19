@@ -28,6 +28,8 @@ public class conexionBDProfes extends Worker {
     private String idiomas="";
     private String exp="";
     private String punt="";
+    private String lat="";
+    private String lng="";
 
     public conexionBDProfes(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -47,6 +49,8 @@ public class conexionBDProfes extends Worker {
                         .putString("nombre",nombre)
                         .putString("precio",precio)
                         .putString("punt",punt)
+                        .putString("lat",lat)
+                        .putString("lng",lng)
                         .build();
                 return Result.success(resultados);
             case "insertProf":
@@ -57,14 +61,10 @@ public class conexionBDProfes extends Worker {
                 String usu=getInputData().getString("usuario");
                 infoProfe(usu);
                 Data res = new Data.Builder()
-                        .putString("usu",usua)
-                        .putString("nombre",nombre)
-                        .putString("precio",precio)
                         .putString("asig",asig)
                         .putString("cursos",cursos)
                         .putString("idiomas",idiomas)
                         .putString("exp",exp)
-                        .putString("punt",punt)
                         .build();
                 return Result.success(res);
             default:
@@ -74,7 +74,7 @@ public class conexionBDProfes extends Worker {
     }
 
     private void infoProfe(String usuario) {
-        String url = URL_BASE + "infoProf.php?usuario="+usuario;
+        String url = URL_BASE + "infoProfesor.php?usuario="+usuario;
         HttpURLConnection urlConnection = null;
         try {
             URL requestUrl = new URL(url);
@@ -92,16 +92,10 @@ public class conexionBDProfes extends Worker {
                 bufferedReader.close();
 
                 JSONArray jsonArray = new JSONArray(result);
-                usua = jsonArray.getJSONObject(0).getString("usu");
-                nombre = jsonArray.getJSONObject(0).getString("nombre");
-                precio = jsonArray.getJSONObject(0).getString("precio");
                 asig = jsonArray.getJSONObject(0).getString("asig");
                 cursos = jsonArray.getJSONObject(0).getString("cursos");
                 idiomas = jsonArray.getJSONObject(0).getString("idiomas");
                 exp = jsonArray.getJSONObject(0).getString("exp");
-                punt = jsonArray.getJSONObject(0).getString("punt");
-
-
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -114,7 +108,7 @@ public class conexionBDProfes extends Worker {
 
 
     private void insertProf(String usuario) {
-        String url = URL_BASE + "insert_profe.php";
+        String url = URL_BASE + "addLoc.php";
 
         HttpURLConnection urlConnection = null;
         try {
@@ -154,7 +148,7 @@ public class conexionBDProfes extends Worker {
 
 
     private void infoLista() {
-        String url = URL_BASE + "infoListaProf.php";
+        String url = URL_BASE + "lisProfes.php";
         HttpURLConnection urlConnection = null;
         try {
             URL requestUrl = new URL(url);
@@ -174,10 +168,11 @@ public class conexionBDProfes extends Worker {
                 JSONArray jsonArray = new JSONArray(result);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    usua = usua+jsonArray.getJSONObject(i).getString("usu")+",";
-                    nombre = nombre+jsonArray.getJSONObject(i).getString("nombre")+",";
+                    usua = usua+jsonArray.getJSONObject(i).getString("idProfe")+",";
                     precio = precio+jsonArray.getJSONObject(i).getString("precio")+",";
                     punt = punt+jsonArray.getJSONObject(i).getString("punt")+",";
+                    lat = lat+jsonArray.getJSONObject(i).getString("lon")+",";
+                    lng = lng+jsonArray.getJSONObject(i).getString("lng")+",";
                 }
 
 

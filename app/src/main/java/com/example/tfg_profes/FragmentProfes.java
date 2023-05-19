@@ -70,7 +70,7 @@ public class FragmentProfes extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView a=view.findViewById(R.id.asig);
+        TextView a=view.findViewById(R.id.asigProfe);
         String asignaturas=getArguments().getString("asig");
         a.setText(asignaturas);
 

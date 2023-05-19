@@ -10,10 +10,16 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+
+import java.sql.Array;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,36 +77,60 @@ public class FragmentEso extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EditText h1=view.findViewById(R.id.hijo1);
+        EditText h2=view.findViewById(R.id.hijo2);
+        EditText h3=view.findViewById(R.id.hijo3);
+        EditText h4=view.findViewById(R.id.hijo4);
+        EditText h5=view.findViewById(R.id.hijo5);
+        EditText h6=view.findViewById(R.id.hijo6);
 
-        CheckBox checkboxeso = view.findViewById(R.id.checkbox_bac);
-    ListView listaAsignaturasEso = view.findViewById(R.id.lista_asignaturas_eso);
+        Spinner numHijos= (Spinner) view.findViewById(R.id.hijos);
+        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(getContext(),R.array.hijos, android.R.layout.simple_spinner_item);
+        numHijos.setAdapter(adapter);
+        numHijos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String h = adapterView.getItemAtPosition(i).toString();
+                h1.setVisibility(View.GONE);
+                h2.setVisibility(View.GONE);
+                h3.setVisibility(View.GONE);
+                h4.setVisibility(View.GONE);
+                h5.setVisibility(View.GONE);
+                h6.setVisibility(View.GONE);
+                if (h.equals("1")) {
+                    h1.setVisibility(View.VISIBLE);
+                } else if (h.equals("2")) {
+                    h1.setVisibility(View.VISIBLE);
+                    h2.setVisibility(View.VISIBLE);
+                } else if (h.equals("3")) {
+                    h1.setVisibility(View.VISIBLE);
+                    h2.setVisibility(View.VISIBLE);
+                    h3.setVisibility(View.VISIBLE);
+                } else if (h.equals("4")) {
+                    h1.setVisibility(View.VISIBLE);
+                    h2.setVisibility(View.VISIBLE);
+                    h3.setVisibility(View.VISIBLE);
+                    h4.setVisibility(View.VISIBLE);
+                } else if (h.equals("5")) {
+                    h1.setVisibility(View.VISIBLE);
+                    h2.setVisibility(View.VISIBLE);
+                    h3.setVisibility(View.VISIBLE);
+                    h4.setVisibility(View.VISIBLE);
+                    h5.setVisibility(View.VISIBLE);
+                } else if (h.equals("6")) {
+                    h1.setVisibility(View.VISIBLE);
+                    h2.setVisibility(View.VISIBLE);
+                    h3.setVisibility(View.VISIBLE);
+                    h4.setVisibility(View.VISIBLE);
+                    h5.setVisibility(View.VISIBLE);
+                    h6.setVisibility(View.VISIBLE);
+                }
+            }
 
-        checkboxeso.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-        listaAsignaturasEso.setVisibility(View.VISIBLE);
-        } else {
-        listaAsignaturasEso.setVisibility(View.GONE);
-        }
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
-
-
-        ListView listVieweso = view.findViewById(R.id.lista_asignaturas_eso);
-        ArrayAdapter<CharSequence> adaptereso = ArrayAdapter.createFromResource(getContext(), R.array.asignaturas_eso, android.R.layout.simple_list_item_multiple_choice);
-        listVieweso.setAdapter(adaptereso);
-
-        SparseBooleanArray checkedItemseso = listVieweso.getCheckedItemPositions();
-        for (int i = 0; i < checkedItemseso.size(); i++) {
-        if (checkedItemseso.valueAt(i)) {
-        int position = checkedItemseso.keyAt(i);
-        String asignatura = adaptereso.getItem(position).toString();
-        // hacer algo con la asignatura seleccionada
-        }
-        }
-
-
     }
 }
-

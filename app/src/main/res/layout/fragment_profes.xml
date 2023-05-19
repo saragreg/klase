@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cur" />
 
     <TextView
-        android:id="@+id/asig"
+        android:id="@+id/asigProfe"
         android:layout_width="264dp"
         android:layout_height="49dp"
         android:layout_marginStart="50dp"
@@ -72,7 +72,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/curso"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/asig" />
+        app:layout_constraintTop_toBottomOf="@+id/asigProfe" />
 
     <TextView
         android:id="@+id/cur"

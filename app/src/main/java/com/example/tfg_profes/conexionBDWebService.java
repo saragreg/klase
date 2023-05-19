@@ -27,8 +27,7 @@ public class conexionBDWebService extends Worker {
 
     String contra;
     private String usuario;
-    private String latObt;
-    private String lngObt;
+    private String latObt,lngObt;
 
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -66,27 +65,81 @@ public class conexionBDWebService extends Worker {
                         .putString("res",contra)
                         .build();
                 return Result.success(resultados);
-            case "addLoc":
-                String usuLoc = getInputData().getString("usuario");
+            case "addProf":
+                String usuProf = getInputData().getString("usuario");
+                String exp = getInputData().getString("exp");
+                Float prec = getInputData().getFloat("prec", 0.0F);
+                String idiom = getInputData().getString("idiom");
+                String cursos = getInputData().getString("cursos");
+                String asig = getInputData().getString("asig");
+                String loc = getInputData().getString("loc");
                 String lat = getInputData().getString("lat");
                 String lng = getInputData().getString("lng");
 
                 System.out.println("lo que llega es: "+lat);
-                addLoc(usuLoc,lat,lng);
+                addProf(usuProf,exp,prec,idiom,cursos,asig,loc,lat,lng);
                 return Result.success();
             case "selectLoc":
                 String usuLocInt = getInputData().getString("usuario");
 
                 selectLoc(usuLocInt);
-                Data loc = new Data.Builder()
+                Data loca = new Data.Builder()
                         .putString("lat",latObt)
                         .putString("lng",lngObt)
                         .build();
-                return Result.success(loc);
+                return Result.success(loca);
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void addProf(String usuProf, String exp,Float prec, String idiom, String cursos, String asig, String loc,String lat, String lng) {
+        String url = URL_BASE + "addLoc.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuario", usuProf);
+            parametrosJSON.put("exp", exp);
+            parametrosJSON.put("prec", prec);
+            parametrosJSON.put("idiom", idiom);
+            parametrosJSON.put("asig", asig);
+            parametrosJSON.put("cursos", cursos);
+            parametrosJSON.put("loc", loc);
+            parametrosJSON.put("lat", lat);
+            parametrosJSON.put("lng", lng);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void selectLoc(String usuLocInt) {
@@ -125,51 +178,8 @@ public class conexionBDWebService extends Worker {
 
     }
 
-    private void addLoc(String usuLoc, String lat, String lng) {
-        String url = URL_BASE + "addLoc.php";
-        System.out.println(url);
+    private void add(String usuLoc, String lat, String lng) {
 
-        HttpURLConnection urlConnection = null;
-        try {
-            URL requestUrl = new URL(url);
-            urlConnection = (HttpURLConnection) requestUrl.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-
-            JSONObject parametrosJSON = new JSONObject();
-            parametrosJSON.put("usuario", usuLoc);
-            parametrosJSON.put("lat", lat);
-            parametrosJSON.put("lng", lng);
-            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
-            out.print(parametrosJSON.toString());
-            out.close();
-
-            int statusCode = urlConnection.getResponseCode();
-            if (statusCode == 200) {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                String line, result = "";
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    result += line;
-                }
-                bufferedReader.close();
-
-                JSONArray jsonArray = new JSONArray(result);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    usuario = jsonArray.getJSONObject(i).getString("res");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
     }
 
 

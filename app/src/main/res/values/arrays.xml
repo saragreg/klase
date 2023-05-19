@@ -15,14 +15,8 @@
         <item>@string/lengua</item>
         <item>@string/ingles</item>
         <item>@string/euskera</item>
-        <item>@string/bio</item>
         <item>@string/fiki</item>
         <item>@string/tics</item>
-        <item>@string/historia</item>
-        <item>@string/tecno</item>
-        <item>@string/dibujo</item>
-        <item>@string/latin</item>
-        <item>@string/empresa</item>
     </string-array>
 
     <string-array name="asignaturas_bac">
@@ -30,14 +24,16 @@
         <item>@string/lengua</item>
         <item>@string/ingles</item>
         <item>@string/euskera</item>
-        <item>@string/bio</item>
         <item>@string/fiki</item>
         <item>@string/tics</item>
-        <item>@string/historia</item>
-        <item>@string/tecno</item>
-        <item>@string/dibujo</item>
-        <item>@string/latin</item>
-        <item>@string/empresa</item>
+    </string-array>
+    <string-array name="hijos">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="horas_mañana">

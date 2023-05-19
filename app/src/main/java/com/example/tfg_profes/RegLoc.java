@@ -13,7 +13,6 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,6 +26,7 @@ public class RegLoc extends AppCompatActivity {
     private String lng;
     private String usu;
     private String per;
+    String loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +34,21 @@ public class RegLoc extends AppCompatActivity {
         setContentView(R.layout.activity_reg_loc);
         usu=getIntent().getExtras().getString("usuario");
         per=getIntent().getExtras().getString("per");
+        if (per.equals("a")){
+            FragmentEso fragAlu= (FragmentEso) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+            Bundle bundle=new Bundle();
+            fragAlu.setArguments(bundle);
+        }else{
+            FragmentBac fragProf= (FragmentBac) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+            Bundle bundle=new Bundle();
+            fragProf.setArguments(bundle);
+        }
     }
 
     public void onClickRegLoc(View view) {
         EditText ciudad=findViewById(R.id.ciudad);
         EditText barrio=findViewById(R.id.barrio);
-        String loc=barrio.getText().toString()+","+ciudad.getText().toString()+",España";
+        loc=barrio.getText().toString()+","+ciudad.getText().toString()+",España";
         obtenerLatLon(loc);
     }
 
@@ -64,7 +73,11 @@ public class RegLoc extends AppCompatActivity {
         protected void onPostExecute(LatLng location) {
             lat=location.latitude+"";
             lng=location.longitude+"";
-            insertarLoc(lat,lng);
+            if (per.equals("a")){
+                //registrarAlu(latitude,longitude);
+            }else{
+                registrarProfe(lat,lng);
+            }
         }
     }
 
@@ -72,10 +85,27 @@ public class RegLoc extends AppCompatActivity {
         new GeocodeTask().execute(loc);
     }
 
-    private void insertarLoc(String latInt, String lngInt) {
+    private void registrarProfe(String latitude, String longitude) {
+        FragmentBac fragProf= (FragmentBac) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        String exp=fragProf.getExp();
+        String cursos=fragProf.getCurso();
+        String idiom=fragProf.getIdiom();
+        String asig = fragProf.getAsig();
+        Float prec =fragProf.getPrecio();
+        insertarProf(latitude,longitude,exp,cursos,idiom,asig,prec);
+    }
+
+    private void insertarProf(String latInt, String lngInt,String exp,String cursos,String idiom,String asig,Float prec) {
+        System.out.println("lat:"+latInt+"lon"+lngInt+"exp:"+exp+"curs:"+cursos+"idiom:"+idiom+"asig:"+asig+"prec:"+prec+"");
         Data inputData = new Data.Builder()
-                .putString("tipo", "addLoc")
+                .putString("tipo", "addProf")
                 .putString("usuario",usu)
+                .putString("exp",exp)
+                .putString("cursos",cursos)
+                .putString("idiom",idiom)
+                .putString("asig",asig)
+                .putFloat("prec",prec)
+                .putString("loc", loc)
                 .putString("lat", latInt)
                 .putString("lng", lngInt)
                 .build();

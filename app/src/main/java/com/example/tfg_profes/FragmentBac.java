@@ -1,5 +1,6 @@
 package com.example.tfg_profes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 /**
@@ -30,6 +33,14 @@ public class FragmentBac extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private EditText exp,prec;
+    private CheckBox prim,eso,bac,cas,eus,ing;
+
+    private ImageButton m,l,e,i,n,s,t,q,a;
+
+    private boolean mx=false,lx=false,ex=false,ix=false,nx=false,sx=false,tx=false,qx=false,ax=false;
+
+
 
     public FragmentBac() {
         // Required empty public constructor
@@ -61,6 +72,70 @@ public class FragmentBac extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    public String getExp(){
+        return exp.getText().toString();
+    }
+    public Float getPrecio(){
+        return Float.parseFloat(prec.getText().toString());
+    }
+    public String getCurso(){
+        String curso="";
+        if(prim.isChecked()){
+            curso="prim,";
+        }
+        if(eso.isChecked()){
+            curso=curso+"eso,";
+        }
+        if(bac.isChecked()){
+            curso=curso+"bac";
+        }
+        return curso;
+    }
+    public String getIdiom(){
+        String curso="";
+        if(cas.isChecked()){
+            curso="cas,";
+        }
+        if(eus.isChecked()){
+            curso=curso+"eus,";
+        }
+        if(ing.isChecked()){
+            curso=curso+"ing";
+        }
+        return curso;
+    }
+    public String getAsig(){
+        String asig="";
+
+        if(mx){
+            asig="mate";
+        }
+        if(lx){
+            asig=asig+"len,";
+        }
+        if(ex){
+            asig=asig+"eus,";
+        }
+        if(ix){
+            asig="ing,";
+        }
+        if(qx){
+            asig=asig+"fiki,";
+        }
+        if(nx){
+            asig=asig+"nat,";
+        }
+        if(sx){
+            asig="soc,";
+        }
+        if(tx){
+            asig=asig+"tic,";
+        }
+        if(ax){
+            asig=asig+"apo";
+        }
+        return asig;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,36 +146,181 @@ public class FragmentBac extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        prim = view.findViewById(R.id.checkbox_prim);
+        eso = view.findViewById(R.id.checkbox_eso);
+        bac = view.findViewById(R.id.checkbox_bac);
 
-        CheckBox checkbox = view.findViewById(R.id.checkbox_bac);
-        ListView listaAsignaturas = view.findViewById(R.id.lista_asignaturas_bac);
+        prec = view.findViewById(R.id.precioreg);
 
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        m = view.findViewById(R.id.mate);
+        l = view.findViewById(R.id.lengua);
+        e = view.findViewById(R.id.eusk);
+        i = view.findViewById(R.id.ing);
+        q = view.findViewById(R.id.fiki);
+        n = view.findViewById(R.id.natura);
+        s = view.findViewById(R.id.gizar);
+        t = view.findViewById(R.id.tic);
+        a = view.findViewById(R.id.apoyo);
+
+        m.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    listaAsignaturas.setVisibility(View.VISIBLE);
-                } else {
-                    listaAsignaturas.setVisibility(View.GONE);
+            public void onClick(View view) {
+                if (mx) {
+                    mx=false;
+                }else{
+                    mx=true;
+                }
+            }
+        });
+        l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (lx) {
+                    lx=false;
+                }else{
+                    lx=true;
+                }
+            }
+        });
+        e.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ex) {
+                    ex=false;
+                }else{
+                    ex=true;
+                }
+            }
+        });
+        i.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ix) {
+                    ix=false;
+                }else{
+                    ix=true;
+                }
+            }
+        });
+        q.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (qx) {
+                    qx=false;
+                }else{
+                    qx=true;
+                }
+            }
+        });
+        n.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nx) {
+                    nx=false;
+                }else{
+                    nx=true;
+                }
+            }
+        });
+        s.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (sx) {
+                    sx=false;
+                }else{
+                    sx=true;
+                }
+            }
+        });
+        t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tx) {
+                    tx=false;
+                }else{
+                    tx=true;
+                }
+            }
+        });
+        a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ax) {
+                    ax=false;
+                }else{
+                    ax=true;
                 }
             }
         });
 
+        cas = view.findViewById(R.id.checkbox_cas);
+        eus = view.findViewById(R.id.checkbox_eusk);
+        ing = view.findViewById(R.id.checkbox_ing);
 
-        ListView listView = view.findViewById(R.id.lista_asignaturas_bac);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.asignaturas_bac, android.R.layout.simple_list_item_multiple_choice);
-        listView.setAdapter(adapter);
-
-        SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
-        for (int i = 0; i < checkedItems.size(); i++) {
-            if (checkedItems.valueAt(i)) {
-                int position = checkedItems.keyAt(i);
-                String asignatura = adapter.getItem(position).toString();
-                // hacer algo con la asignatura seleccionada
-            }
-        }
-
-
+        exp=view.findViewById(R.id.expNum);
     }
+    /*public void onClickm(View v){
+        if (mx) {
+            mx=false;
+        }else{
+            mx=true;
+        }
+    }
+    public void onClickl(View v){
+        if (lx) {
+            lx=false;
+        }else{
+            lx=true;
+        }
+    }
+    public void onClicke(View v){
+        if (ex) {
+            ex=false;
+        }else{
+            ex=true;
+        }
+    }
+    public void onClicki(View v){
+        if (ix) {
+            ix=false;
+        }else{
+            ix=true;
+        }
+    }
+    public void onClickq(View v){
+        if (qx) {
+            qx=false;
+        }else{
+            qx=true;
+        }
+    }
+    public void onClickn(View v){
+        if (nx) {
+            nx=false;
+        }else{
+            nx=true;
+        }
+    }
+    public void onClicks(View v){
+        if (sx) {
+            sx=false;
+        }else{
+            sx=true;
+        }
+    }
+    public void onClickt(View v){
+        if (tx) {
+            tx=false;
+        }else{
+            tx=true;
+        }
+    }
+    public void onClicka(View v){
+        if (ax) {
+            ax=false;
+        }else{
+            ax=true;
+        }
+    }*/
 
 }

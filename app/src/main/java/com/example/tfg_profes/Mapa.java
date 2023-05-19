@@ -2,6 +2,7 @@ package com.example.tfg_profes;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -21,7 +22,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -29,7 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
+public class Mapa extends FragmentActivity implements OnMapReadyCallback {
     private GeocodeTask geocodeTask;
     private String usu;
     String lat,lng;
@@ -39,9 +42,11 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
         usu=getIntent().getExtras().getString("usuario");
-        MapView mapView = (MapView) findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
     }
 
     private void obtenerLoc(String usu,GoogleMap googleMap) {
@@ -75,11 +80,23 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
+        LatLng location=new LatLng(43.2969875,-2.9862029);
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(location)
+                .title("Mi marcador")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+        googleMap.addMarker(markerOptions);
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(location)
+                .zoom(15) // ajustar el nivel de zoom según tus necesidades
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         /*float newZoomLevel = 12.5f;
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(newZoomLevel));*/
 
-        obtenerLoc(usu,googleMap);
+        //obtenerLoc(usu,googleMap);
         /*if (geocodeTask != null) {
             geocodeTask.cancel(true);
         }
@@ -114,7 +131,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
         protected void onPostExecute(LatLng location) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(location)
-                    .title("Mi marcador");
+                    .title("Mi marcador")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
             map.addMarker(markerOptions);
 
             // Mueve la cámara para enfocar la posición de tu marcador

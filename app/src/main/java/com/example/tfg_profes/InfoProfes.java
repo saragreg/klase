@@ -21,8 +21,7 @@ public class InfoProfes extends AppCompatActivity {
         setContentView(R.layout.activity_info_profes);
         //obtenemos info del usuario
         usuario = getIntent().getExtras().getString("usus");
-        String nombre = getIntent().getExtras().getString("noms");
-        String precio = getIntent().getExtras().getString("precios");
+        String precio = getIntent().getExtras().getString("precio");
         String asig = getIntent().getExtras().getString("asig");
         String cursos = getIntent().getExtras().getString("cursos");
         String idiomas = getIntent().getExtras().getString("idiomas");
@@ -31,7 +30,7 @@ public class InfoProfes extends AppCompatActivity {
 
         TextView n=findViewById(R.id.nombreusu);
         RatingBar p=findViewById(R.id.ratingBar2);
-        n.setText(nombre);
+        n.setText(usuario);
         p.setRating(Float.parseFloat(punts));
 
         System.out.println("curso que se envia al fragment: "+cursos);

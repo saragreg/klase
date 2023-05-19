@@ -7,59 +7,89 @@
     android:layout_height="match_parent"
     tools:context=".FragmentEso">
 
-    <CheckBox
-        android:id="@+id/checkbox_eso"
-        android:layout_width="118dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/eso"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="60dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="4dp"
-        android:text="€/h"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumberDecimal2"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal2" />
-
-    <EditText
-        android:id="@+id/editTextNumberDecimal2"
-        android:layout_width="87dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/precio"
-        android:inputType="numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/checkbox_eso"
-        app:layout_constraintTop_toTopOf="@+id/checkbox_eso" />
-
-    <TextView
-        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Asignaturas del curso:"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_eso"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_eso" />
-
-    <ListView
-        android:id="@+id/lista_asignaturas_eso"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:choiceMode="multipleChoice"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/numhijos"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView7" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/hijo1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="hijo1"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <EditText
+        android:id="@+id/hijo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="hijo2"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/hijo1"
+        app:layout_constraintTop_toBottomOf="@+id/hijo1" />
+
+    <EditText
+        android:id="@+id/hijo3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="hijo3"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/hijo2"
+        app:layout_constraintTop_toBottomOf="@+id/hijo2" />
+
+    <EditText
+        android:id="@+id/hijo4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="hijo4"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/hijo3"
+        app:layout_constraintTop_toBottomOf="@+id/hijo3" />
+
+    <EditText
+        android:id="@+id/hijo5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="hijo5"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/hijo4"
+        app:layout_constraintTop_toBottomOf="@+id/hijo4" />
+
+    <EditText
+        android:id="@+id/hijo6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="hijo6"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/hijo5"
+        app:layout_constraintTop_toBottomOf="@+id/hijo5" />
+
+    <Spinner
+        android:id="@+id/hijos"
+        android:layout_width="100dp"
+        android:layout_height="22dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

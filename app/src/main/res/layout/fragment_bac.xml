@@ -8,57 +8,321 @@
     tools:context=".FragmentBac">
 
     <CheckBox
-        android:id="@+id/checkbox_bac"
-        android:layout_width="118dp"
-        android:layout_height="52dp"
+        android:id="@+id/checkbox_eusk"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/euskera"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_cas"
+        app:layout_constraintTop_toTopOf="@+id/checkbox_cas" />
+
+    <CheckBox
+        android:id="@+id/checkbox_cas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cas"
+        android:textSize="13dp"
+        app:layout_constraintStart_toStartOf="@+id/textView46"
+        app:layout_constraintTop_toBottomOf="@+id/textView46" />
+
+    <CheckBox
+        android:id="@+id/checkbox_ing"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ingles"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_eusk"
+        app:layout_constraintTop_toTopOf="@+id/checkbox_eusk" />
+
+    <ImageButton
+        android:id="@+id/tic"
+        android:layout_width="61dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toEndOf="@+id/gizar"
+        app:layout_constraintTop_toTopOf="@+id/gizar" />
+
+    <ImageButton
+        android:id="@+id/apoyo"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintBottom_toBottomOf="@+id/textView44"
+        app:layout_constraintEnd_toEndOf="@+id/ing"
+        app:layout_constraintStart_toEndOf="@+id/tic"
+        app:layout_constraintTop_toBottomOf="@+id/natura" />
+
+    <ImageButton
+        android:id="@+id/gizar"
+        android:layout_width="179dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toStartOf="@+id/mate"
+        app:layout_constraintTop_toBottomOf="@+id/fiki" />
+
+    <ImageButton
+        android:id="@+id/natura"
+        android:layout_width="211dp"
+        android:layout_height="38dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toEndOf="@+id/fiki"
+        app:layout_constraintTop_toTopOf="@+id/fiki" />
+
+    <ImageButton
+        android:id="@+id/fiki"
+        android:layout_width="156dp"
+        android:layout_height="38dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/bach"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toStartOf="@+id/mate"
+        app:layout_constraintTop_toBottomOf="@+id/mate" />
+
+    <ImageButton
+        android:id="@+id/ing"
+        android:layout_width="83dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toEndOf="@+id/eusk"
+        app:layout_constraintTop_toTopOf="@+id/eusk" />
+
+    <ImageButton
+        android:id="@+id/eusk"
+        android:layout_width="99dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toEndOf="@+id/lengua"
+        app:layout_constraintTop_toTopOf="@+id/lengua" />
+
+    <ImageButton
+        android:id="@+id/lengua"
+        android:layout_width="93dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toEndOf="@+id/mate"
+        app:layout_constraintTop_toTopOf="@+id/mate" />
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="60dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="4dp"
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/asignatura"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_prim" />
+
+    <CheckBox
+        android:id="@+id/checkbox_bac"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/bach"
+        app:layout_constraintBottom_toBottomOf="@+id/checkbox_eso"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_eso" />
+
+    <CheckBox
+        android:id="@+id/checkbox_eso"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/eso"
+        app:layout_constraintBottom_toBottomOf="@+id/checkbox_prim"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_prim" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="€/h"
         android:textColor="@color/black"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumberDecimal2"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal2" />
+        app:layout_constraintBottom_toBottomOf="@+id/precioreg"
+        app:layout_constraintStart_toEndOf="@+id/precioreg"
+        app:layout_constraintTop_toTopOf="@+id/precioreg" />
 
-    <EditText
-        android:id="@+id/editTextNumberDecimal2"
-        android:layout_width="87dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/precio"
-        android:inputType="numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/checkbox_bac"
-        app:layout_constraintTop_toTopOf="@+id/checkbox_bac" />
-
-    <TextView
-        android:id="@+id/textView7"
+    <CheckBox
+        android:id="@+id/checkbox_prim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Asignaturas del curso:"
-        app:layout_constraintStart_toStartOf="@+id/checkbox_bac"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_bac" />
+        android:text="@string/primaria"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox_eso"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <EditText
+        android:id="@+id/precioreg"
+        android:layout_width="74dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:hint="@string/precio"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/checkbox_bac"
+        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_bac"
+        app:layout_constraintTop_toTopOf="@+id/checkbox_bac" />
 
     <ListView
         android:id="@+id/lista_asignaturas_bac"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:choiceMode="multipleChoice"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/curso"
+        android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView7" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/mate"
+        android:layout_width="109dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/btn_asig"
+        app:layout_constraintStart_toStartOf="@+id/textView31"
+        app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+    <TextView
+        android:id="@+id/textView36"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mate"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mate"
+        app:layout_constraintEnd_toEndOf="@+id/mate"
+        app:layout_constraintStart_toStartOf="@+id/mate"
+        app:layout_constraintTop_toTopOf="@+id/mate" />
+
+    <TextView
+        android:id="@+id/textView38"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lengua"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/lengua"
+        app:layout_constraintEnd_toEndOf="@+id/lengua"
+        app:layout_constraintStart_toStartOf="@+id/lengua"
+        app:layout_constraintTop_toTopOf="@+id/lengua" />
+
+    <TextView
+        android:id="@+id/textView39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/euskera"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/eusk"
+        app:layout_constraintEnd_toEndOf="@+id/eusk"
+        app:layout_constraintStart_toStartOf="@+id/eusk"
+        app:layout_constraintTop_toTopOf="@+id/eusk" />
+
+    <TextView
+        android:id="@+id/textView40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ingles"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ing"
+        app:layout_constraintEnd_toEndOf="@+id/ing"
+        app:layout_constraintStart_toStartOf="@+id/ing"
+        app:layout_constraintTop_toTopOf="@+id/ing" />
+
+    <TextView
+        android:id="@+id/textView41"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiki"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fiki"
+        app:layout_constraintEnd_toEndOf="@+id/fiki"
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="@+id/fiki"
+        app:layout_constraintTop_toTopOf="@+id/fiki" />
+
+    <TextView
+        android:id="@+id/textView42"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/natura"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/natura"
+        app:layout_constraintEnd_toEndOf="@+id/natura"
+        app:layout_constraintStart_toStartOf="@+id/natura"
+        app:layout_constraintTop_toTopOf="@+id/natura" />
+
+    <TextView
+        android:id="@+id/textView43"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sociales"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/gizar"
+        app:layout_constraintEnd_toEndOf="@+id/gizar"
+        app:layout_constraintStart_toStartOf="@+id/gizar"
+        app:layout_constraintTop_toTopOf="@+id/gizar" />
+
+    <TextView
+        android:id="@+id/textView44"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/apoyo"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/apoyo"
+        app:layout_constraintEnd_toEndOf="@+id/apoyo"
+        app:layout_constraintStart_toStartOf="@+id/apoyo"
+        app:layout_constraintTop_toTopOf="@+id/apoyo" />
+
+    <TextView
+        android:id="@+id/textView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tics"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tic"
+        app:layout_constraintEnd_toEndOf="@+id/tic"
+        app:layout_constraintStart_toStartOf="@+id/tic"
+        app:layout_constraintTop_toTopOf="@+id/tic" />
+
+    <TextView
+        android:id="@+id/textView46"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/idiomas"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/textView31"
+        app:layout_constraintTop_toBottomOf="@+id/gizar" />
+
+    <EditText
+        android:id="@+id/expNum"
+        android:layout_width="112dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/exp"
+        android:textSize="10dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/checkbox_ing"
+        app:layout_constraintEnd_toEndOf="@+id/apoyo"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_ing"
+        app:layout_constraintTop_toTopOf="@+id/checkbox_ing" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

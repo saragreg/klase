@@ -22,23 +22,17 @@
     <string name="idiom">Irakatsi dezakezun hizkuntzak</string>
     <string name="años">Urteetako esperientzia</string>
     <string name="mate">Matematika</string>
-    <string name="lengua">Gaztelania eta literatura.</string>
-    <string name="euskera">Euskara eta literatura</string>
+    <string name="lengua">Gaztelania</string>
+    <string name="euskera">Euskara</string>
     <string name="ingles">Ingelesa</string>
     <string name="natura">Natur zientziak.</string>
-    <string name="sociales">Gizarte Zientziak, Geografia eta Historia</string>
+    <string name="sociales">Gizarte Zientziak</string>
     <string name="primaria">Herri Eskola</string>
     <string name="eso">DBH</string>
     <string name="bach">Batxilergoa</string>
     <string name="precio">Prezioa</string>
-    <string name="bio">Biologia eta Geologia</string>
     <string name="fiki">Fisika eta Kimika</string>
     <string name="tics">TICs</string>
-    <string name="historia">Gizarte Zientziak, Geografia eta Historia</string>
-    <string name="latin">Latina</string>
-    <string name="tecno">Teknologia</string>
-    <string name="empresa">Ekintzailetzarako hastapena</string>
-    <string name="dibujo">Marrazki Teknikoa</string>
     <string name="sig">Hurrengoa</string>
     <string name="repeContra">Errepikatu pasahitza</string>
     <string name="profesor">Irakasle</string>
@@ -48,4 +42,10 @@
     <string name="pais">Herrialdea</string>
     <string name="ciudad">Hiria</string>
     <string name="barrio">Auzoa</string>
+    <string name="apoyo">Eskola Laguntza</string>
+    <string name="asignatura">Gaiak</string>
+    <string name="idiomas">Hizkuntzak</string>
+    <string name="cas">Gaztelania</string>
+    <string name="exp">Urteko Esperientzia</string>
+    <string name="numhijos">Adierazi zenbat seme-alabak dituzun</string>
 </resources>

@@ -23,23 +23,16 @@
     <string name="años">Años de experiencia</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="mate">Matemáticas</string>
-    <string name="lengua">Lengua Castellana y literatura</string>
-    <string name="euskera">Lengua vasca y literatura</string>
+    <string name="lengua">Lengua</string>
     <string name="ingles">Inglés</string>
     <string name="natura">Ciencias de la Naturaleza</string>
-    <string name="sociales">Ciencias Sociales, Geografía e Historia</string>
-    <string name="primaria">Educación primaria</string>
+    <string name="sociales">Ciencias Sociales</string>
+    <string name="primaria">Primaria</string>
     <string name="eso">E.S.O</string>
     <string name="bach">Bachiller</string>
     <string name="precio">Precio</string>
-    <string name="bio">Biología y geología</string>
     <string name="fiki">Física y Química</string>
     <string name="tics">TICs</string>
-    <string name="historia">Ciencias Sociales,Geografía e Historia</string>
-    <string name="latin">Latín</string>
-    <string name="tecno">Tecnología</string>
-    <string name="dibujo">Dibujo Técnico</string>
-    <string name="empresa">Iniciación al Emprendimiento</string>
     <string name="sig">Siguiente</string>
     <string name="repeContra">Repetir contraseña</string>
     <string name="profesor">Profesor</string>
@@ -47,8 +40,14 @@
     <string name="rol">Usted se va a registrar como:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_maps_api_key">AIzaSyBkQBo4qew97alrgzanOAyy45H93LjiHzA</string>
     <string name="pais">País</string>
     <string name="ciudad">Ciudad</string>
     <string name="barrio">Barrio</string>
+    <string name="euskera">Euskera</string>
+    <string name="apoyo">Apoyo Escolar</string>
+    <string name="asignatura">Asignaturas</string>
+    <string name="idiomas">Idiomas</string>
+    <string name="cas">Castellano</string>
+    <string name="exp">Años de experiencia</string>
+    <string name="numhijos">Indica el número de hijos que tienes</string>
 </resources>
