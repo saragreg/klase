@@ -26,7 +26,7 @@ public class RegLoc extends AppCompatActivity {
     private String lng;
     private String usu;
     private String per;
-    String loc;
+    private String loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,7 @@ public class RegLoc extends AppCompatActivity {
                     .beginTransaction()
                     .replace(R.id.fragmentContainerView,fragAlu)
                     .commit();
-        }/*else{
-            FragmentBac fragProf= (FragmentBac) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
-            Bundle bundle=new Bundle();
-            fragProf.setArguments(bundle);
-        }*/
+        }
     }
 
     public void onClickRegLoc(View view) {
@@ -77,30 +73,53 @@ public class RegLoc extends AppCompatActivity {
         protected void onPostExecute(LatLng location) {
             lat=location.latitude+"";
             lng=location.longitude+"";
-            if (per.equals("a")){
-                //registrarAlu(latitude,longitude);
-            }else{
-                registrarProfe(lat,lng);
-            }
+            regLoc(lat,lng);
         }
     }
+
+
 
     private void obtenerLatLon(String loc) {
         new GeocodeTask().execute(loc);
     }
+    private void regLoc(String lat, String lng) {
+        //meter loc lat y long en el usuario
+        Data inputData = new Data.Builder()
+                .putString("tipo", "addLocUsu")
+                .putString("usuario",usu)
+                .putString("loc",loc)
+                .putString("lat",lat)
+                .putString("lng",lng)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            if (per.equals("a")){
+                                //registrarAlu(latitude,longitude);
+                            }else{
+                                registrarProfe();
+                            }
 
-    private void registrarProfe(String latitude, String longitude) {
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+    private void registrarProfe() {
         FragmentBac fragProf= (FragmentBac) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         String exp=fragProf.getExp();
         String cursos=fragProf.getCurso();
         String idiom=fragProf.getIdiom();
         String asig = fragProf.getAsig();
         Float prec =fragProf.getPrecio();
-        insertarProf(latitude,longitude,exp,cursos,idiom,asig,prec);
+        insertarProf(exp,cursos,idiom,asig,prec);
     }
 
-    private void insertarProf(String latInt, String lngInt,String exp,String cursos,String idiom,String asig,Float prec) {
-        System.out.println("lat:"+latInt+"lon"+lngInt+"exp:"+exp+"curs:"+cursos+"idiom:"+idiom+"asig:"+asig+"prec:"+prec+"");
+    private void insertarProf(String exp,String cursos,String idiom,String asig,Float prec) {
+        System.out.println("exp:"+exp+"curs:"+cursos+"idiom:"+idiom+"asig:"+asig+"prec:"+prec+"");
         Data inputData = new Data.Builder()
                 .putString("tipo", "addProf")
                 .putString("usuario",usu)
@@ -109,9 +128,6 @@ public class RegLoc extends AppCompatActivity {
                 .putString("idiom",idiom)
                 .putString("asig",asig)
                 .putFloat("prec",prec)
-                .putString("loc", loc)
-                .putString("lat", latInt)
-                .putString("lng", lngInt)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
@@ -122,9 +138,8 @@ public class RegLoc extends AppCompatActivity {
 
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
 
-                            //subirProfe(usuInt);
                             if (per.equals("p")) {
-                                Intent intent = new Intent(RegLoc.this, Menu.class);
+                                Intent intent = new Intent(RegLoc.this, LisAlumnos.class);
                                 intent.putExtra("usuario", usu);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                         Intent.FLAG_ACTIVITY_NEW_TASK);

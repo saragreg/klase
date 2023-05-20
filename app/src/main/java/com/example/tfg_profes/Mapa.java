@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Mapa extends FragmentActivity implements OnMapReadyCallback {
@@ -39,12 +40,14 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
     String lat,lng;
     private ArrayList<LatLng> pend=new ArrayList<>();
     private ArrayList<LatLng> acept=new ArrayList<>();
+    private Double latProfe,lngProfe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
-        usu=getIntent().getExtras().getString("usuario");
+        latProfe=getIntent().getExtras().getDouble("latProfe");
+        lngProfe=getIntent().getExtras().getDouble("lngProfe");
         pend=getIntent().getParcelableArrayListExtra("pend");
         acept=getIntent().getParcelableArrayListExtra("acept");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -54,7 +57,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-    private void obtenerLoc(String usu,GoogleMap googleMap) {
+    /*private void obtenerLoc(String usu,GoogleMap googleMap) {
         Data inputData = new Data.Builder()
                 .putString("tipo", "selectLoc")
                 .putString("usuario", usu)
@@ -78,37 +81,45 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
                     }
                 });
         WorkManager.getInstance(this).enqueue(otwr);
-    }
+    }*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
-        LatLng location=new LatLng(43.2969875,-2.9862029);
-        //poner iterator y dentro el marker y sacar los latlng de cada uno
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position(location)
-                .title("Mi marcador")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        LatLng locProfe =new LatLng(latProfe,lngProfe);
+        MarkerOptions marker = new MarkerOptions()
+                .position(locProfe)
+                .title("Este soy yo")
+                .icon(BitmapDescriptorFactory.defaultMarker());
+        googleMap.addMarker(marker);
+        Iterator<LatLng> iterator = pend.iterator();
+        while (iterator.hasNext()) {
+            LatLng location = iterator.next();
 
-        googleMap.addMarker(markerOptions);
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(location)
+                    .title("pendiente")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            googleMap.addMarker(markerOptions);
+        }
+        Iterator<LatLng> iterator2 = acept.iterator();
+        while (iterator2.hasNext()) {
+            LatLng location = iterator2.next();
+
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(location)
+                    .title("aceptado")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            googleMap.addMarker(markerOptions);
+        }
+        //ajustar camara a la ubicacion del profesor
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(location)
-                .zoom(15) // ajustar el nivel de zoom según tus necesidades
+                .target(locProfe)
+                .zoom(12) // ajustar el nivel de zoom según tus necesidades
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        /*float newZoomLevel = 12.5f;
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(newZoomLevel));*/
-
-        //obtenerLoc(usu,googleMap);
-        /*if (geocodeTask != null) {
-            geocodeTask.cancel(true);
-        }
-        geocodeTask = new GeocodeTask(googleMap);
-        new GeocodeTask(googleMap).execute("Indautxu, Bilbao, España");
-        new GeocodeTask(googleMap).execute("San Ignacio, Bilbao, España");*/
     }
 
     private class GeocodeTask extends AsyncTask<String, Void, LatLng> {

@@ -76,12 +76,15 @@ public class conexionBDWebService extends Worker {
                 String idiom = getInputData().getString("idiom");
                 String cursos = getInputData().getString("cursos");
                 String asig = getInputData().getString("asig");
-                String loc = getInputData().getString("loc");
-                String lat = getInputData().getString("lat");
-                String lng = getInputData().getString("lng");
+                addProf(usuProf,exp,prec,idiom,cursos,asig);
+                return Result.success();
+            case "addLocUsu":
+                String usuario = getInputData().getString("usuario");
+                String locU = getInputData().getString("loc");
+                String latU = getInputData().getString("lat");
+                String lngU = getInputData().getString("lng");
 
-                System.out.println("lo que llega es: "+lat);
-                addProf(usuProf,exp,prec,idiom,cursos,asig,loc,lat,lng);
+                addLocUsu(usuario,locU,latU,lngU);
                 return Result.success();
             case "selectLoc":
                 String usuLocInt = getInputData().getString("usuario");
@@ -110,6 +113,49 @@ public class conexionBDWebService extends Worker {
                 return Result.failure();
         }
 
+    }
+
+    private void addLocUsu(String usuario,String locU, String latU, String lngU) {
+        String url = URL_BASE + "addLoc.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuario", usuario);
+            parametrosJSON.put("loc", locU);
+            parametrosJSON.put("lat", latU);
+            parametrosJSON.put("lng", lngU);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void pendientes(String profe) {
@@ -182,8 +228,8 @@ public class conexionBDWebService extends Worker {
         }
     }
 
-    private void addProf(String usuProf, String exp,Float prec, String idiom, String cursos, String asig, String loc,String lat, String lng) {
-        String url = URL_BASE + "addLoc.php";
+    private void addProf(String usuProf, String exp,Float prec, String idiom, String cursos, String asig) {
+        String url = URL_BASE + "addProfe.php";
         System.out.println(url);
 
         HttpURLConnection urlConnection = null;
@@ -201,11 +247,8 @@ public class conexionBDWebService extends Worker {
             parametrosJSON.put("idiom", idiom);
             parametrosJSON.put("asig", asig);
             parametrosJSON.put("cursos", cursos);
-            parametrosJSON.put("loc", loc);
-            parametrosJSON.put("lat", lat);
-            parametrosJSON.put("lng", lng);
             PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
-            out.print(parametrosJSON.toString());
+            out.print(parametrosJSON);
             out.close();
 
             int statusCode = urlConnection.getResponseCode();

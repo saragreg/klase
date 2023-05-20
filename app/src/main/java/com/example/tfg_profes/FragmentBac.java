@@ -161,8 +161,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (mx) {
+                    m.setImageResource(R.drawable.btn_asig);
                     mx=false;
                 }else{
+                    m.setImageResource(R.drawable.btn_asig_pulsada);
                     mx=true;
                 }
             }
@@ -171,8 +173,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (lx) {
+                    l.setImageResource(R.drawable.btn_asig);
                     lx=false;
                 }else{
+                    l.setImageResource(R.drawable.btn_asig_pulsada);
                     lx=true;
                 }
             }
@@ -181,8 +185,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (ex) {
+                    e.setImageResource(R.drawable.btn_asig);
                     ex=false;
                 }else{
+                    e.setImageResource(R.drawable.btn_asig_pulsada);
                     ex=true;
                 }
             }
@@ -191,8 +197,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (ix) {
+                    i.setImageResource(R.drawable.btn_asig);
                     ix=false;
                 }else{
+                    i.setImageResource(R.drawable.btn_asig_pulsada);
                     ix=true;
                 }
             }
@@ -201,8 +209,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (qx) {
+                    q.setImageResource(R.drawable.btn_asig);
                     qx=false;
                 }else{
+                    q.setImageResource(R.drawable.btn_asig_pulsada);
                     qx=true;
                 }
             }
@@ -211,8 +221,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (nx) {
+                    n.setImageResource(R.drawable.btn_asig);
                     nx=false;
                 }else{
+                    n.setImageResource(R.drawable.btn_asig_pulsada);
                     nx=true;
                 }
             }
@@ -221,8 +233,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (sx) {
+                    s.setImageResource(R.drawable.btn_asig);
                     sx=false;
                 }else{
+                    s.setImageResource(R.drawable.btn_asig_pulsada);
                     sx=true;
                 }
             }
@@ -231,8 +245,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (tx) {
+                    t.setImageResource(R.drawable.btn_asig);
                     tx=false;
                 }else{
+                    t.setImageResource(R.drawable.btn_asig_pulsada);
                     tx=true;
                 }
             }
@@ -241,8 +257,10 @@ public class FragmentBac extends Fragment {
             @Override
             public void onClick(View view) {
                 if (ax) {
+                    a.setImageResource(R.drawable.btn_asig);
                     ax=false;
                 }else{
+                    a.setImageResource(R.drawable.btn_asig_pulsada);
                     ax=true;
                 }
             }

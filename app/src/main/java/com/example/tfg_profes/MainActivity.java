@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void btn_login(View v){
-        Intent intent = new Intent(MainActivity.this, Login.class);
+        Intent intent = new Intent(MainActivity.this, Graph_demanda_asig_annos.class);
         startActivity(intent);
     }
     public void btn_reg(View v){

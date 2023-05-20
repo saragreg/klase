@@ -25,6 +25,7 @@ import java.util.Arrays;
 public class LisAlumnos extends AppCompatActivity {
     private String profe="";
     private String res="";
+    Double latProfe,lngProfe;
     private ArrayList<LatLng> locationsAccepted = new ArrayList<LatLng>();
     private ArrayList<LatLng> locationsPend = new ArrayList<LatLng>();
     @Override
@@ -35,6 +36,7 @@ public class LisAlumnos extends AppCompatActivity {
     }
 
     public void onClickMapa(View v){
+        obtenerLoc(profe,0,false);
         //se obtienen los alumnos pendientes
         Data inputData = new Data.Builder()
                 .putString("tipo", "pendientes")
@@ -104,7 +106,10 @@ public class LisAlumnos extends AppCompatActivity {
                             String lat = workInfo.getOutputData().getString("lat");
                             String lng = workInfo.getOutputData().getString("lng");
                             LatLng loc=new LatLng(parseDouble(lat), parseDouble(lng));
-                            if (n==1){
+                            if(n==0){
+                                latProfe=Double.parseDouble(lat);
+                                lngProfe=Double.parseDouble(lng);
+                            } else if (n==1){
                                 locationsPend.add(loc);
                             }else{
                                 locationsAccepted.add(loc);
@@ -113,6 +118,8 @@ public class LisAlumnos extends AppCompatActivity {
                                 Intent intent = new Intent(LisAlumnos.this, Mapa.class);
                                 intent.putParcelableArrayListExtra("pend", locationsPend);
                                 intent.putParcelableArrayListExtra("acept", locationsAccepted);
+                                intent.putExtra("latProfe",latProfe);
+                                intent.putExtra("lngProfe",lngProfe);
                                 startActivity(intent);
                             }
                         }
