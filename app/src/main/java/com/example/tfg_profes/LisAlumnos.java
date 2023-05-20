@@ -24,6 +24,9 @@ import java.util.Arrays;
 
 public class LisAlumnos extends AppCompatActivity {
     private String profe="";
+    private String res="";
+    private ArrayList<LatLng> locationsAccepted = new ArrayList<LatLng>();
+    private ArrayList<LatLng> locationsPend = new ArrayList<LatLng>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +36,6 @@ public class LisAlumnos extends AppCompatActivity {
 
     public void onClickMapa(View v){
         //se obtienen los alumnos pendientes
-        ArrayList<LatLng> locationsPend = new ArrayList<LatLng>();
         Data inputData = new Data.Builder()
                 .putString("tipo", "pendientes")
                 .putString("profe",profe)
@@ -47,11 +49,10 @@ public class LisAlumnos extends AppCompatActivity {
                             String usupend = workInfo.getOutputData().getString("usupend");
 
                             String[] arrayusu = usupend.split(",");
-                            for (int i = 0; i < usupend.length(); i++) {
-                                String res=obtenerLoc(arrayusu[i]);
-                                String[] localizacion=res.split(",");
-                                LatLng loc=new LatLng(parseDouble(localizacion[0]), parseDouble(localizacion[1]));
-                                locationsPend.add(loc);
+                            int i=0;
+                            while ( i < (arrayusu.length)) {
+                                obtenerLoc(arrayusu[i],1,false);
+                                i++;
                             }
                             obtenerAceptados(profe,locationsPend);
                             }
@@ -61,7 +62,7 @@ public class LisAlumnos extends AppCompatActivity {
     }
     private void obtenerAceptados(String profe,ArrayList<LatLng> locationsPend) {
         //se obtienen los alumnos pendientes
-        ArrayList<LatLng> locationsAccepted = new ArrayList<LatLng>();
+
         Data inputData = new Data.Builder()
                 .putString("tipo", "aceptados")
                 .putString("profe",profe)
@@ -72,27 +73,24 @@ public class LisAlumnos extends AppCompatActivity {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-                            String usuacep = workInfo.getOutputData().getString("usuacep");
+                            String usuacep = workInfo.getOutputData().getString("usuacept");
 
                             String[] arrayusu = usuacep.split(",");
                             for (int i = 0; i < arrayusu.length; i++) {
-                                String res=obtenerLoc(arrayusu[i]);
-                                String[] localizacion=res.split(",");
-                                LatLng loc=new LatLng(parseDouble(localizacion[0]), parseDouble(localizacion[1]));
-                                locationsAccepted.add(loc);
+                                if (i==arrayusu.length-1) {
+                                    obtenerLoc(arrayusu[i], 2,true);
+                                }else{
+                                    obtenerLoc(arrayusu[i], 2,false);
+                                }
                             }
-                            Intent intent = new Intent(LisAlumnos.this, Mapa.class);
-                            intent.putParcelableArrayListExtra("pend",locationsPend);
-                            intent.putParcelableArrayListExtra("acept",locationsAccepted);
-                            startActivity(intent);
+
                         }
                     }
                 });
         WorkManager.getInstance(this).enqueue(otwr);
     }
 
-    private String obtenerLoc(String usu) {
-        final String[] respuesta = {""};
+    private void obtenerLoc(String usu,int n, boolean last) {
         Data inputData = new Data.Builder()
                 .putString("tipo", "selectLoc")
                 .putString("usuario", usu)
@@ -105,12 +103,22 @@ public class LisAlumnos extends AppCompatActivity {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             String lat = workInfo.getOutputData().getString("lat");
                             String lng = workInfo.getOutputData().getString("lng");
-                            respuesta[0] =lat+","+lng;
+                            LatLng loc=new LatLng(parseDouble(lat), parseDouble(lng));
+                            if (n==1){
+                                locationsPend.add(loc);
+                            }else{
+                                locationsAccepted.add(loc);
+                            }
+                            if (last) {
+                                Intent intent = new Intent(LisAlumnos.this, Mapa.class);
+                                intent.putParcelableArrayListExtra("pend", locationsPend);
+                                intent.putParcelableArrayListExtra("acept", locationsAccepted);
+                                startActivity(intent);
+                            }
                         }
                     }
                 });
         WorkManager.getInstance(this).enqueue(otwr);
-        return respuesta[0];
     }
 
 }

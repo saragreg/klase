@@ -31,7 +31,7 @@ public class conexionBDWebService extends Worker {
     private String perfil;
     private String usuario;
     private String latObt,lngObt;
-    private String usupend,usuacept;
+    private String usupend="",usuacept="";
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
@@ -134,7 +134,7 @@ public class conexionBDWebService extends Worker {
                 JSONArray jsonArray = new JSONArray(result);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    usupend=usupend+jsonArray.getJSONObject(i).getString("usu");
+                    usupend=usupend+jsonArray.getJSONObject(i).getString("usu")+",";
                 }
 
 
@@ -174,7 +174,7 @@ public class conexionBDWebService extends Worker {
                 JSONArray jsonArray = new JSONArray(result);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    usuacept=usuacept+jsonArray.getJSONObject(i).getString("usu");
+                    usuacept=usuacept+jsonArray.getJSONObject(i).getString("usu")+",";
                 }
 
 
