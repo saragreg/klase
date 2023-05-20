@@ -30,18 +30,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Mapa extends FragmentActivity implements OnMapReadyCallback {
     private GeocodeTask geocodeTask;
     private String usu;
     String lat,lng;
+    private ArrayList<LatLng> pend=new ArrayList<>();
+    private ArrayList<LatLng> acept=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
         usu=getIntent().getExtras().getString("usuario");
+        pend=getIntent().getParcelableArrayListExtra("pend");
+        acept=getIntent().getParcelableArrayListExtra("acept");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -81,6 +86,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         LatLng location=new LatLng(43.2969875,-2.9862029);
+        //poner iterator y dentro el marker y sacar los latlng de cada uno
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(location)
                 .title("Mi marcador")

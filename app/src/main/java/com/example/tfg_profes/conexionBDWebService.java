@@ -155,12 +155,6 @@ public class conexionBDWebService extends Worker {
             urlConnection = (HttpURLConnection) requestUrl.openConnection();
             urlConnection.setRequestMethod("GET");
 
-            JSONObject parametrosJSON = new JSONObject();
-            parametrosJSON.put("profe", profe);
-            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
-            out.print(parametrosJSON.toString());
-            out.close();
-
             int statusCode = urlConnection.getResponseCode();
             if (statusCode == 200) {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
