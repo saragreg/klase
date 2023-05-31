@@ -6,53 +6,90 @@
     android:layout_height="match_parent"
     android:background="#EFE4B0"
     tools:context=".Menu">
+
     <ImageButton
-        android:id="@+id/mapa"
+        android:id="@+id/calendario"
         android:layout_width="93dp"
         android:layout_height="141dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="24dp"
         android:backgroundTint="#EFE4B0"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/perfilbtn"
+        app:layout_constraintStart_toEndOf="@+id/chat"
+        app:layout_constraintTop_toTopOf="@+id/chat"
+        app:srcCompat="@drawable/calendario" />
+
+    <ImageButton
+        android:id="@+id/grafica"
+        android:layout_width="93dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#EFE4B0"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/listabtn"
+        app:layout_constraintStart_toStartOf="@+id/listabtn"
+        app:layout_constraintTop_toBottomOf="@+id/listabtn"
+        app:srcCompat="@drawable/grafico" />
+
+    <ImageButton
+        android:id="@+id/chat"
+        android:layout_width="93dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#EFE4B0"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/textView3"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/mapa" />
+        app:srcCompat="@drawable/chat" />
+
+    <ImageButton
+        android:id="@+id/ajustes"
+        android:layout_width="93dp"
+        android:layout_height="141dp"
+        android:backgroundTint="#EFE4B0"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/perfilbtn"
+        app:layout_constraintEnd_toEndOf="@+id/calendario"
+        app:layout_constraintStart_toStartOf="@+id/calendario"
+        app:layout_constraintTop_toTopOf="@+id/perfilbtn"
+        app:srcCompat="@drawable/ajustes" />
 
     <ImageButton
         android:id="@+id/listabtn"
-        android:layout_width="116dp"
-        android:layout_height="159dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="1dp"
+        android:layout_width="93dp"
+        android:layout_height="141dp"
+        android:layout_marginEnd="24dp"
         android:backgroundTint="#EFE4B0"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/perfilbtn"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/lista" />
+        app:layout_constraintEnd_toStartOf="@+id/chat"
+        app:layout_constraintTop_toTopOf="@+id/chat"
+        app:srcCompat="@drawable/busqueda" />
 
     <ImageButton
         android:id="@+id/perfilbtn"
-        android:layout_width="122dp"
-        android:layout_height="158dp"
+        android:layout_width="93dp"
+        android:layout_height="141dp"
         android:backgroundTint="#EFE4B0"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/listabtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+
+        app:layout_constraintBottom_toBottomOf="@+id/grafica"
+        app:layout_constraintStart_toStartOf="@+id/chat"
+        app:layout_constraintTop_toTopOf="@+id/grafica"
         app:srcCompat="@drawable/perfil" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="186dp"
-        android:layout_height="62dp"
+        android:layout_width="133dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/menu"
         android:textColor="@color/black"
         android:textSize="40dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

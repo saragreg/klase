@@ -15,8 +15,9 @@
         android:text="TextView"
         android:textColor="@color/black"
         android:textSize="15dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/precio"
+        app:layout_constraintStart_toEndOf="@+id/fotoPerLis"
+        app:layout_constraintTop_toTopOf="@+id/fotoPerLis" />
 
     <TextView
         android:id="@+id/precio"
@@ -27,15 +28,16 @@
         android:textColor="@color/black"
         android:textSize="10dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+        app:layout_constraintStart_toEndOf="@+id/fotoPerLis"
         app:layout_constraintTop_toBottomOf="@+id/nombre" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/fotoPerLis"
         android:layout_width="48dp"
         android:layout_height="52dp"
-        android:layout_marginStart="80dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/localProf"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/perfil" />
 
@@ -46,7 +48,19 @@
         android:layout_height="18dp"
         android:layout_marginStart="16dp"
         android:numStars="5"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/fotoPerLis"
+        app:layout_constraintStart_toEndOf="@+id/fotoPerLis"
         app:layout_constraintTop_toBottomOf="@+id/precio" />
+
+    <TextView
+        android:id="@+id/localProf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/fotoPerLis"
+        app:layout_constraintEnd_toStartOf="@+id/fotoPerLis"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fotoPerLis" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

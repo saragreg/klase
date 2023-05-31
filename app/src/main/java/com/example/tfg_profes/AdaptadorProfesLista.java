@@ -17,12 +17,14 @@ public class AdaptadorProfesLista extends BaseAdapter {
     private ArrayList<String> nombres;
     private ArrayList<String> precios;
     private ArrayList<String> puntuaciones;
-    public AdaptadorProfesLista(Context pcontext, ArrayList<String> pnombres, ArrayList<String> pprecio, ArrayList<String> ppuntuaciones)
+    private ArrayList<String> locs;
+    public AdaptadorProfesLista(Context pcontext, ArrayList<String> pnombres, ArrayList<String> pprecio, ArrayList<String> ppuntuaciones,ArrayList<String> plocs)
     {
         contexto = pcontext;
         nombres = pnombres;
         precios=pprecio;
         puntuaciones=ppuntuaciones;
+        locs=plocs;
         inflater = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -46,9 +48,11 @@ public class AdaptadorProfesLista extends BaseAdapter {
         view=inflater.inflate(R.layout.adaptador_profes,null);
         TextView nombre= (TextView) view.findViewById(R.id.nombre);
         TextView precio=(TextView) view.findViewById(R.id.precio);
+        TextView loc = (TextView) view.findViewById(R.id.localProf);
         RatingBar barra= (RatingBar) view.findViewById(R.id.ratingBar);
         nombre.setText(nombres.get(i));
         precio.setText(precios.get(i)+"€");
+        loc.setText(locs.get(i));
         barra.setRating(Float.parseFloat(puntuaciones.get(i)));
         return view;
     }

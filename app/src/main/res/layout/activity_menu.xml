@@ -9,49 +9,76 @@
 
 
     <ImageButton
-        android:id="@+id/mapa"
-        android:layout_width="93dp"
-        android:layout_height="141dp"
+        android:id="@+id/calendario"
+        android:layout_width="57dp"
+        android:layout_height="48dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
         android:backgroundTint="#EFE4B0"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/perfilbtn"
+        app:layout_constraintStart_toEndOf="@+id/chat"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/mapa" />
+        app:srcCompat="@drawable/calendario" />
+
+    <ImageButton
+        android:id="@+id/grafica"
+        android:layout_width="50dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#EFE4B0"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/calendario"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:srcCompat="@drawable/grafico" />
+
+    <ImageButton
+        android:id="@+id/chat"
+        android:layout_width="51dp"
+        android:layout_height="61dp"
+        android:backgroundTint="#EFE4B0"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/listabtn"
+        app:layout_constraintStart_toEndOf="@+id/listabtn"
+        app:layout_constraintTop_toTopOf="@+id/listabtn"
+        app:srcCompat="@drawable/chat" />
+
+    <ImageButton
+        android:id="@+id/ajustes"
+        android:layout_width="53dp"
+        android:layout_height="41dp"
+        android:backgroundTint="#EFE4B0"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/grafica"
+        app:layout_constraintTop_toTopOf="@+id/perfilbtn"
+        app:srcCompat="@drawable/ajustes" />
 
     <ImageButton
         android:id="@+id/listabtn"
-        android:layout_width="93dp"
-        android:layout_height="141dp"
+        android:layout_width="52dp"
+        android:layout_height="48dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="#EFE4B0"
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/lista" />
+        app:srcCompat="@drawable/busqueda" />
 
     <ImageButton
         android:id="@+id/perfilbtn"
-        android:layout_width="93dp"
-        android:layout_height="141dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="50dp"
+        android:layout_height="38dp"
         android:backgroundTint="#EFE4B0"
+
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/mapa"
-        app:layout_constraintStart_toEndOf="@+id/listabtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/ajustes"
+        app:layout_constraintTop_toTopOf="@+id/grafica"
         app:srcCompat="@drawable/perfil" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="133dp"
         android:layout_height="45dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/menu"
         android:textColor="@color/black"
@@ -60,5 +87,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView3"
+        android:name="com.example.tfg_profes.FragmentPeticiones"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

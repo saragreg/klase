@@ -1,12 +1,11 @@
 package com.example.tfg_profes;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,12 +13,10 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 
 
@@ -32,6 +29,7 @@ public class conexionBDWebService extends Worker {
     private String usuario;
     private String latObt,lngObt;
     private String usupend="",usuacept="";
+    private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="";
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
@@ -51,9 +49,6 @@ public class conexionBDWebService extends Worker {
                 String tel = getInputData().getString("tel");
                 String per = getInputData().getString("perfil");
                 String token = getInputData().getString("token");
-                System.out.println("usu:"+usu);
-                System.out.println("per:"+per);
-                System.out.println("token:"+token);
 
                 registroUsu(usu,contraReg,nom,tel,per,token);
                 Data resreg = new Data.Builder()
@@ -109,10 +104,76 @@ public class conexionBDWebService extends Worker {
                         .putString("usuacept",usuacept)
                         .build();
                 return Result.success(aceptados);
+            case "ListaPeticiones":
+                String user = getInputData().getString("user");
+                ListaPeticiones(user);
+                Data petis = new Data.Builder()
+                        .putString("asig",asigPet)
+                        .putString("nombre",nombrePet)
+                        .putString("fotoper",fotoperPet)
+                        .putString("duracion",duracionPet)
+                        .putString("fechahora",fechahoraPet)
+                        .putString("intensivo",intensivoPet)
+                        .putString("dias",diasPet)
+                        .build();
+                return Result.success(petis);
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void ListaPeticiones(String user) {
+        String url = URL_BASE + "lisPeticiones.php?user="+user;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    asigPet = asigPet+jsonArray.getJSONObject(i).getString("asignaturas")+";";
+                    nombrePet = nombrePet+jsonArray.getJSONObject(i).getString("nombre")+",";
+                    fotoperPet = fotoperPet+jsonArray.getJSONObject(i).getString("imagen")+",";
+                    duracionPet = duracionPet+jsonArray.getJSONObject(i).getString("duracion")+",";
+                    fechahoraPet = fechahoraPet+jsonArray.getJSONObject(i).getString("fechaClase")+" ";
+                    fechahoraPet = fechahoraPet+jsonArray.getJSONObject(i).getString("horaClase")+",";
+                    int puntual = jsonArray.getJSONObject(i).getInt("puntual");
+                    if (puntual==1){
+                        intensivoPet=intensivoPet+"puntual"+",";
+                    }else{
+                        intensivoPet=intensivoPet+"intensivo"+",";
+                    }
+                    String dias=jsonArray.getJSONObject(i).getString("dias");
+                    if (!dias.equals("")){
+                        diasPet=diasPet+jsonArray.getJSONObject(i).getString("dias")+",";
+                    }else{
+                        diasPet=diasPet+"nada,";
+                    }
+                }
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void addLocUsu(String usuario,String locU, String latU, String lngU) {

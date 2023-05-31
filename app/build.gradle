@@ -40,9 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'androidx.work:work-runtime:2.8.1'
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
-    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
-    implementation 'com.google.firebase:firebase-storage:20.0.1'
+    implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
@@ -51,6 +49,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-database-ktx'
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    // For control over item selection of both touch and mouse driven selection
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
 
 

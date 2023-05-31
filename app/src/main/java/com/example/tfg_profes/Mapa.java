@@ -57,32 +57,6 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-    /*private void obtenerLoc(String usu,GoogleMap googleMap) {
-        Data inputData = new Data.Builder()
-                .putString("tipo", "selectLoc")
-                .putString("usuario", usu)
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            lat = workInfo.getOutputData().getString("lat");
-                            lng = workInfo.getOutputData().getString("lng");
-                            LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            markerOptions.position(latLng);
-                            markerOptions.title("mi casa");
-
-                            googleMap.addMarker(markerOptions);
-                        }
-                    }
-                });
-        WorkManager.getInstance(this).enqueue(otwr);
-    }*/
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -101,7 +75,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(location)
                     .title("pendiente")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             googleMap.addMarker(markerOptions);
         }
         Iterator<LatLng> iterator2 = acept.iterator();

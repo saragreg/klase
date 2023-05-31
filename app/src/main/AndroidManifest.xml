@@ -64,7 +64,17 @@
             android:exported="false" />
         <activity
             android:name=".Menu"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:configChanges="locale|orientation" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER"
+                    android:configChanges="locale|orientation" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -100,16 +110,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="locale|orientation"
-            android:exported="true">
-            <intent-filter>
-                <action
-                    android:name="android.intent.action.MAIN"
-                    android:configChanges="locale|orientation" />
-
-                <category
-                    android:name="android.intent.category.LAUNCHER"
-                    android:configChanges="locale|orientation" />
-            </intent-filter>
+            android:exported="false">
         </activity>
 
         <provider

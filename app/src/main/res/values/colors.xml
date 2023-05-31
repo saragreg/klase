@@ -10,4 +10,6 @@
     <color name="rojo">#880015</color>
     <color name="gris">#C3C3C3</color>
     <color name="amarillo">#EFE4B0</color>
+    <color name="theme_color">#FF9800</color>
+    <color name="theme_color_">#25FF9800</color>
 </resources>

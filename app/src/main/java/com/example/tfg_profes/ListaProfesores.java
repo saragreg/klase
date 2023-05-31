@@ -1,5 +1,12 @@
 package com.example.tfg_profes;
 
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
@@ -7,21 +14,13 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
-import android.content.Intent;
-import android.location.Location;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ListaProfesores extends AppCompatActivity {
     ArrayList<String> noms= new ArrayList<String>();
     ArrayList<String> precios= new ArrayList<String>();
     ArrayList<String> punt= new ArrayList<String>();
+    ArrayList<String> locs= new ArrayList<String>();
     ArrayList<String> usus= new ArrayList<String>();
     String usuario;
 
@@ -34,9 +33,10 @@ public class ListaProfesores extends AppCompatActivity {
         noms = getIntent().getExtras().getStringArrayList("noms");
         precios = getIntent().getExtras().getStringArrayList("precios");
         punt = getIntent().getExtras().getStringArrayList("punt");
+        locs = getIntent().getExtras().getStringArrayList("locs");
 
         ListView lisprofes = findViewById(R.id.listView);
-        AdaptadorProfesLista eladap = new AdaptadorProfesLista(getApplicationContext(), usus, precios, punt);
+        AdaptadorProfesLista eladap = new AdaptadorProfesLista(getApplicationContext(), usus, precios, punt,locs);
         lisprofes.setAdapter(eladap);
         lisprofes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

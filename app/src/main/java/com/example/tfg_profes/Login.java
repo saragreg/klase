@@ -10,14 +10,18 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -72,6 +76,7 @@ public class Login extends AppCompatActivity {
                                     boolean passwordMatches = PasswordHasher.checkPassword(contraIntro, contraRec);
                                     if (passwordMatches) {
                                         // Contraseña correcta
+                                        saveSession(usuIntro);
                                         //se ha logeado correctamente
                                         if (per.equals("a")){
                                             Intent intent = new Intent(Login.this, Menu.class);
@@ -96,6 +101,18 @@ public class Login extends AppCompatActivity {
             WorkManager.getInstance(this).enqueue(otwr);
         }
 
+    }
+
+    public void saveSession(String mail) {
+        try {
+            OutputStreamWriter outputStreamWriter =
+                    new OutputStreamWriter(openFileOutput("config.txt",
+                            Context.MODE_PRIVATE));
+            outputStreamWriter.write(mail);
+            outputStreamWriter.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e);
+        }
     }
 
 

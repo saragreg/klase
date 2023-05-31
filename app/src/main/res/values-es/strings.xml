@@ -48,4 +48,7 @@
     <string name="cas">Castellano</string>
     <string name="exp">Años de experiencia</string>
     <string name="numhijos">Indica el número de hijos que tienes</string>
+    <string name="puntual">Clase Puntual</string>
+    <string name="continua">Clases Continuas</string>
+    <string name="presencial">Presencial</string>
 </resources>

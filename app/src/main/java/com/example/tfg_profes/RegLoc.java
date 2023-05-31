@@ -48,7 +48,7 @@ public class RegLoc extends AppCompatActivity {
     public void onClickRegLoc(View view) {
         EditText ciudad=findViewById(R.id.ciudad);
         EditText barrio=findViewById(R.id.barrio);
-        loc=barrio.getText().toString()+","+ciudad.getText().toString()+",España";
+        loc=barrio.getText().toString()+","+ciudad.getText().toString();
         obtenerLatLon(loc);
     }
 

@@ -1,22 +1,16 @@
 package com.example.tfg_profes;
 
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-
-import android.content.Intent;
-import android.location.Location;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,14 +20,16 @@ public class Menu extends AppCompatActivity {
     ArrayList<String> precios= new ArrayList<String>();
     ArrayList<String> punt= new ArrayList<String>();
     ArrayList<String> usus= new ArrayList<String>();
+    ArrayList<String> locs= new ArrayList<String>();
     Double latUsu,lngUsu;
     String usuario;
-    ImageButton lisprofes,perfilbtn,mapabtn;
+    ImageButton lisprofes,perfilbtn,graficabtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        usuario=getIntent().getExtras().getString("usuario");
+        /*usuario=getIntent().getExtras().getString("usuario");
         obtenerLoc(usuario);
 
         lisprofes=findViewById(R.id.listabtn);
@@ -52,15 +48,15 @@ public class Menu extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        mapabtn=findViewById(R.id.mapa);
-        mapabtn.setOnClickListener(new View.OnClickListener() {
+        graficabtn=findViewById(R.id.grafica);
+        graficabtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Menu.this, Mapa.class);
+                Intent intent = new Intent(Menu.this, Graph_demanda_asig_annos.class);
                 intent.putExtra("usuario",usuario);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     public void obtenerDatosProfes(String usuInt) {
@@ -77,6 +73,8 @@ public class Menu extends AppCompatActivity {
                             String nombre = workInfo.getOutputData().getString("nombre");
                             String precio = workInfo.getOutputData().getString("precio");
                             String punts = workInfo.getOutputData().getString("punt");
+                            String usuarios_conf = workInfo.getOutputData().getString("usu_conf");
+                            String loc = workInfo.getOutputData().getString("loc");
                             String lat = workInfo.getOutputData().getString("lat");
                             String lon = workInfo.getOutputData().getString("lng");
 
@@ -84,10 +82,11 @@ public class Menu extends AppCompatActivity {
                             String[] arrayn = nombre.split(",");
                             String[] arrayp = precio.split(",");
                             String[] arraypp = punts.split(",");
+                            String[] arrayloc = loc.split(";");
                             String[] arraylat = lat.split(",");
                             String[] arraylon = lon.split(",");
 
-                            calcularDistancias(arraylat,arraylon,arrayu,arrayp,arraypp);
+                            calcularDistancias(arraylat,arraylon,arrayu,arrayn,arrayp,arraypp,arrayloc);
 
                             System.out.println("punt: "+punts);
 
@@ -95,6 +94,7 @@ public class Menu extends AppCompatActivity {
                             noms = new ArrayList<String>(Arrays.asList(arrayn));
                             precios = new ArrayList<String>(Arrays.asList(arrayp));
                             punt = new ArrayList<String>(Arrays.asList(arraypp));
+                            locs = new ArrayList<String>(Arrays.asList(arrayloc));
 
                             Intent intent = new Intent(Menu.this, ListaProfesores.class);
                             intent.putExtra("usuario", usuInt);
@@ -102,6 +102,7 @@ public class Menu extends AppCompatActivity {
                             intent.putStringArrayListExtra("noms",noms);
                             intent.putStringArrayListExtra("precios",precios);
                             intent.putStringArrayListExtra("punt",punt);
+                            intent.putStringArrayListExtra("locs",locs);
 
                             startActivity(intent);
                         }
@@ -112,7 +113,7 @@ public class Menu extends AppCompatActivity {
 
     }
 
-    public void calcularDistancias(String[] lislat,String[] lislng,String[] usus,String[] precios,String[] puntos){
+    public void calcularDistancias(String[] lislat,String[] lislng,String[] usus,String[] nombres,String[] precios,String[] puntos,String[] locs){
         int i=0;
         Float[] distancias = new Float[lislat.length];
         Location location1 = new Location("loc1");
@@ -129,11 +130,11 @@ public class Menu extends AppCompatActivity {
             i++;
         }
 
-        quicksort(distancias,0,i-1,usus,precios,puntos);
+        quicksort(distancias,0,i-1,usus,nombres,precios,puntos,locs);
 
     }
 
-    public static void quicksort(Float A[], int izq, int der, String B[],String C[],String D[]) {
+    public static void quicksort(Float A[], int izq, int der, String B[],String C[],String D[],String E[],String F[]) {
 
         Float pivote = A[izq]; // tomamos primer elemento como pivote
         int i = izq;         // i realiza la búsqueda de izquierda a derecha
@@ -146,6 +147,10 @@ public class Menu extends AppCompatActivity {
         String aux3;
         String pivote4 = D[izq];
         String aux4;
+        String pivote5 = E[izq];
+        String aux5;
+        String pivote6 = F[izq];
+        String aux6;
 
         while (i < j) {                          // mientras no se crucen las búsquedas
             while (A[i] <= pivote && i < j) i++; // busca elemento mayor que pivote
@@ -164,6 +169,12 @@ public class Menu extends AppCompatActivity {
                 aux4 = D[i];
                 D[i] = D[j];
                 D[j] = aux4;
+                aux5 = E[i];
+                E[i] = E[j];
+                E[j] = aux5;
+                aux6 = F[i];
+                F[i] = F[j];
+                F[j] = aux6;
             }
         }
 
@@ -176,11 +187,15 @@ public class Menu extends AppCompatActivity {
         C[j] = pivote3;
         D[izq] = D[j];
         D[j] = pivote4;
+        E[izq] = E[j];
+        E[j] = pivote5;
+        F[izq] = F[j];
+        F[j] = pivote6;
         if (izq < j - 1) {
-            quicksort(A, izq, j - 1, B,C,D);
+            quicksort(A, izq, j - 1, B,C,D,E,F);
         }// ordenamos subarray izquierdo
         if (j + 1 < der){
-            quicksort(A, j + 1, der, B,C,D);          // ordenamos subarray derecho
+            quicksort(A, j + 1, der, B,C,D,E,F);          // ordenamos subarray derecho
         }
     }
 

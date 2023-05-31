@@ -20,16 +20,7 @@ import java.net.URL;
 
 public class conexionBDProfes extends Worker {
     private String URL_BASE = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/";
-    private String usua="";
-    private String nombre="";
-    private String precio="";
-    private String asig="";
-    private String cursos="";
-    private String idiomas="";
-    private String exp="";
-    private String punt="";
-    private String lat="";
-    private String lng="";
+    private String usua="",usua_conf="",nombre="",precio="",asig="",cursos="",idiomas="",exp="",punt="",loc="",lat="",lng="";
 
     public conexionBDProfes(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -49,6 +40,8 @@ public class conexionBDProfes extends Worker {
                         .putString("nombre",nombre)
                         .putString("precio",precio)
                         .putString("punt",punt)
+                        .putString("usu_conf",usua_conf)
+                        .putString("loc",loc)
                         .putString("lat",lat)
                         .putString("lng",lng)
                         .build();
@@ -171,7 +164,10 @@ public class conexionBDProfes extends Worker {
                     usua = usua+jsonArray.getJSONObject(i).getString("idProfe")+",";
                     precio = precio+jsonArray.getJSONObject(i).getString("precio")+",";
                     punt = punt+jsonArray.getJSONObject(i).getString("punt")+",";
-                    lat = lat+jsonArray.getJSONObject(i).getString("lon")+",";
+                    usua_conf = usua+jsonArray.getJSONObject(i).getString("usu")+",";
+                    nombre = usua+jsonArray.getJSONObject(i).getString("nombre")+",";
+                    loc = loc+jsonArray.getJSONObject(i).getString("loc")+";";
+                    lat = lat+jsonArray.getJSONObject(i).getString("lat")+",";
                     lng = lng+jsonArray.getJSONObject(i).getString("lng")+",";
                 }
 

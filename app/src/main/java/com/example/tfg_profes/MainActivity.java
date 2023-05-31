@@ -1,20 +1,17 @@
 package com.example.tfg_profes;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -100,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void btn_login(View v){
-        Intent intent = new Intent(MainActivity.this, Graph_demanda_asig_annos.class);
+        Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
     }
     public void btn_reg(View v){
@@ -109,12 +106,12 @@ public class MainActivity extends AppCompatActivity {
     }
     public void setIdioma(Activity activity, String idiomCod){
 
-            Locale locale = new Locale(idiomCod);
-            Locale.setDefault(locale);
-            Resources resources = activity.getResources();
-            Configuration config = resources.getConfiguration();
-            config.setLocale(locale);
-            resources.updateConfiguration(config, resources.getDisplayMetrics());
+        Locale locale = new Locale(idiomCod);
+        Locale.setDefault(locale);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
 
     }
 

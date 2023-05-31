@@ -48,4 +48,7 @@
     <string name="cas">Gaztelania</string>
     <string name="exp">Urteko Esperientzia</string>
     <string name="numhijos">Adierazi zenbat seme-alabak dituzun</string>
+    <string name="puntual">Klase Puntuala</string>
+    <string name="continua">Etengabeko Klaseak</string>
+    <string name="presencial">Asistentzia</string>
 </resources>
