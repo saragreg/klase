@@ -103,7 +103,7 @@ public class FragmentPeticiones extends Fragment {
                 });
 
         WorkManager.getInstance(getContext()).enqueue(otwr);
-        /*workerFinishedLiveData.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        workerFinishedLiveData.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean workerFinished) {
                 if (workerFinished) {
@@ -111,7 +111,7 @@ public class FragmentPeticiones extends Fragment {
                     // Inflate the layout for this fragment
                 }
             }
-        });*/
+        });
 
     }
 

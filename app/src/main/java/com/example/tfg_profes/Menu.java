@@ -16,6 +16,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.example.tfg_profes.utils.FileUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -35,27 +36,36 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        boolean success = getApplicationContext().deleteFile("config.txt");
+        FileUtils fu = new FileUtils();
+        if (!fu.sessionExists(this, "config.txt")) {
+            Intent intent = new Intent(this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            setContentView(R.layout.activity_menu);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+            bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        // Configurar el listener para el menú inferior
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // Realizar acciones según el elemento seleccionado
-                if (item.getItemId() == R.id.home_bar) {
-                    replaceFragment(new FragmentPeticiones());
-                } else if (item.getItemId() == R.id.chat_bar) {
-                    replaceFragment(new UserListFragment());
-                } /*else if (item.getItemId() == R.id.agenda_bar) {
+            // Configurar el listener para el menú inferior
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    // Realizar acciones según el elemento seleccionado
+                    if (item.getItemId() == R.id.home_bar) {
+                        replaceFragment(new FragmentPeticiones());
+                    } else if (item.getItemId() == R.id.chat_bar) {
+                        replaceFragment(new UserListFragment());
+                    } /*else if (item.getItemId() == R.id.agenda_bar) {
                     replaceFragment(new SettingsFragment());
                 } else if (item.getItemId() == R.id.settings_bar) {
                     replaceFragment(new SettingsFragment());
                 }*/
-                return true;
-            }
-        });
+                    return true;
+                }
+            });
+        }
     }
 
     private void replaceFragment(Fragment fragment) {

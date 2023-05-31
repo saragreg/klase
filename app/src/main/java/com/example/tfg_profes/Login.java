@@ -1,14 +1,5 @@
 package com.example.tfg_profes;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -20,10 +11,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Login extends AppCompatActivity {
     private String contraRec="";
@@ -33,6 +31,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        TextView registrar = findViewById(R.id.Registrarse);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)!=
@@ -41,6 +40,13 @@ public class Login extends AppCompatActivity {
                         String[]{Manifest.permission.POST_NOTIFICATIONS}, 11);
             }
         }
+
+        registrar.setOnClickListener(v -> {
+
+            Intent intent = new Intent(v.getContext(), RegistroUSuario.class);
+            startActivity(intent);
+
+        });
     }
     public void onclick_login(View v){
         TextView usu = findViewById(R.id.user);
