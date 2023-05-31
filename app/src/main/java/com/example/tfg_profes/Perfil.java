@@ -1,9 +1,25 @@
 package com.example.tfg_profes;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,42 +32,19 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.View;
-import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ktx.Firebase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 public class Perfil extends AppCompatActivity {
     public static final int CAMERA_PERM_CODE=101;
@@ -134,6 +127,7 @@ public class Perfil extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_PERM_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent();
@@ -164,14 +158,42 @@ public class Perfil extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE) {
-            /*Bitmap image= (Bitmap) data.getExtras().get("data");
-            selectedImage.setImageBitmap(image);*/
-            if(resultCode == this.RESULT_OK){
-                File f = new File(currentPhotoPath);
+            if (resultCode == this.RESULT_OK) {
+
+                Bitmap bitmap= (Bitmap) data.getExtras().get("data");
+                selectedImage.setImageBitmap(bitmap);
+                File directory =
+                        getApplicationContext().getApplicationContext().getFilesDir();
+
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                String nombrefichero = "IMG_" + timeStamp + "_";
+                File imagenFich = new File(directory, nombrefichero + ".jpg");
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(imagenFich);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100,
+                            outputStream);
+                    outputStream.close();
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                // Transform the photo to a Base64 String and compress it
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                byte[] byteArray = stream.toByteArray();
+                String photo64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                subirUriImagen(photo64);
+
+                /*File f = new File(currentPhotoPath);
                 selectedImage.setImageURI(Uri.fromFile(f));
-                Log.d("tag","Absolute url:"+ Uri.fromFile(f));
+                Log.d("tag", "Absolute url:" + Uri.fromFile(f));
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(f);
@@ -179,20 +201,47 @@ public class Perfil extends AppCompatActivity {
                 this.sendBroadcast(mediaScanIntent);
 
                 //uploadimage
-                uploadImageToFirebase(f.getName(),contentUri);
+                uploadImageToFirebase(f.getName(), contentUri);*/
             }
         }
 
         if (requestCode == GALLERY_REQUEST_CODE) {
-            if(resultCode == this.RESULT_OK){
-                Uri contentUri=data.getData();
-                String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName= "JPEG_"+timeStamp+"."+getFileExt(contentUri);
-                Log.d("tag","gallery url:"+ imageFileName);
+            if (resultCode == this.RESULT_OK) {
+                Bitmap bitmap= (Bitmap) data.getExtras().get("data");
+                selectedImage.setImageBitmap(bitmap);
+                File directory =
+                        getApplicationContext().getApplicationContext().getFilesDir();
+
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                String nombrefichero = "IMG_" + timeStamp + "_";
+                File imagenFich = new File(directory, nombrefichero + ".jpg");
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(imagenFich);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100,
+                            outputStream);
+                    outputStream.close();
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                // Transform the photo to a Base64 String and compress it
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                byte[] byteArray = stream.toByteArray();
+                String photo64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                subirUriImagen(photo64);
+                /*Uri contentUri = data.getData();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
+                Log.d("tag", "gallery url:" + imageFileName);
                 selectedImage.setImageURI(contentUri);
 
                 //uploadimage
-                uploadImageToFirebase(imageFileName,contentUri);
+                uploadImageToFirebase(imageFileName, contentUri);*/
             }
         }
     }
@@ -206,7 +255,7 @@ public class Perfil extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri){
                         Log.d("tag","uploaded url:"+ uri.toString());
-                        Picasso.get().load(uri).into(selectedImage);
+
                         subirUriImagen(uri.toString());
                     }
                 });
@@ -221,14 +270,14 @@ public class Perfil extends AppCompatActivity {
         });
     }
 
-    private void subirUriImagen(String uri) {
+    private void subirUriImagen(String imagen) {
 
         Data inputData = new Data.Builder()
                 .putString("usuario", usu)
-                .putString("uri",uri)
+                .putString("imagen",imagen)
                 .putString("tipo","insertarImagen")
                 .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDinsertImage.class).setInputData(inputData).build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
                 .observe(this, new Observer<WorkInfo>() {
                     @Override

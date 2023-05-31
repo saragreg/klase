@@ -3,14 +3,20 @@ package com.example.tfg_profes;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,41 +30,41 @@ public class Menu extends AppCompatActivity {
     Double latUsu,lngUsu;
     String usuario;
     ImageButton lisprofes,perfilbtn,graficabtn;
+    private BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        /*usuario=getIntent().getExtras().getString("usuario");
-        obtenerLoc(usuario);
 
-        lisprofes=findViewById(R.id.listabtn);
-        lisprofes.setOnClickListener(new View.OnClickListener() {
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        // Configurar el listener para el menú inferior
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                obtenerDatosProfes(usuario);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Realizar acciones según el elemento seleccionado
+                if (item.getItemId() == R.id.home_bar) {
+                    replaceFragment(new FragmentPeticiones());
+                } else if (item.getItemId() == R.id.chat_bar) {
+                    replaceFragment(new UserListFragment());
+                } /*else if (item.getItemId() == R.id.agenda_bar) {
+                    replaceFragment(new SettingsFragment());
+                } else if (item.getItemId() == R.id.settings_bar) {
+                    replaceFragment(new SettingsFragment());
+                }*/
+                return true;
             }
         });
-        perfilbtn=findViewById(R.id.perfilbtn);
-        perfilbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Menu.this, Perfil.class);
-                intent.putExtra("usuario",usuario);
-                startActivity(intent);
-            }
-        });
-        graficabtn=findViewById(R.id.grafica);
-        graficabtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Menu.this, Graph_demanda_asig_annos.class);
-                intent.putExtra("usuario",usuario);
-                startActivity(intent);
-            }
-        });*/
     }
 
+    private void replaceFragment(Fragment fragment) {
+        // Reemplazar el fragmento actual con el fragmento proporcionado
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView3, fragment)
+                .commit();
+    }
     public void obtenerDatosProfes(String usuInt) {
         Data inputData = new Data.Builder()
                 .putString("tipo", "infoLista")

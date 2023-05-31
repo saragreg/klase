@@ -95,7 +95,7 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                 builder.setTitle("Reserva confirmada");
-                builder.setMessage("podrá ver toda la información en la lista de peticiones aceptadas");
+                builder.setMessage("La klase se ha añadido a la agenda, te enviaré una notificación para que no se te olvide 24 horas antes");
                 builder.show();
                 estado="c";
                 updateEstado(estado);
