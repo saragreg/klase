@@ -51,4 +51,7 @@
     <string name="puntual">Klase Puntuala</string>
     <string name="continua">Etengabeko Klaseak</string>
     <string name="presencial">Asistentzia</string>
+    <string name="semanal">Astero</string>
+    <string name="mensual">Hilero</string>
+    <string name="crearev">Gertaera Sortu</string>
 </resources>

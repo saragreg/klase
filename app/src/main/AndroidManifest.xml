@@ -27,6 +27,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".EventEdit"
+            android:exported="false" />
+        <activity
             android:name=".Graph_demanda_asig_annos"
             android:exported="false" />
         <!--
@@ -61,8 +64,8 @@
             android:exported="false" />
         <activity
             android:name=".Menu"
-            android:label="@string/app_name"
-            android:exported="true" >
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN"
@@ -108,8 +111,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="locale|orientation"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -51,4 +51,7 @@
     <string name="puntual">Clase Puntual</string>
     <string name="continua">Clases Continuas</string>
     <string name="presencial">Presencial</string>
+    <string name="semanal">Semanal</string>
+    <string name="mensual">Mensual</string>
+    <string name="crearev">Crear Evento</string>
 </resources>

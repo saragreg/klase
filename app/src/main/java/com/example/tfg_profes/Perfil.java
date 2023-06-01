@@ -34,9 +34,9 @@ import androidx.work.WorkManager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,7 +72,7 @@ public class Perfil extends AppCompatActivity {
 
         camara=findViewById(R.id.camara);
         galeria=findViewById(R.id.galeria);
-        storageReference= FirebaseStorage.getInstance().getReference();
+        //storageReference= FirebaseStorage.getInstance().getReference();
         //ponerFotoPerfil(usu);
         camara.setOnClickListener(new View.OnClickListener() {
             @Override

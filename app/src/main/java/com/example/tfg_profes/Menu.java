@@ -36,7 +36,6 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        boolean success = getApplicationContext().deleteFile("config.txt");
         FileUtils fu = new FileUtils();
         if (!fu.sessionExists(this, "config.txt")) {
             Intent intent = new Intent(this, Login.class);
@@ -57,9 +56,9 @@ public class Menu extends AppCompatActivity {
                         replaceFragment(new FragmentPeticiones());
                     } else if (item.getItemId() == R.id.chat_bar) {
                         replaceFragment(new UserListFragment());
-                    } /*else if (item.getItemId() == R.id.agenda_bar) {
-                    replaceFragment(new SettingsFragment());
-                } else if (item.getItemId() == R.id.settings_bar) {
+                    } else if (item.getItemId() == R.id.agenda_bar) {
+                        replaceFragment(new AgendaFragment());
+                }/* else if (item.getItemId() == R.id.settings_bar) {
                     replaceFragment(new SettingsFragment());
                 }*/
                     return true;
