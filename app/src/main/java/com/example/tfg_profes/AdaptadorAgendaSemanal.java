@@ -34,11 +34,12 @@ public class AdaptadorAgendaSemanal extends RecyclerView.Adapter<AgendaSemanalVi
 
     @Override
     public void onBindViewHolder(@NonNull AgendaSemanalViewHolder holder, int position) {
-        if (diasSem.get(position)==null){
+        final LocalDate date=diasSem.get(position);
+        if (date==null){
             holder.diaMes.setText("");
         }else {
-            holder.diaMes.setText(diasSem.get(position).getDayOfMonth());
-            if (diasSem.get(position).equals(AgendaUtils.selectedDate)){
+            holder.diaMes.setText(date.getDayOfMonth());
+            if (date.equals(AgendaUtils.selectedDate)){
                 holder.parentView.setBackgroundColor(Color.LTGRAY);
             }
         }

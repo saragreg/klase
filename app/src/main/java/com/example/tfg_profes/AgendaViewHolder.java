@@ -7,10 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AgendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public final View parentView;
     public final TextView diaMes;
     private final AdaptadorAgenda.OnItemListener onItemListener;
-    public AgendaViewHolder(@NonNull View itemView, AdaptadorAgenda.OnItemListener onItemListener) {
+    public AgendaViewHolder( @NonNull View itemView, AdaptadorAgenda.OnItemListener onItemListener) {
         super(itemView);
+        parentView = itemView.findViewById(R.id.parentView);;
         diaMes=itemView.findViewById(R.id.diaCeldaTxt);
         this.onItemListener = onItemListener;
         itemView.setOnClickListener(this);

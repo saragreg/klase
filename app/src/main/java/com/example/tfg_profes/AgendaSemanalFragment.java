@@ -1,6 +1,5 @@
 package com.example.tfg_profes;
 
-import static com.example.tfg_profes.utils.AgendaUtils.diasEnSemArray;
 import static com.example.tfg_profes.utils.AgendaUtils.mesAnnoFromDate;
 import static com.example.tfg_profes.utils.AgendaUtils.sundayForDate;
 
@@ -25,7 +24,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 
-public class AgendaSemanalFragment extends Fragment implements AdaptadorAgendaSemanal.OnItemListener{
+public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.OnItemListener{
 
     private TextView mesannoTxt;
     private RecyclerView calendarSemanalRecyclerView;
@@ -93,11 +92,11 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgendaSe
 
     private void setSemView() {
         mesannoTxt.setText(String.valueOf(sundayForDate(AgendaUtils.selectedDate)));
-        ArrayList<LocalDate> diasEnSem =diasEnSemArray(AgendaUtils.selectedDate);
-        AdaptadorAgendaSemanal adaptadorAgendaSemanal=new AdaptadorAgendaSemanal(diasEnSem,this);
+        ArrayList<LocalDate> diasEnMes =AgendaUtils.diasEnSemArray(AgendaUtils.selectedDate);
+        AdaptadorAgenda adaptadorAgenda=new AdaptadorAgenda(diasEnMes,this);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getContext(),7);
         calendarSemanalRecyclerView.setLayoutManager(layoutManager);
-        calendarSemanalRecyclerView.setAdapter(adaptadorAgendaSemanal);
+        calendarSemanalRecyclerView.setAdapter(adaptadorAgenda);
     }
 
 

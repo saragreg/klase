@@ -80,7 +80,7 @@ public class AgendaFragment extends Fragment implements AdaptadorAgenda.OnItemLi
 
     private void setMesView() {
         mesannoTxt.setText(mesAnnoFromDate(AgendaUtils.selectedDate));
-        ArrayList<String> diasEnMes =AgendaUtils.diasEnMesArray(AgendaUtils.selectedDate);
+        ArrayList<LocalDate> diasEnMes =AgendaUtils.diasEnMesArray(AgendaUtils.selectedDate);
         AdaptadorAgenda adaptadorAgenda=new AdaptadorAgenda(diasEnMes,this);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getContext(),7);
         calendarRecyclerView.setLayoutManager(layoutManager);

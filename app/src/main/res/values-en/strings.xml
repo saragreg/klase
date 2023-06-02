@@ -51,7 +51,8 @@
     <string name="puntual">Punctual Class</string>
     <string name="continua">Continuous Classes</string>
     <string name="presencial">Attendance</string>
-    <string name="semanal">Monthly</string>
+    <string name="semanal">Weekly</string>
+    <string name="mensual">Monthly</string>
     <string name="crearev">Create Event</string>
 
 </resources>
