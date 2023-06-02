@@ -56,4 +56,7 @@
     <string name="semanal">Semanal</string>
     <string name="mensual">Mensual</string>
     <string name="crearev">Crear Evento</string>
+    <string name="descEvent">Descripción del evento</string>
+    <string name="fecha">Fecha</string>
+    <string name="addevent">Añadir Evento</string>
 </resources>

@@ -2,11 +2,13 @@ package com.example.tfg_profes;
 
 import static com.example.tfg_profes.utils.AgendaUtils.sundayForDate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
 
     private TextView mesannoTxt;
     private RecyclerView calendarSemanalRecyclerView;
+    private ListView liseventos;
     public AgendaSemanalFragment() {
         // Required empty public constructor
     }
@@ -48,6 +51,7 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
         Button nextWeek=view.findViewById(R.id.nextMonth);
         Button mensual=view.findViewById(R.id.mensual);
         Button crearEvent=view.findViewById(R.id.addEvent);
+        liseventos=view.findViewById(R.id.lisEvents);
         calendarSemanalRecyclerView = view.findViewById(R.id.calendarSemanalRecyclerView);
         mesannoTxt=view.findViewById(R.id.monthyearTV);
         AgendaUtils.selectedDate= LocalDate.now();
@@ -78,12 +82,8 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
         });
         crearEvent.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Do something in response to button click
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                AgendaFragment agendaFragment=new AgendaFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView3, agendaFragment)
-                        .commit();
+                Intent intent = new Intent(getActivity(), EventEdit.class);
+                startActivity(intent);
             }
         });
     }
@@ -95,6 +95,7 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getContext(),7);
         calendarSemanalRecyclerView.setLayoutManager(layoutManager);
         calendarSemanalRecyclerView.setAdapter(adaptadorAgenda);
+        SetEventAdapter();
     }
 
 
@@ -102,5 +103,16 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
     public void onItemClick(int position, LocalDate date) {
         AgendaUtils.selectedDate=date;
         setSemView();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        SetEventAdapter();
+    }
+
+    private void SetEventAdapter() {
+        ArrayList<Evento> eventosDia=Evento.eventosdeldia(AgendaUtils.selectedDate);
+        AdaptadorEventos adaptadorEventos=new AdaptadorEventos(getContext(),eventosDia);
+        liseventos.setAdapter(adaptadorEventos);
     }
 }

@@ -6,4 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".EventEdit">
 
+    <TextView
+        android:id="@+id/textView37"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/descEvent"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/descEvenET"
+        android:layout_width="303dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Klase con María a las 17:30"
+        app:layout_constraintEnd_toEndOf="@+id/textView37"
+        app:layout_constraintStart_toStartOf="@+id/textView37"
+        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+    <TextView
+        android:id="@+id/textView47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/fecha"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/descEvenET"
+        app:layout_constraintTop_toBottomOf="@+id/descEvenET" />
+
+    <TextView
+        android:id="@+id/fechaKlase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="14-05-2023"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView47"
+        app:layout_constraintStart_toEndOf="@+id/textView47"
+        app:layout_constraintTop_toTopOf="@+id/textView47" />
+
+    <Button
+        android:id="@+id/addEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/addevent"
+        app:layout_constraintEnd_toEndOf="@+id/descEvenET"
+        app:layout_constraintStart_toStartOf="@+id/descEvenET"
+        app:layout_constraintTop_toBottomOf="@+id/fechaKlase" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,4 +50,9 @@ public class AgendaUtils {
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("MMMM yyyy");
         return date.format(formatter);
     }
+
+    public static String formattedDate(LocalDate date) {
+        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        return date.format(formatter);
+    }
 }
