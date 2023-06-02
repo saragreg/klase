@@ -33,7 +33,7 @@ public class AdaptadorAgenda extends RecyclerView.Adapter<AgendaViewHolder>{
         }else{
             layoutParams.height = (int) parent.getHeight();
         }
-        return new AgendaViewHolder(view,onItemListener);
+        return new AgendaViewHolder(view, dias, onItemListener);
     }
 
     @Override
@@ -55,6 +55,6 @@ public class AdaptadorAgenda extends RecyclerView.Adapter<AgendaViewHolder>{
     }
 
     public interface OnItemListener{
-        void onItemClick(int position,String diaTxt);
+        void onItemClick(int position,LocalDate date );
     }
 }

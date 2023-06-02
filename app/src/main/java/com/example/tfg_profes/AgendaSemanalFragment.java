@@ -1,6 +1,5 @@
 package com.example.tfg_profes;
 
-import static com.example.tfg_profes.utils.AgendaUtils.mesAnnoFromDate;
 import static com.example.tfg_profes.utils.AgendaUtils.sundayForDate;
 
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,7 +90,7 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
 
     private void setSemView() {
         mesannoTxt.setText(String.valueOf(sundayForDate(AgendaUtils.selectedDate)));
-        ArrayList<LocalDate> diasEnMes =AgendaUtils.diasEnSemArray(AgendaUtils.selectedDate);
+       ArrayList<LocalDate> diasEnMes =AgendaUtils.diasEnSemArray(AgendaUtils.selectedDate);
         AdaptadorAgenda adaptadorAgenda=new AdaptadorAgenda(diasEnMes,this);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getContext(),7);
         calendarSemanalRecyclerView.setLayoutManager(layoutManager);
@@ -101,7 +99,8 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
 
 
     @Override
-    public void onItemClick(int position, String diaTxt) {
-        Toast.makeText(getContext(), "Selected day "+diaTxt+""+mesAnnoFromDate(AgendaUtils.selectedDate), Toast.LENGTH_SHORT).show();
+    public void onItemClick(int position, LocalDate date) {
+        AgendaUtils.selectedDate=date;
+        setSemView();
     }
 }
