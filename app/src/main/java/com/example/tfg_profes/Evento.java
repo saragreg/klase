@@ -5,14 +5,7 @@ import java.util.ArrayList;
 
 public class Evento {
     public static ArrayList<Evento> eventosLis=new ArrayList<>();
-    public static ArrayList<Evento> eventosdeldia(LocalDate date){
-        ArrayList<Evento> eventos=new ArrayList<>();
-        for (Evento evento : eventosLis){
-            if (evento.getDate().equals(date))
-                eventos.add(evento);
-        }
-        return eventos;
-    }
+
     public Evento(String desc, LocalDate date) {
         this.desc = desc;
         this.date = date;
@@ -35,5 +28,17 @@ public class Evento {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public void guardarEvento() {
+        //llamar a la base de datos y guardarlo
+    }
+    public static ArrayList<Evento> eventosdeldia(LocalDate date){
+        ArrayList<Evento> eventos=new ArrayList<>();
+        for (Evento evento : eventosLis){
+            if (evento.getDate().equals(date))
+                eventos.add(evento);
+        }
+        return eventos;
     }
 }

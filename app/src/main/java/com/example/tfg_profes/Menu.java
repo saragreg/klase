@@ -36,6 +36,7 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        //boolean success = getApplicationContext().deleteFile("config.txt");
         FileUtils fu = new FileUtils();
         if (!fu.sessionExists(this, "config.txt")) {
             Intent intent = new Intent(this, Login.class);
@@ -44,6 +45,7 @@ public class Menu extends AppCompatActivity {
             startActivity(intent);
         } else {
             setContentView(R.layout.activity_menu);
+            cargarEventos();
 
             bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -65,6 +67,27 @@ public class Menu extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void cargarEventos() {
+        FileUtils fileUtils=new FileUtils();
+        String user = fileUtils.readFile(this, "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "cargarEventos")
+                .putString("user",user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
+
     }
 
     private void replaceFragment(Fragment fragment) {

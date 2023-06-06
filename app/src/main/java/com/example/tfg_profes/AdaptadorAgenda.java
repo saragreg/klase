@@ -15,10 +15,12 @@ import java.util.ArrayList;
 
 public class AdaptadorAgenda extends RecyclerView.Adapter<AgendaViewHolder>{
     private final ArrayList<LocalDate> dias;
+    private final ArrayList<LocalDate> diasNaranjas;
     private final OnItemListener onItemListener;
 
-    public AdaptadorAgenda(ArrayList<LocalDate> dias, OnItemListener onItemListener) {
+    public AdaptadorAgenda(ArrayList<LocalDate> dias, ArrayList<LocalDate> diasNaranjas, OnItemListener onItemListener) {
         this.dias = dias;
+        this.diasNaranjas = diasNaranjas;
         this.onItemListener = onItemListener;
     }
 
@@ -28,9 +30,9 @@ public class AdaptadorAgenda extends RecyclerView.Adapter<AgendaViewHolder>{
         LayoutInflater inflater= LayoutInflater.from(parent.getContext());
         View view= inflater.inflate(R.layout.celda_calendario,parent,false);
         ViewGroup.LayoutParams layoutParams= view.getLayoutParams();
-        if (dias.size()>15) {
+        if (dias.size()>15) {//mes
             layoutParams.height = (int) (parent.getHeight() * 0.16666666);
-        }else{
+        }else{//semana
             layoutParams.height = (int) parent.getHeight();
         }
         return new AgendaViewHolder(view, dias, onItemListener);
@@ -46,6 +48,9 @@ public class AdaptadorAgenda extends RecyclerView.Adapter<AgendaViewHolder>{
             if (date.equals(AgendaUtils.selectedDate)){
                 holder.parentView.setBackgroundColor(Color.LTGRAY);
             }
+        }
+        if (diasNaranjas.contains(date)){
+            holder.bolaNaranja.setVisibility(View.VISIBLE);
         }
     }
 

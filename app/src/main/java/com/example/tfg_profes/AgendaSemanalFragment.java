@@ -89,9 +89,13 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
     }
 
     private void setSemView() {
+        ArrayList<LocalDate> arrayDiasNaranjasMes=new ArrayList<>();
+        for (int i = 0; i < Evento.eventosLis.size(); i++) {
+            arrayDiasNaranjasMes.add(Evento.eventosLis.get(i).getDate());
+        }
         mesannoTxt.setText(String.valueOf(sundayForDate(AgendaUtils.selectedDate)));
        ArrayList<LocalDate> diasEnMes =AgendaUtils.diasEnSemArray(AgendaUtils.selectedDate);
-        AdaptadorAgenda adaptadorAgenda=new AdaptadorAgenda(diasEnMes,this);
+        AdaptadorAgenda adaptadorAgenda=new AdaptadorAgenda(diasEnMes, arrayDiasNaranjasMes, this);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getContext(),7);
         calendarSemanalRecyclerView.setLayoutManager(layoutManager);
         calendarSemanalRecyclerView.setAdapter(adaptadorAgenda);
@@ -109,7 +113,7 @@ public class AgendaSemanalFragment extends Fragment implements AdaptadorAgenda.O
         super.onResume();
         SetEventAdapter();
     }
-
+    //SE OBTIENEN LOS EVENTOS DEL DIA SELECCIONADO
     private void SetEventAdapter() {
         ArrayList<Evento> eventosDia=Evento.eventosdeldia(AgendaUtils.selectedDate);
         AdaptadorEventos adaptadorEventos=new AdaptadorEventos(getContext(),eventosDia);

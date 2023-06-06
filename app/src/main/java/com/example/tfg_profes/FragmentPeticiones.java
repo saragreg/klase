@@ -17,8 +17,9 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.example.tfg_profes.utils.FileUtils;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FragmentPeticiones extends Fragment {
 
@@ -47,9 +48,9 @@ public class FragmentPeticiones extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-    /*FileUtils fileUtils = new FileUtils();
-    String user = fileUtils.readFile(requireContext(), "config.txt");*/
-        String user = "monica";
+        FileUtils fileUtils = new FileUtils();
+        String user = fileUtils.readFile(requireContext(), "config.txt");
+        Peticion.peticionesLis=new ArrayList<>();
 
         MutableLiveData<Boolean> workerFinishedLiveData = new MutableLiveData<>();
 
@@ -67,6 +68,9 @@ public class FragmentPeticiones extends Fragment {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
+
+                            String idUsu = workInfo.getOutputData().getString("idUsu");
+                            String feccrea = workInfo.getOutputData().getString("feccrea");
                             String asig = workInfo.getOutputData().getString("asig");
                             String nombre = workInfo.getOutputData().getString("nombre");
                             String fotoper = workInfo.getOutputData().getString("fotoper");
@@ -75,6 +79,8 @@ public class FragmentPeticiones extends Fragment {
                             String intensivo = workInfo.getOutputData().getString("intensivo");
                             String dias = workInfo.getOutputData().getString("dias");
 
+                            String[] arrayidUsu = idUsu.split(",");
+                            String[] arrayfeccrea = feccrea.split(",");
                             String[] arraya = asig.split(";");
                             String[] arrayn = nombre.split(",");
                             String[] arrayf = fotoper.split(",");
@@ -82,17 +88,24 @@ public class FragmentPeticiones extends Fragment {
                             String[] arrayh = fechahora.split(",");
                             String[] arrayi = intensivo.split(",");
                             String[] arraydd = dias.split(",");
+                             int i=0;
+                            while (i<arraya.length){
+                                Peticion peticion=new Peticion(user,arrayidUsu[i],arrayf[i],arrayn[i],arraya[i],arrayd[i],arrayh[i],arrayfeccrea[i],arrayi[i],arraydd[i],"p");
+                                Peticion.peticionesLis.add(peticion);
+                                i++;
+                            }
 
-                            asignaturas = new ArrayList<>(Arrays.asList(arraya));
+                            /*asignaturas = new ArrayList<>(Arrays.asList(arraya));
                             noms = new ArrayList<>(Arrays.asList(arrayn));
                             fotos = new ArrayList<>(Arrays.asList(arrayf));
                             duraciones = new ArrayList<>(Arrays.asList(arrayd));
                             fechas = new ArrayList<>(Arrays.asList(arrayh));
                             intens = new ArrayList<>(Arrays.asList(arrayi));
-                            diasSem = new ArrayList<>(Arrays.asList(arraydd));
+                            diasSem = new ArrayList<>(Arrays.asList(arraydd));*/
+
 
                             RecyclerView lista = view.findViewById(R.id.recyclerViewPeticiones);
-                            AdaptadorPeticiones eladap = new AdaptadorPeticiones(requireContext(), asignaturas, fotos, noms, duraciones, fechas, intens, diasSem);
+                            AdaptadorPeticiones eladap = new AdaptadorPeticiones(requireContext(),Peticion.peticionesLis,getViewLifecycleOwner());
                             lista.setAdapter(eladap);
                             LinearLayoutManager elLayoutLineal = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                             lista.setLayoutManager(elLayoutLineal);

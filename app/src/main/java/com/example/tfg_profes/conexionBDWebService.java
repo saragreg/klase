@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+import java.time.LocalDate;
 
 
 public class conexionBDWebService extends Worker {
@@ -29,7 +29,7 @@ public class conexionBDWebService extends Worker {
     private String usuario;
     private String latObt,lngObt;
     private String usupend="",usuacept="";
-    private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="";
+    private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="",idProfe="",idUsu="",feccrea="";
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
 
@@ -106,8 +106,11 @@ public class conexionBDWebService extends Worker {
                 return Result.success(aceptados);
             case "ListaPeticiones":
                 String user = getInputData().getString("user");
-                ListaPeticiones(user);
+                listaPeticiones(user);
                 Data petis = new Data.Builder()
+                        .putString("idProfe",idProfe)
+                        .putString("idUsu",idUsu)
+                        .putString("feccrea",feccrea)
                         .putString("asig",asigPet)
                         .putString("nombre",nombrePet)
                         .putString("fotoper",fotoperPet)
@@ -117,10 +120,27 @@ public class conexionBDWebService extends Worker {
                         .putString("dias",diasPet)
                         .build();
                 return Result.success(petis);
+            case "updateEstadoPeticion":
+                String userUPD = getInputData().getString("user");
+                String idUsuUPD = getInputData().getString("idUsu");
+                String idfechaUPD = getInputData().getString("idFecha");
+                String estado= getInputData().getString("estado");
+                updateEstadoPeticion(userUPD,idUsuUPD,idfechaUPD,estado);
+                return Result.success();
             case "insertarImagen":
                 usu = getInputData().getString("usuario");
                 String uri = getInputData().getString("uri");
                 insertImagen(usu,uri);
+                return Result.success();
+            case "cargarEventos":
+                usu = getInputData().getString("user");
+                cargarEventos(usu);
+                return Result.success();
+            case "addEvento":
+                usu = getInputData().getString("usu");
+                String fechaEvento = getInputData().getString("fecha");
+                String descrEvento = getInputData().getString("descr");
+                addEvento(usu,fechaEvento,descrEvento);
                 return Result.success();
             default:
                 return Result.failure();
@@ -128,7 +148,132 @@ public class conexionBDWebService extends Worker {
 
     }
 
-    private void ListaPeticiones(String user) {
+    private void addEvento(String usu, String fechaEvento, String descrEvento) {
+        String url = URL_BASE + "addEvento.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuario", usu);
+            parametrosJSON.put("fecha", fechaEvento);
+            parametrosJSON.put("descr", descrEvento);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void cargarEventos(String user) {
+        String url = URL_BASE + "cargarEventos.php?user="+user;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    String fecha = jsonArray.getJSONObject(i).getString("fecha");
+                    String desc = jsonArray.getJSONObject(i).getString("desc");
+                    Evento evento=new Evento(desc, LocalDate.parse(fecha));
+                    Evento.eventosLis.add(evento);
+                }
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void updateEstadoPeticion(String userUPD, String idUsuUPD, String idfechaUPD, String estado) {
+        String url = URL_BASE + "updateEstadoPeticion.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuario", userUPD);
+            parametrosJSON.put("idUsu", idUsuUPD);
+            parametrosJSON.put("idFecha", idfechaUPD);
+            parametrosJSON.put("estado", estado);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void listaPeticiones(String user) {
         String url = URL_BASE + "lisPeticiones.php?user="+user;
         System.out.println("url: "+url);
         HttpURLConnection urlConnection = null;
@@ -150,6 +295,8 @@ public class conexionBDWebService extends Worker {
                 JSONArray jsonArray = new JSONArray(result);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
+                    idUsu = idUsu+jsonArray.getJSONObject(i).getString("idUsu")+",";
+                    feccrea = feccrea+jsonArray.getJSONObject(i).getString("feccrea")+",";
                     asigPet = asigPet+jsonArray.getJSONObject(i).getString("asignaturas")+";";
                     nombrePet = nombrePet+jsonArray.getJSONObject(i).getString("nombre")+",";
                     fotoperPet = fotoperPet+jsonArray.getJSONObject(i).getString("imagen")+",";

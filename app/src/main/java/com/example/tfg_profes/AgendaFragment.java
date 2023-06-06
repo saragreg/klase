@@ -78,9 +78,13 @@ public class AgendaFragment extends Fragment implements AdaptadorAgenda.OnItemLi
     }
 
     private void setMesView() {
+        ArrayList<LocalDate> arrayDiasNaranjasMes=new ArrayList<>();
+        for (int i = 0; i < Evento.eventosLis.size(); i++) {
+            arrayDiasNaranjasMes.add(Evento.eventosLis.get(i).getDate());
+        }
         mesannoTxt.setText(mesAnnoFromDate(AgendaUtils.selectedDate));
         ArrayList<LocalDate> diasEnMes =AgendaUtils.diasEnMesArray(AgendaUtils.selectedDate);
-        AdaptadorAgenda adaptadorAgenda=new AdaptadorAgenda(diasEnMes,this);
+        AdaptadorAgenda adaptadorAgenda=new AdaptadorAgenda(diasEnMes, arrayDiasNaranjasMes, this);
         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getContext(),7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(adaptadorAgenda);

@@ -1,8 +1,6 @@
 package com.example.tfg_profes;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +9,13 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 /**
@@ -89,17 +86,5 @@ public class UserListFragment extends Fragment {
 
             }
         });
-    }
-
-    public void saveSession(String mail) {
-        try {
-            OutputStreamWriter outputStreamWriter =
-                    new OutputStreamWriter(requireContext().openFileOutput("config.txt",
-                            Context.MODE_PRIVATE));
-            outputStreamWriter.write(mail);
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e);
-        }
     }
 }
