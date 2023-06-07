@@ -2,60 +2,39 @@ package com.example.tfg_profes;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
-
 import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
     private Spinner idiomas;
     private String idiomSel;
     private boolean idiomacargado = false;
+    private static final String DEFAULT_LANGUAGE = "default";
+    private SharedPreferences sharedPreferences;
     Activity a = this;
     private String idioma ="es";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    return;
-                }
-                String token = task.getResult();
-                System.out.println("el token de la app es:" + token);
 
-            }
-        });
+        sharedPreferences = getPreferences(MODE_PRIVATE);
 
-        if (savedInstanceState != null) {
-            idiomSel=savedInstanceState.getString("idiomaActual");
-            System.out.println("idioma "+idiomSel);
-            if (idiomSel.equals("Castellano")){
-                setIdioma(MainActivity.this,"es");
-            } else if (idiomSel.equals("Euskara")) {
-                setIdioma(MainActivity.this,"eu");
-            }else if (idiomSel.equals("English")){
-                setIdioma(MainActivity.this,"en");
-            }
-        }
-        Bundle extras= getIntent().getExtras();
-        if (extras != null){
-            idioma= extras.getString("idioma");
-            setIdioma(MainActivity.this,idioma);
-        }
+        idioma = sharedPreferences.getString("idioma", DEFAULT_LANGUAGE);
+        setIdioma(idioma);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -72,20 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 idiomSel = adapterView.getItemAtPosition(i).toString();
 
                 if (idiomSel.equals("Castellano")){
-                    System.out.println("ha elegido castelllano");
-                    finish();
-                    startActivity(getIntent().putExtra("idioma","es"));
-
+                    saveLanguage("es");
                 } else if (idiomSel.equals("Euskara")) {
-                    System.out.println("ha elegido eu");
-                    finish();
-                    startActivity(getIntent().putExtra("idioma","eu"));
-
+                    saveLanguage("eu");
                 }else if (idiomSel.equals("English")){
-                    System.out.println("ha elegido en");
-                    finish();
-                    startActivity(getIntent().putExtra("idioma","en"));
-
+                    saveLanguage("en");
                 }
 
             }
@@ -104,22 +74,32 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, RegistroUSuario.class);
         startActivity(intent);
     }
-    public void setIdioma(Activity activity, String idiomCod){
+    public void setIdioma(String idiomCod){
 
         Locale locale = new Locale(idiomCod);
         Locale.setDefault(locale);
-        Resources resources = activity.getResources();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
 
+        Resources resources = getResources();
+        Configuration configuration = resources.getConfiguration();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+
+        configuration.setLocale(locale);
+
+        resources.updateConfiguration(configuration, displayMetrics);
+    }
+    private void saveLanguage(String language) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("idioma", language); // Ejemplo: Guardar una cadena de texto
+        editor.apply(); // Guardar los cambios
+        finish();
+        startActivity(getIntent());
     }
 
-    protected void onSaveInstanceState(Bundle outState) {
+    /*protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("mySpinner", idiomas.getSelectedItemPosition());
         outState.putString("idiomaActual", idiomSel);
         // do this for each or your Spinner
-    }
+    }*/
 
 }

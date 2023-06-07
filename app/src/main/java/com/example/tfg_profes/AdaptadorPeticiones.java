@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -25,6 +26,7 @@ import androidx.work.WorkManager;
 import com.example.tfg_profes.utils.FileUtils;
 import com.google.android.material.internal.FlowLayout;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
@@ -109,6 +111,21 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
         holder.aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FileUtils fileUtils=new FileUtils();
+                String user=fileUtils.readFile(contexto,"config.txt");
+                String[] fechahora=p.getFechahora().split(" ");
+                String fecha=fechahora[0];
+                String descr="";
+                if (fechahora.length>1){
+                    String hora=fechahora[1];
+                    descr="Klase con "+p.getNombre()+" a las "+hora;
+                }else{
+                    descr="Klase con "+p.getNombre();
+                }
+                Evento evento=new Evento(descr, LocalDate.parse(fecha));
+                Evento.eventosLis.add(evento);
+                addEvento(user,descr,fecha);
+                addContacto(user,p.getIdUsu());
                 AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                 builder.setTitle("Reserva confirmada");
                 builder.setMessage("La klase se ha añadido a la agenda, te enviaré una notificación para que no se te olvide 24 horas antes");
@@ -136,37 +153,91 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
             }
         });
     }
-    private void updateEstado(String estado,int pos) {
-        lista.get(pos).setEstado(estado);
-        FileUtils fileUtils=new FileUtils();
-        String user=fileUtils.readFile(contexto, "config.txt");
+
+    private void addContacto(String user, String idUsu) {
         Data inputData = new Data.Builder()
-                .putString("tipo", "updateEstadoPeticion")
-                .putString("user", user)
-                .putString("idUsu",lista.get(pos).getIdUsu())
-                .putString("idFecha",lista.get(pos).getFechacreacion())
-                .putString("estado",estado)
+                .putString("tipo", "addEvento")
+                .putString("usu1", user)
+                .putString("usu2", idUsu)
                 .build();
-
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class)
-                .setInputData(inputData)
-                .build();
-
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(contexto).getWorkInfoByIdLiveData(otwr.getId())
                 .observe(lifecycleOwner, new Observer<WorkInfo>() {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
 
+                            Toast.makeText(contexto, "Se ha añadido correctamente", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
                         }
                     }
                 });
-
         WorkManager.getInstance(contexto).enqueue(otwr);
     }
+
+    private void addEvento(String user, String descr, String fecha) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "addEvento")
+                .putString("usu", user)
+                .putString("fecha", fecha)
+                .putString("descr", descr)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(contexto).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(lifecycleOwner, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                            Toast.makeText(contexto, "Se ha añadido correctamente", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(contexto).enqueue(otwr);
+    }
+
+    private void updateEstado(String estado,int pos) {
+        if (lista.size()>0) {
+            lista.get(pos).setEstado(estado);
+            FileUtils fileUtils = new FileUtils();
+            String user = fileUtils.readFile(contexto, "config.txt");
+            Data inputData = new Data.Builder()
+                    .putString("tipo", "updateEstadoPeticion")
+                    .putString("user", user)
+                    .putString("idUsu", lista.get(pos).getIdUsu())
+                    .putString("idFecha", lista.get(pos).getFechacreacion())
+                    .putString("estado", estado)
+                    .build();
+
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class)
+                    .setInputData(inputData)
+                    .build();
+
+            WorkManager.getInstance(contexto).getWorkInfoByIdLiveData(otwr.getId())
+                    .observe(lifecycleOwner, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+
+                            }
+                        }
+                    });
+
+            WorkManager.getInstance(contexto).enqueue(otwr);
+        }
+    }
     public void eliminarElemento(int posicion) {
-        lista.remove(posicion);
-        notifyItemRemoved(posicion);
+        if(posicion==lista.size()){
+            lista=new ArrayList<>();
+        }else {
+            lista.remove(posicion);
+            notifyItemRemoved(posicion);
+        }
     }
 
 

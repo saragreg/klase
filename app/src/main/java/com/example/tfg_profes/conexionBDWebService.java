@@ -29,6 +29,7 @@ public class conexionBDWebService extends Worker {
     private String usuario;
     private String latObt,lngObt;
     private String usupend="",usuacept="";
+    private String nombres="",imgs="";
     private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="",idProfe="",idUsu="",feccrea="";
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -142,8 +143,82 @@ public class conexionBDWebService extends Worker {
                 String descrEvento = getInputData().getString("descr");
                 addEvento(usu,fechaEvento,descrEvento);
                 return Result.success();
+            case "cargarContactos":
+                usu = getInputData().getString("user");
+                cargarContactos(usu);
+                Data contactos = new Data.Builder()
+                        .putString("nombres",nombres)
+                        .putString("imgs",imgs)
+                        .build();
+                return Result.success(contactos);
+            case "addContacto":
+                String usu1 = getInputData().getString("usu1");
+                String usu2 = getInputData().getString("usu2");
+                addContacto(usu1,usu2);
+                return Result.success();
             default:
                 return Result.failure();
+        }
+
+    }
+
+    private void addContacto(String usu1, String usu2) {
+        String url = URL_BASE + "login_usuarios.php?iduser1="+usu1+"&iduser2="+usu2;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void cargarContactos(String usu) {
+        String url = URL_BASE + "login_usuarios.php?iduser="+usu;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
 
     }

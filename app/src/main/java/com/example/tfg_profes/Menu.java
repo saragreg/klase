@@ -1,10 +1,13 @@
 package com.example.tfg_profes;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
+
 
 public class Menu extends AppCompatActivity {
     ArrayList<String> noms= new ArrayList<String>();
@@ -28,9 +33,9 @@ public class Menu extends AppCompatActivity {
     ArrayList<String> punt= new ArrayList<String>();
     ArrayList<String> usus= new ArrayList<String>();
     ArrayList<String> locs= new ArrayList<String>();
+    private static final String DEFAULT_LANGUAGE = "default";
+    private SharedPreferences sharedPreferences;
     Double latUsu,lngUsu;
-    String usuario;
-    ImageButton lisprofes,perfilbtn,graficabtn;
     private BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +44,15 @@ public class Menu extends AppCompatActivity {
         //boolean success = getApplicationContext().deleteFile("config.txt");
         FileUtils fu = new FileUtils();
         if (!fu.sessionExists(this, "config.txt")) {
-            Intent intent = new Intent(this, Login.class);
+            Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
                     | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
+            sharedPreferences = getPreferences(MODE_PRIVATE);
+
+            String idioma = sharedPreferences.getString("idioma", DEFAULT_LANGUAGE);
+            setIdioma(idioma);
             setContentView(R.layout.activity_menu);
             cargarEventos();
 
@@ -256,6 +265,20 @@ public class Menu extends AppCompatActivity {
                     }
                 });
         WorkManager.getInstance(this).enqueue(otwr);
+    }
+
+    public void setIdioma(String idiomCod){
+
+        Locale locale = new Locale(idiomCod);
+        Locale.setDefault(locale);
+
+        Resources resources = getResources();
+        Configuration configuration = resources.getConfiguration();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+
+        configuration.setLocale(locale);
+
+        resources.updateConfiguration(configuration, displayMetrics);
     }
 
 

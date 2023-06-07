@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="8dp">
@@ -73,11 +74,10 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:src="@drawable/baseline_check_circle_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.52"
-            app:layout_constraintStart_toEndOf="@+id/duracion"
+            app:layout_constraintStart_toEndOf="@+id/fechaHoraPet"
             app:layout_constraintTop_toTopOf="@+id/fotoPerfil" />
 
         <ImageView
@@ -130,6 +130,28 @@
             app:layout_constraintStart_toEndOf="@+id/intensivo"
             app:layout_constraintTop_toBottomOf="@+id/fechaHoraPet" />
 
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/info_btn"
+            app:layout_constraintStart_toStartOf="@+id/flowlayout"
+            app:layout_constraintTop_toTopOf="@+id/flowlayout"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView48"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:text="mate" />
+
+            </LinearLayout>
+        </LinearLayout>
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flowlayout"

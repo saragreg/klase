@@ -9,7 +9,13 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
+import com.example.tfg_profes.utils.FileUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,14 +41,14 @@ public class UserListFragment extends Fragment {
     private ArrayList<String> noms = new ArrayList<>();
     private ArrayList<String> imgs = new ArrayList<>();
     private ArrayList<String> mails = new ArrayList<>();
+    private ListView lista;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
 
-        ListView lista = view.findViewById(R.id.users_list);
-
-
+        lista = view.findViewById(R.id.users_list);
+        obtenerContactos();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -50,6 +57,33 @@ public class UserListFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void obtenerContactos() {
+        FileUtils fileUtils=new FileUtils();
+        String user=fileUtils.readFile(requireContext(), "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "obtenerContactos")
+                .putString("usuario", user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String nombres = workInfo.getOutputData().getString("nombres");
+                            String imagenes = workInfo.getOutputData().getString("imgs");
+                            String[] nomsArray=nombres.split(",");
+                            String[] imgsArray=imagenes.split(",");
+                            noms=new ArrayList<String>(Arrays.asList(nomsArray));
+                            imgs=new ArrayList<String>(Arrays.asList(imgsArray));
+                            UserListAdapter userListAdapter=new UserListAdapter(getContext(),noms,imgs);
+                            lista.setAdapter(userListAdapter);
+                        }
+                    }
+                });
+        WorkManager.getInstance(getContext()).enqueue(otwr);
     }
 
     private void obtenerClave(String otroMail, int pos) {

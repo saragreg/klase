@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,26 +90,22 @@ public class FragmentPeticiones extends Fragment {
                             String[] arrayi = intensivo.split(",");
                             String[] arraydd = dias.split(",");
                              int i=0;
-                            while (i<arraya.length){
-                                Peticion peticion=new Peticion(user,arrayidUsu[i],arrayf[i],arrayn[i],arraya[i],arrayd[i],arrayh[i],arrayfeccrea[i],arrayi[i],arraydd[i],"p");
-                                Peticion.peticionesLis.add(peticion);
-                                i++;
+                             if(!idUsu.equals("")) {
+                                 while (i < arraya.length) {
+                                     Peticion peticion = new Peticion(user, arrayidUsu[i], arrayf[i], arrayn[i], arraya[i], arrayd[i], arrayh[i], arrayfeccrea[i], arrayi[i], arraydd[i], "p");
+                                     Peticion.peticionesLis.add(peticion);
+                                     i++;
+                                 }
+                             }
+                            if (i!=0) {
+                                RecyclerView lista = view.findViewById(R.id.recyclerViewPeticiones);
+                                AdaptadorPeticiones eladap = new AdaptadorPeticiones(requireContext(), Peticion.peticionesLis, getViewLifecycleOwner());
+                                lista.setAdapter(eladap);
+                                LinearLayoutManager elLayoutLineal = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                                lista.setLayoutManager(elLayoutLineal);
+                            }else{
+                                Toast.makeText(getContext(), "No hay peticiones nuevas", Toast.LENGTH_SHORT).show();
                             }
-
-                            /*asignaturas = new ArrayList<>(Arrays.asList(arraya));
-                            noms = new ArrayList<>(Arrays.asList(arrayn));
-                            fotos = new ArrayList<>(Arrays.asList(arrayf));
-                            duraciones = new ArrayList<>(Arrays.asList(arrayd));
-                            fechas = new ArrayList<>(Arrays.asList(arrayh));
-                            intens = new ArrayList<>(Arrays.asList(arrayi));
-                            diasSem = new ArrayList<>(Arrays.asList(arraydd));*/
-
-
-                            RecyclerView lista = view.findViewById(R.id.recyclerViewPeticiones);
-                            AdaptadorPeticiones eladap = new AdaptadorPeticiones(requireContext(),Peticion.peticionesLis,getViewLifecycleOwner());
-                            lista.setAdapter(eladap);
-                            LinearLayoutManager elLayoutLineal = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                            lista.setLayoutManager(elLayoutLineal);
 
                             workerFinishedLiveData.setValue(true); // Notificar que el worker ha terminado
                         }
