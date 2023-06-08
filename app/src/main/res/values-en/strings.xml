@@ -19,7 +19,7 @@
     <string name="perfilp">USER PROFILE</string>
     <string name="asig">Subjects you can teach</string>
     <string name="curso">Courses</string>
-    <string name="idiom">Languages in which you can teach</string>
+    <string name="idiom">Languges in which you can teach</string>
     <string name="años">Years of experience</string>
     <string name="mate">Mathematics</string>
     <string name="lengua">Spanish</string>
@@ -38,6 +38,7 @@
     <string name="profesor">Teacher</string>
     <string name="alumno">Student</string>
     <string name="rol">You will register as:</string>
+    <string name="ajustes">Settings</string>
     <string name="google_maps_api_key">AIzaSyBkQBo4qew97alrgzanOAyy45H93LjiHzA</string>
     <string name="pais">Country</string>
     <string name="ciudad">locality</string>
@@ -54,8 +55,11 @@
     <string name="semanal">Weekly</string>
     <string name="mensual">Monthly</string>
     <string name="crearev">Create Event</string>
-    <string name="descEvent">Descripción del evento</string>
-    <string name="fecha">Fecha</string>
-    <string name="addevent">Añadir Evento</string>
+    <string name="descEvent">Event description</string>
+    <string name="fecha">Date</string>
+    <string name="addevent">Add event</string>
+    <string name="cerrarsesion">Log out</string>
+    <string name="borrarcuuenta">Delete account</string>
+    <string name="cambiaridioma">Change Language</string>
 
 </resources>

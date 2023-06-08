@@ -54,7 +54,11 @@
     <string name="semanal">Astero</string>
     <string name="mensual">Hilero</string>
     <string name="crearev">Gertaera Sortu</string>
-    <string name="descEvent">Descripción del evento</string>
-    <string name="fecha">Fecha</string>
-    <string name="addevent">Añadir Evento</string>
+    <string name="descEvent">Ekitaldiaren deskribapena</string>
+    <string name="fecha">Data</string>
+    <string name="addevent">Gehitu gertaera</string>
+    <string name="cerrarsesion">Saioa itzi</string>
+    <string name="borrarcuuenta">Ezabatu kontua</string>
+    <string name="cambiaridioma">Hizkuntza aldatu</string>
+    <string name="ajustes">Ezarpenak</string>
 </resources>

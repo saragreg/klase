@@ -21,8 +21,7 @@ public class conexionBDmensajes extends Worker {
     @Override
     public Result doWork() {
         String usu = getInputData().getString("usuario");
-        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/mensajefcm.php?usuario="+usu;
-
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/mensajefcm.php?usuario="+usu+"&descripcion="+"su solicitud ha sido aceptada";
         HttpURLConnection urlConnection = null;
         System.out.println("hemos llegau");
         try {

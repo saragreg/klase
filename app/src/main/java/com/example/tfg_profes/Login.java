@@ -36,8 +36,8 @@ public class Login extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sharedPreferences = getPreferences(MODE_PRIVATE);
-
+        //sharedPreferences = getPreferences(MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         String idioma = sharedPreferences.getString("idioma", DEFAULT_LANGUAGE);
         setIdioma(idioma);
         super.onCreate(savedInstanceState);
@@ -141,7 +141,6 @@ public class Login extends AppCompatActivity {
 
         resources.updateConfiguration(configuration, displayMetrics);
     }
-
 
 
 }

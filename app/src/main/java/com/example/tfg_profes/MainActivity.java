@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        sharedPreferences = getPreferences(MODE_PRIVATE);
-
+        //sharedPreferences = getPreferences(MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         idioma = sharedPreferences.getString("idioma", DEFAULT_LANGUAGE);
         setIdioma(idioma);
 
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         resources.updateConfiguration(configuration, displayMetrics);
     }
     private void saveLanguage(String language) {
+        sharedPreferences = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("idioma", language); // Ejemplo: Guardar una cadena de texto
         editor.apply(); // Guardar los cambios

@@ -5,4 +5,8 @@
     <string name="descEvent">Descripción del evento</string>
     <string name="fecha">Fecha</string>
     <string name="addevent">Añadir Evento</string>
+    <string name="cerrarsesion">Cerrar sesión</string>
+    <string name="borrarcuuenta">Eliminar cuenta</string>
+    <string name="cambiaridioma">Cambiar idioma</string>
+    <string name="ajustes">Ajustes</string>
 </resources>

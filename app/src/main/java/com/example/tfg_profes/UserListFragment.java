@@ -1,5 +1,6 @@
 package com.example.tfg_profes;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,26 +34,39 @@ import java.util.Arrays;
 public class UserListFragment extends Fragment {
 
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mensajeriafcm-ea7c9-default-rtdb.europe-west1.firebasedatabase.app/");
-    private String usermail;
-    private String userExtmail = "";
-    private String chatKey = "";
-    String mailComprobar1 = "";
-    String mailComprobar2 = "";
+    private String chatKey = "", usuario;
+    String userComprobar1 = "";
+    String userComprobar2 = "";
     private ArrayList<String> noms = new ArrayList<>();
     private ArrayList<String> imgs = new ArrayList<>();
-    private ArrayList<String> mails = new ArrayList<>();
+    private ArrayList<String> users = new ArrayList<>();
     private ListView lista;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
-
+        FileUtils fileUtils=new FileUtils();
+        usuario=fileUtils.readFile(requireContext(), "config.txt");
         lista = view.findViewById(R.id.users_list);
-        obtenerContactos();
+        //obtenerContactos();
+        noms=new ArrayList<String>();
+        imgs=new ArrayList<String>();
+        noms.add("sara");
+        noms.add("sofia");
+        noms.add("prueba");
+        String imagen="https://lapi.com.mx/web/image/product.product/31740/image_1024/Perfil%20Mujer%20%28Balbuena%29?unique=a660b70";
+        imgs.add(imagen);
+        imgs.add(imagen);
+        imgs.add(imagen);
+        users.add("sara");
+        users.add("sofia");
+        users.add("prueba");
+        UserListAdapter userListAdapter=new UserListAdapter(getContext(),noms,imgs);
+        lista.setAdapter(userListAdapter);
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                obtenerClave(mails.get(i), i);
+                obtenerClave(users.get(i), i);
             }
         });
 
@@ -95,9 +109,9 @@ public class UserListFragment extends Fragment {
                 if (snapshot.hasChild("chat")) {
                     for (DataSnapshot messagesnapshot : snapshot.child("chat").getChildren()) {
                         if (messagesnapshot.hasChild("user1") && messagesnapshot.hasChild("user2")) {
-                            mailComprobar1 = messagesnapshot.child("user1").getValue(String.class);
-                            mailComprobar2 = messagesnapshot.child("user2").getValue(String.class);
-                            if ((mailComprobar1.equals(otroMail) || mailComprobar1.equals(usermail)) && (mailComprobar2.equals(otroMail) || mailComprobar2.equals(usermail))) {
+                            userComprobar1 = messagesnapshot.child("user1").getValue(String.class);
+                            userComprobar2 = messagesnapshot.child("user2").getValue(String.class);
+                            if ((userComprobar1.equals(otroMail) || userComprobar1.equals(usuario)) && (userComprobar2.equals(otroMail) || userComprobar2.equals(usuario))) {
                                 //se asume que no existen mensajes contigo mismo
                                 chatKey = messagesnapshot.getKey();
                             }
@@ -105,14 +119,14 @@ public class UserListFragment extends Fragment {
                     }
                 }
                 //se abre la ventana de chat
-                /*Intent intent = new Intent(requireActivity(), Chat.class);
+                Intent intent = new Intent(requireActivity(), Chat.class);
                 intent.putExtra("nombre", noms.get(pos));
-                intent.putExtra("mail1",mails.get(pos));
+                intent.putExtra("mail1",users.get(pos));
                 intent.putExtra("fotoPerfil",imgs.get(pos));
-                intent.putExtra("mailUser",usermail);
+                intent.putExtra("mailUser",usuario);
                 intent.putExtra("chatKey", chatKey);
                 //intent.putExtra("fotoPerfil",imgs.get(i));
-                startActivity(intent);*/
+                startActivity(intent);
             }
 
             @Override

@@ -2,14 +2,11 @@ package com.example.tfg_profes;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -45,16 +42,15 @@ public class UserListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         view=inflater.inflate(R.layout.adapter_user_list,null);
         TextView nombre= (TextView) view.findViewById(R.id.nombre);
-        ImageView imagen=(ImageView) view.findViewById(R.id.imagen);
+        //ImageView imagen=(ImageView) view.findViewById(R.id.imagen);
         nombre.setText(nombres.get(i));
-        if (!imagenes.get(i).equals("default")) {
+        /*if (!imagenes.get(i).equals("default")) {
             String image64 = imagenes.get(i);
             byte[] b = Base64.decode(image64, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(b,0,
-                    b.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(b,0,b.length);
             Bitmap rescaledImage = adjustImageSize(bitmap);
             imagen.setImageBitmap(rescaledImage);
-        }
+        }*/
         return view;
     }
     private Bitmap adjustImageSize(Bitmap bitmap) {

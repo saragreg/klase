@@ -1,16 +1,22 @@
 package com.example.tfg_profes;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -34,7 +40,9 @@ public class Menu extends AppCompatActivity {
     ArrayList<String> usus= new ArrayList<String>();
     ArrayList<String> locs= new ArrayList<String>();
     private static final String DEFAULT_LANGUAGE = "default";
+    private static final String DEFAULT_PERFIL = "p";
     private SharedPreferences sharedPreferences;
+    private String perfil;
     Double latUsu,lngUsu;
     private BottomNavigationView bottomNavigationView;
     @Override
@@ -49,11 +57,20 @@ public class Menu extends AppCompatActivity {
                     | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
+            FileUtils fileUtils= new FileUtils();
+            String user= fileUtils.readFile(this, "config.txt");
             sharedPreferences = getPreferences(MODE_PRIVATE);
-
             String idioma = sharedPreferences.getString("idioma", DEFAULT_LANGUAGE);
+            perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
             setIdioma(idioma);
             setContentView(R.layout.activity_menu);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new
+                            String[]{POST_NOTIFICATIONS}, 11);
+                }
+            }
             cargarEventos();
 
             bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -64,14 +81,19 @@ public class Menu extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     // Realizar acciones según el elemento seleccionado
                     if (item.getItemId() == R.id.home_bar) {
-                        replaceFragment(new FragmentPeticiones());
+                        if (perfil.equals("p")) {
+                            replaceFragment(new FragmentPeticiones());
+                        }else{
+                            obtenerDatosProfes(user);
+                            replaceFragment(new ListaProfesores());
+                        }
                     } else if (item.getItemId() == R.id.chat_bar) {
                         replaceFragment(new UserListFragment());
                     } else if (item.getItemId() == R.id.agenda_bar) {
                         replaceFragment(new AgendaFragment());
-                }/* else if (item.getItemId() == R.id.settings_bar) {
+                } else if (item.getItemId() == R.id.settings_bar) {
                     replaceFragment(new SettingsFragment());
-                }*/
+                }
                     return true;
                 }
             });

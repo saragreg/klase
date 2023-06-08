@@ -1,12 +1,5 @@
 package com.example.tfg_profes;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,6 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -98,7 +98,7 @@ public class RegLoc extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             if (per.equals("a")){
-                                //registrarAlu(latitude,longitude);
+                                registrarAlu();
                             }else{
                                 registrarProfe();
                             }
@@ -108,6 +108,53 @@ public class RegLoc extends AppCompatActivity {
                 });
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
     }
+
+    private void registrarAlu() {
+        FragmentEso fragAlu= (FragmentEso) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        int numHijos=fragAlu.getNumHijos();
+        String[] hijos=fragAlu.getHijos();
+        for (int i = 0; i < numHijos; i++) {
+            insertarAlu(usu,hijos[i]);
+        }
+    }
+
+    private void insertarAlu(String usu, String hijo) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "addAlumno")
+                .putString("padre",usu)
+                .putString("hijo",hijo)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                            Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+
+                            if (per.equals("p")) {
+                                Intent intent = new Intent(RegLoc.this, LisAlumnos.class);
+                                intent.putExtra("usuario", usu);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }else{
+                                Intent intent = new Intent(RegLoc.this, Menu.class);
+                                intent.putExtra("usuario", usu);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+
+                        } else {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
     private void registrarProfe() {
         FragmentBac fragProf= (FragmentBac) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         String exp=fragProf.getExp();

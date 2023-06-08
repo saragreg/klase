@@ -111,21 +111,29 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
         holder.aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //enviar notificacion al usuario
+                enviarnotificacion(p.getIdUsu());
                 FileUtils fileUtils=new FileUtils();
                 String user=fileUtils.readFile(contexto,"config.txt");
+                //añadir eventos a la agenda
                 String[] fechahora=p.getFechahora().split(" ");
                 String fecha=fechahora[0];
-                String descr="";
+                String descr="",descr2="";
                 if (fechahora.length>1){
                     String hora=fechahora[1];
                     descr="Klase con "+p.getNombre()+" a las "+hora;
+                    descr2="Klase con "+user+" a las "+hora;
                 }else{
                     descr="Klase con "+p.getNombre();
+                    descr2="Klase con "+user;
                 }
                 Evento evento=new Evento(descr, LocalDate.parse(fecha));
                 Evento.eventosLis.add(evento);
                 addEvento(user,descr,fecha);
+                addEvento(p.getIdUsu(),descr2,fecha);
+                //añadir el contacto a la lista de contactos del chat
                 addContacto(user,p.getIdUsu());
+                //mostrar dialogo de reserva confirmada
                 AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                 builder.setTitle("Reserva confirmada");
                 builder.setMessage("La klase se ha añadido a la agenda, te enviaré una notificación para que no se te olvide 24 horas antes");
@@ -244,6 +252,24 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
     @Override
     public int getItemCount() {
         return lista.size();
+    }
+    private void enviarnotificacion(String usuIntro) {
+        usuIntro="monica";
+        Data inputData = new Data.Builder()
+                .putString("usuario",usuIntro)
+                .build();
+
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDmensajes.class).setInputData(inputData).build();
+        WorkManager.getInstance(contexto).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(lifecycleOwner, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(contexto).enqueue(otwr);
     }
 
 

@@ -1,17 +1,16 @@
 package com.example.tfg_profes;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -272,68 +271,5 @@ public class FragmentBac extends Fragment {
 
         exp=view.findViewById(R.id.expNum);
     }
-    /*public void onClickm(View v){
-        if (mx) {
-            mx=false;
-        }else{
-            mx=true;
-        }
-    }
-    public void onClickl(View v){
-        if (lx) {
-            lx=false;
-        }else{
-            lx=true;
-        }
-    }
-    public void onClicke(View v){
-        if (ex) {
-            ex=false;
-        }else{
-            ex=true;
-        }
-    }
-    public void onClicki(View v){
-        if (ix) {
-            ix=false;
-        }else{
-            ix=true;
-        }
-    }
-    public void onClickq(View v){
-        if (qx) {
-            qx=false;
-        }else{
-            qx=true;
-        }
-    }
-    public void onClickn(View v){
-        if (nx) {
-            nx=false;
-        }else{
-            nx=true;
-        }
-    }
-    public void onClicks(View v){
-        if (sx) {
-            sx=false;
-        }else{
-            sx=true;
-        }
-    }
-    public void onClickt(View v){
-        if (tx) {
-            tx=false;
-        }else{
-            tx=true;
-        }
-    }
-    public void onClicka(View v){
-        if (ax) {
-            ax=false;
-        }else{
-            ax=true;
-        }
-    }*/
 
 }
