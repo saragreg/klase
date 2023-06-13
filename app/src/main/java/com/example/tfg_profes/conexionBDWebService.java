@@ -1,6 +1,7 @@
 package com.example.tfg_profes;
 
 import android.content.Context;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -17,6 +18,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 
 
@@ -29,7 +32,7 @@ public class conexionBDWebService extends Worker {
     private String usuario;
     private String latObt,lngObt;
     private String usupend="",usuacept="";
-    private String nombres="",imgs="",img="";
+    private String nombres="",imgs="",img="",filePath="";
     private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="",idProfe="",idUsu="",feccrea="";
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -159,8 +162,9 @@ public class conexionBDWebService extends Worker {
             case "cargarFotoPerfil":
                 String usuPer = getInputData().getString("user");
                 cargarFotoPerfil(usuPer);
+                String filepath;
                 Data fotoPer = new Data.Builder()
-                        .putString("img",img)
+                        .putString("img",filePath)
                         .build();
                 return Result.success(fotoPer);
             case "cargarDatosUsu":
@@ -331,6 +335,25 @@ public class conexionBDWebService extends Worker {
 
                 JSONArray jsonArray = new JSONArray(result);
                 img = jsonArray.getJSONObject(0).getString("imagen");
+                Usuario.usuariosLis.get(0).setImagen(img);
+                // Set a name to the photo and save it to internal storage
+                /*String imageFileName =
+                        "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss")
+                                .format(new Date());
+                File directory =
+                        getApplicationContext().getFilesDir();
+                File imageFile = new File(directory, imageFileName);
+                // Guardar el bitmap en el archivo temporal
+                try {
+                    FileOutputStream fos = new FileOutputStream(imageFile);
+                    //image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.write(img.getBytes());
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // Obtener la ruta del archivo temporal
+                filePath = imageFile.getAbsolutePath();*/
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -866,6 +889,7 @@ public class conexionBDWebService extends Worker {
         }
     }
     private void insertImagen(String usu, String uri) {
+        String imagen=obtenerImagenEnString(uri);
         String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/insertar_imagenes.php";
 
         HttpURLConnection urlConnection = null;
@@ -878,7 +902,7 @@ public class conexionBDWebService extends Worker {
 
             JSONObject parametrosJSON = new JSONObject();
             parametrosJSON.put("usuario", usu);
-            parametrosJSON.put("imagen", uri);
+            parametrosJSON.put("imagen", imagen);
             PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
             out.print(parametrosJSON);
             out.close();
@@ -907,6 +931,21 @@ public class conexionBDWebService extends Worker {
                 urlConnection.disconnect();
             }
         }
+    }
+    public static String obtenerImagenEnString(String filePath) {
+        try {
+            // Leer los bytes del archivo
+            byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+
+            // Decodificar los bytes en forma de cadena Base64
+            String imageString = Base64.encodeToString(bytes, Base64.DEFAULT);
+
+            return imageString;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
 

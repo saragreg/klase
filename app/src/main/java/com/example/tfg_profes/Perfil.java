@@ -2,7 +2,6 @@ package com.example.tfg_profes;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -46,7 +45,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -71,8 +71,19 @@ public class Perfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
         selectedImage=findViewById(R.id.imageView4);
-
-        ImageUtils iu = new ImageUtils();
+        String image64 =Usuario.getUsuariosLis().get(0).getImagen();
+        byte[] b = Base64.decode(image64, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+        //Bitmap rescaledImage = adjustImageSize(bitmap);
+        selectedImage.setImageBitmap(bitmap);
+        /*String image64 =obtenerImagenEnString(Usuario.getUsuariosLis().get(0).getImagen());
+        if (!image64.equals("")) {
+            byte[] b = Base64.decode(image64, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+            //Bitmap rescaledImage = adjustImageSize(bitmap);
+            selectedImage.setImageBitmap(bitmap);
+        }*/
+        /*ImageUtils iu = new ImageUtils();
         if (!iu.sessionExists(this, "image.txt")) {
             ImageUtils imageUtils= new ImageUtils();
             String imagen= imageUtils.readImage(this, "image.txt");
@@ -83,7 +94,7 @@ public class Perfil extends AppCompatActivity {
                     b.length);
             Bitmap rescaledImage = adjustImageSize(bitmap);
             selectedImage.setImageBitmap(rescaledImage);
-        }
+        }*/
         //usu=getIntent().getExtras().getString("usuario");
         FileUtils fileUtils=new FileUtils();
         usu=fileUtils.readFile(this, "config.txt");
@@ -112,7 +123,7 @@ public class Perfil extends AppCompatActivity {
         if (savedInstanceState != null) {
             String ruta =savedInstanceState.getString("imagen");
             // Decodificar la cadena Base64 a un array de bytes
-            Bitmap bitmap = BitmapFactory.decodeFile(ruta);
+            bitmap = BitmapFactory.decodeFile(ruta);
 
             // Mostrar el Bitmap en un ImageView
             selectedImage.setImageBitmap(bitmap);
@@ -178,16 +189,34 @@ public class Perfil extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         if (requestCode == CAMERA_REQUEST_CODE) {
-            Bitmap image= (Bitmap) data.getExtras().get("data");
-            selectedImage.setImageBitmap(image);
+            if(resultCode == this.RESULT_OK) {
+                Bitmap image = (Bitmap) data.getExtras().get("data");
+                selectedImage.setImageBitmap(image);
+                // Transform the photo to a Base64 String and compress it
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                byte[] byteArray = stream.toByteArray();
+                String photo64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-            // Set a name to the photo and save it to internal storage
-            String imageFileName =
-                    "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss")
-                            .format(new Date());
-            File directory =
-                    getApplicationContext().getFilesDir();
-            File imageFile = new File(directory, imageFileName);
+                // Set a name to the photo and save it to internal storage
+                String imageFileName =
+                        "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss")
+                                .format(new Date());
+                File directory =
+                        getApplicationContext().getFilesDir();
+                File imageFile = new File(directory, imageFileName);
+                // Guardar el bitmap en el archivo temporal
+                try (FileOutputStream fos = new FileOutputStream(imageFile)) {
+                    //image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.write(photo64.getBytes());
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // Obtener la ruta del archivo temporal
+                String filePath = imageFile.getAbsolutePath();
+                System.out.println(filePath);
+                subirUriImagen(filePath);
 
             /*FileOutputStream outputStream = null;
             try {
@@ -199,13 +228,8 @@ public class Perfil extends AppCompatActivity {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }*/
+            }
 
-            // Transform the photo to a Base64 String and compress it
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-            byte[] byteArray = stream.toByteArray();
-            String photo64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
             try {
                 OutputStreamWriter outputStreamWriter =
                         new OutputStreamWriter(openFileOutput("image.txt",
@@ -214,32 +238,20 @@ public class Perfil extends AppCompatActivity {
                 outputStreamWriter.close();
             } catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e);
+            }*/
             }
-            // Crear un archivo temporal
-            File tempFile = null;
-            try {
-                tempFile = File.createTempFile("image", ".jpg", getCacheDir());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            // Obtener la ruta del archivo temporal
-            String filePath = tempFile.getAbsolutePath();
-            System.out.println(filePath);
-            subirUriImagen(photo64);
         }
 
         if (requestCode == GALLERY_REQUEST_CODE) {
             if(resultCode == this.RESULT_OK){
                 Uri contentUri=data.getData();
-                String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                /*String timeStamp= new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String imageFileName= "JPEG_"+timeStamp+"."+getFileExt(contentUri);
-                Log.d("tag","gallery url:"+ imageFileName);
+                Log.d("tag","gallery url:"+ imageFileName);*/
                 selectedImage.setImageURI(contentUri);
 
                 //uploadimage
-                uploadImageToFirebase(imageFileName,contentUri);
+                //uploadImageToFirebase(imageFileName,contentUri);
             }
         }
     }
@@ -373,6 +385,21 @@ public class Perfil extends AppCompatActivity {
         matrix.postScale(scaleWidth, scaleLength);
 
         return Bitmap.createBitmap(bitmap, 0, 0, width, length, matrix, true);
+    }
+    public static String obtenerImagenEnString(String filePath) {
+        try {
+            // Leer los bytes del archivo
+            byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+
+            // Decodificar los bytes en forma de cadena Base64
+            String imageString = Base64.encodeToString(bytes, Base64.DEFAULT);
+
+            return imageString;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 

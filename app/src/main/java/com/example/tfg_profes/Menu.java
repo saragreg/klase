@@ -117,9 +117,8 @@ public class Menu extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             String fotoPer=workInfo.getOutputData().getString("img");
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("fotoPer", fotoPer); // Ejemplo: Guardar una cadena de texto
-                            editor.apply(); // Guardar los cambios
+                            //Usuario.usuariosLis.get(0).setImagen(fotoPer);
+
                         }
                     }
                 });
@@ -159,7 +158,7 @@ public class Menu extends AppCompatActivity {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-                            //cargarFotoPerfil();
+                            cargarFotoPerfil();
                         }
                     }
                 });
