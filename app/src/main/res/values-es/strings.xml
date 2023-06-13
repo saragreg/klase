@@ -61,4 +61,11 @@
     <string name="borrarcuuenta">Eliminar cuenta</string>
     <string name="cambiaridioma">Cambiar idioma</string>
     <string name="ajustes">Ajustes</string>
+    <string name="guardar">Guardar</string>
+    <string name="contraAnti">Contraseña antigua</string>
+    <string name="cambioContra">Cambiar contraseña</string>
+    <string name="datosPer">Datos personales</string>
+    <string name="miDir">Mi dirección</string>
+    <string name="calle">Calle</string>
+    <string name="opcional">(Opcional)</string>
 </resources>

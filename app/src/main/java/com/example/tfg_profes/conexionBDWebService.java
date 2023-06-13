@@ -29,7 +29,7 @@ public class conexionBDWebService extends Worker {
     private String usuario;
     private String latObt,lngObt;
     private String usupend="",usuacept="";
-    private String nombres="",imgs="";
+    private String nombres="",imgs="",img="";
     private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="",idProfe="",idUsu="",feccrea="";
     public conexionBDWebService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -156,10 +156,189 @@ public class conexionBDWebService extends Worker {
                 String usu2 = getInputData().getString("usu2");
                 addContacto(usu1,usu2);
                 return Result.success();
+            case "cargarFotoPerfil":
+                String usuPer = getInputData().getString("user");
+                cargarFotoPerfil(usuPer);
+                Data fotoPer = new Data.Builder()
+                        .putString("img",img)
+                        .build();
+                return Result.success(fotoPer);
+            case "cargarDatosUsu":
+                String usuDatos = getInputData().getString("user");
+                cargarDatosUsu(usuDatos);
+                return Result.success();
+            case "updateUsuario":
+                String usuarioDatosAnti = getInputData().getString("usuAnti");
+                String usuarioDatos = getInputData().getString("usu");
+                String nomDatos = getInputData().getString("nom");
+                String telDatos = getInputData().getString("tel");
+                updateUsuario(usuarioDatosAnti,usuarioDatos,nomDatos,telDatos);
+                return Result.success();
+            case "updateContra":
+                String usuarioContra = getInputData().getString("usu");
+                String contraHasheada = getInputData().getString("contra");
+                updateContra(usuarioContra,contraHasheada);
+                return Result.success();
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void updateContra(String usuarioContra, String contraHasheada) {
+        String url = URL_BASE + "updateContra.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuario", usuarioContra);
+            parametrosJSON.put("contra", contraHasheada);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void updateUsuario(String usuarioDatosAnti,String usuarioDatos, String nomDatos, String telDatos) {
+        String url = URL_BASE + "updateDatosUsu.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("usuAnti", usuarioDatosAnti);
+            parametrosJSON.put("usu", usuarioDatos);
+            parametrosJSON.put("nom", nomDatos);
+            parametrosJSON.put("tel", telDatos);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void cargarDatosUsu(String usuDatos) {
+        String url = URL_BASE + "cargarDatosUsu.php?user="+usuDatos;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    String nombre = jsonArray.getJSONObject(i).getString("nombre");
+                    String tel = jsonArray.getJSONObject(i).getString("tel");
+                    String loc = jsonArray.getJSONObject(i).getString("loc");
+                    String foto="default";
+                    Usuario usu=new Usuario(usuDatos,nombre,tel,loc,foto);
+                    Usuario.usuariosLis.add(usu);
+                }
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void cargarFotoPerfil(String usu) {
+        String url = URL_BASE + "selectImagenToken.php?usuario="+usu;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+                img = jsonArray.getJSONObject(0).getString("imagen");
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void addContacto(String usu1, String usu2) {
@@ -699,7 +878,7 @@ public class conexionBDWebService extends Worker {
 
             JSONObject parametrosJSON = new JSONObject();
             parametrosJSON.put("usuario", usu);
-            parametrosJSON.put("uri", uri);
+            parametrosJSON.put("imagen", uri);
             PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
             out.print(parametrosJSON);
             out.close();
@@ -716,7 +895,7 @@ public class conexionBDWebService extends Worker {
                 JSONArray jsonArray = new JSONArray(result);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    String nomuri = jsonArray.getJSONObject(i).getString("uri");
+                    String nomuri = jsonArray.getJSONObject(i).getString("imagen");
                 }
             }
         } catch (IOException e) {

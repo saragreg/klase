@@ -1,5 +1,9 @@
 package com.example.tfg_profes;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +21,8 @@ import androidx.work.WorkManager;
 import com.example.tfg_profes.utils.AgendaUtils;
 import com.example.tfg_profes.utils.FileUtils;
 
+import java.util.Calendar;
+
 public class EventEdit extends AppCompatActivity {
     private EditText eventEditET;
     private TextView fechaKlase;
@@ -29,7 +35,7 @@ public class EventEdit extends AppCompatActivity {
         eventEditET=findViewById(R.id.descEvenET);
         fechaKlase=findViewById(R.id.fechaKlase);
         addevent=findViewById(R.id.addEvent);
-        eventEditET.setText(String.valueOf(AgendaUtils.formattedDate(AgendaUtils.selectedDate)));
+        //eventEditET.setText(String.valueOf(AgendaUtils.formattedDate(AgendaUtils.selectedDate)));
         fechaKlase.setText(AgendaUtils.formattedDate(AgendaUtils.selectedDate));
         addevent.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -60,6 +66,20 @@ public class EventEdit extends AppCompatActivity {
                         if (workInfo != null && workInfo.getState().isFinished()) {
 
                             Toast.makeText(getApplicationContext(), "Se ha añadido correctamente", Toast.LENGTH_SHORT).show();
+                            // Obtener la fecha y hora actual
+                            Calendar calendar = Calendar.getInstance();
+
+// Establecer la fecha y hora deseadas
+                            String[] partesFecha = fechaEvento.split("-");
+                            calendar.set(Calendar.YEAR, Integer.parseInt(partesFecha[0]));
+                            calendar.set(Calendar.MONTH, Integer.parseInt(partesFecha[1]));
+                            calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(partesFecha[2])-1);
+                            calendar.set(Calendar.HOUR_OF_DAY, 9);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
+
+// Programar la alarma
+                            programarAlarma(calendar,descEvento);
 
                         } else {
 
@@ -69,5 +89,21 @@ public class EventEdit extends AppCompatActivity {
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
     }
 
+    private void programarAlarma(Calendar calendar,String descr) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // Intent para la clase BroadcastReceiver que manejará la alarma
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        // Crear un Bundle para incluir datos adicionales
+        Bundle bundle = new Bundle();
+        bundle.putString("descripcion",descr);
+
+// Agregar el Bundle al intent
+        intent.putExtras(bundle);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        // Establecer la alarma con el tipo RTC_WAKEUP para que se dispare incluso si el dispositivo está en suspensión
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
 
 }

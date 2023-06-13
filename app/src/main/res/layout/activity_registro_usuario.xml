@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EFE4B0"
     tools:context=".RegistroUSuario">
 
 
@@ -25,7 +24,6 @@
         android:text="@string/contra"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/usuario"
         app:layout_constraintStart_toStartOf="@+id/usuario"
         app:layout_constraintTop_toBottomOf="@+id/usuario" />
@@ -48,7 +46,6 @@
         android:text="@string/repeContra"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/contraseña"
         app:layout_constraintStart_toStartOf="@+id/contraseña"
         app:layout_constraintTop_toBottomOf="@+id/contraseña" />
@@ -58,7 +55,6 @@
         android:layout_width="317dp"
         android:layout_height="60dp"
         android:layout_marginTop="24dp"
-        android:fontFamily="@font/impact"
         android:gravity="center"
         android:text="@string/registro"
         android:textColor="@color/black"
@@ -76,7 +72,6 @@
         android:text="@string/usuario"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -88,7 +83,6 @@
         android:text="@string/nombre"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/contraseña2"
         app:layout_constraintStart_toStartOf="@+id/contraseña2"
         app:layout_constraintTop_toBottomOf="@+id/contraseña2" />
@@ -100,7 +94,6 @@
         android:text="@string/tel"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/nombre"
         app:layout_constraintStart_toStartOf="@+id/nombre"
         app:layout_constraintTop_toBottomOf="@+id/nombre" />
@@ -112,7 +105,6 @@
         android:layout_marginTop="16dp"
         android:onClick="onclick_reg"
         android:text="@string/aceptar"
-        android:textColor="#EFE4B0"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/radioGroup"

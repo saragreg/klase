@@ -10,7 +10,6 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +23,6 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.example.tfg_profes.utils.FileUtils;
-import com.google.android.material.internal.FlowLayout;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,28 +30,10 @@ import java.util.ArrayList;
 public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
 
     private Context contexto;
-    /*private ArrayList<String> asig;
-    private ArrayList<String> perfil;
-    private ArrayList<String> nombres;
-    private ArrayList<String> duracion;
-    private ArrayList<String> fechahora;
-    private ArrayList<String> intensivos;
-    private ArrayList<String> dias;*/
     private ArrayList<Peticion> lista;
     private LifecycleOwner lifecycleOwner;
     private String estado;
     private View elLayoutDeCadaItem;
-    /*public AdaptadorPeticiones(Context pcontext, ArrayList<String> pasig, ArrayList<String> pperfil, ArrayList<String> pnombres, ArrayList<String> pduracion,ArrayList<String> pfechahora,ArrayList<String> pintensivo,ArrayList<String> pdias)
-    {
-        contexto = pcontext;
-        asig = pasig;
-        perfil=pperfil;
-        nombres=pnombres;
-        duracion=pduracion;
-        fechahora=pfechahora;
-        intensivos=pintensivo;
-        dias=pdias;
-    }*/
 
     public AdaptadorPeticiones(Context pcontext, ArrayList<Peticion> peticionesLis, LifecycleOwner viewLifecycleOwner) {
         contexto = pcontext;
@@ -94,20 +74,40 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
             holder.diasPet.setVisibility(View.GONE);
         }
         String[] asigind=p.getAsig().split(",");
-        int j=0;
-        while (j<asigind.length){
-            TextView textView = new TextView(contexto);
-            textView.setText(asigind[j]);
-            textView.setBackground(elLayoutDeCadaItem.getResources().getDrawable(R.drawable.btn_asig_pulsada, null));
-            textView.setPadding(10, 0, 10, 0);
-            textView.setTextSize(24f);
-
-            FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT);
-            textView.setLayoutParams(layoutParams);
-
-            holder.flowLayout.addView(textView);
-            j++;
+        int j=asigind.length;
+        if (1<=j){
+            holder.asig1.setVisibility(View.VISIBLE);
+            holder.asig1.setText(asigind[0]);
         }
+        if (2<=j){
+            holder.asig2.setVisibility(View.VISIBLE);
+            holder.asig2.setText(asigind[1]);
+        }
+        if (3<=j){
+            holder.asig3.setVisibility(View.VISIBLE);
+            holder.asig3.setText(asigind[2]);
+        }
+        if (4<=j){
+            holder.asig4.setVisibility(View.VISIBLE);
+            holder.asig4.setText(asigind[3]);
+        }
+        if (5<=j){
+            holder.asig5.setVisibility(View.VISIBLE);
+            holder.asig5.setText(asigind[4]);
+        }
+        if (6<=j){
+            holder.asig6.setVisibility(View.VISIBLE);
+            holder.asig6.setText(asigind[5]);
+        }
+        if (7<=j){
+            holder.asig7.setVisibility(View.VISIBLE);
+            holder.asig7.setText(asigind[6]);
+        }
+        if (8<=j){
+            holder.asig8.setVisibility(View.VISIBLE);
+            holder.asig8.setText(asigind[7]);
+        }
+
         holder.aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -257,6 +257,7 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
         usuIntro="monica";
         Data inputData = new Data.Builder()
                 .putString("usuario",usuIntro)
+                .putString("descr","su solicitud ha sido aceptada")
                 .build();
 
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDmensajes.class).setInputData(inputData).build();

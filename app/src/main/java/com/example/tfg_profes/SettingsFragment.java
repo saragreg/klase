@@ -89,6 +89,8 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Button idiomas=view.findViewById(R.id.cambiarIdioma);
         Button cerrarSes=view.findViewById(R.id.cerrarsesion);
+        Button datosPer=view.findViewById(R.id.cambiarDatosPer);
+        Button cambiarLoc=view.findViewById(R.id.cambiarDire);
         Button borrarcuenta=view.findViewById(R.id.borrarcuenta);
 
         FileUtils fileUtils = new FileUtils();
@@ -138,10 +140,23 @@ public class SettingsFragment extends Fragment {
                         editor.putString("idioma", opcionesCod[indiceSeleccionado]); // Ejemplo: Guardar una cadena de texto
                         editor.apply(); // Guardar los
                         SettingsFragment settingsFragment=new SettingsFragment();
-                        
                     }
                 });
                 builder.show();
+            }
+        });
+        datosPer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CambioDatos.class);
+                startActivity(intent);
+            }
+        });
+        cambiarLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CambiosLoc.class);
+                startActivity(intent);
             }
         });
     }

@@ -28,6 +28,23 @@
         android:layout_marginTop="30dp">
 
         <Button
+            android:id="@+id/cambiarDatosPer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/datosPer"
+            android:textColor="@color/black"
+            android:background="@drawable/redondo_back_light_10"/>
+        <Button
+            android:id="@+id/cambiarDire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/miDir"
+            android:textColor="@color/black"
+            android:gravity="left"
+            android:background="@drawable/redondo_back_light_10"/>
+        <Button
             android:id="@+id/cambiarIdioma"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

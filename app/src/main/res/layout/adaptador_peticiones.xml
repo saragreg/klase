@@ -7,14 +7,14 @@
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/intensivo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Intensivo"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -74,11 +74,11 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="32dp"
+            android:layout_marginStart="90dp"
             android:src="@drawable/baseline_check_circle_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fechaHoraPet"
-            app:layout_constraintTop_toTopOf="@+id/fotoPerfil" />
+            app:layout_constraintStart_toEndOf="@+id/duracion"
+            app:layout_constraintTop_toTopOf="@+id/duracion" />
 
         <ImageView
             android:id="@+id/rechazar_btn"
@@ -105,13 +105,12 @@
 
         <TextView
             android:id="@+id/fechaHoraPet"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:text="14/05/2023 6pm"
             android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/rechazar_btn"
             app:layout_constraintStart_toStartOf="@+id/fotoPerfil"
             app:layout_constraintTop_toBottomOf="@+id/fotoPerfil" />
 
@@ -134,21 +133,121 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@+id/info_btn"
             app:layout_constraintStart_toStartOf="@+id/flowlayout"
-            app:layout_constraintTop_toTopOf="@+id/flowlayout"
-            android:orientation="vertical">
+            app:layout_constraintTop_toTopOf="@+id/flowlayout">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:id="@+id/textView48"
+                    android:id="@+id/asig1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
                     android:layout_weight="1"
                     android:background="@color/theme_color"
-                    android:text="mate" />
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/asig2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/asig3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/asig4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/asig5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/asig6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/asig7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/asig8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/theme_color"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="mate"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </LinearLayout>

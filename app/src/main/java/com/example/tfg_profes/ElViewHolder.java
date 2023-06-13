@@ -9,7 +9,7 @@ import androidx.constraintlayout.helper.widget.Flow;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ElViewHolder extends RecyclerView.ViewHolder {
-    public TextView nombre,dur,fechaHoraPet,intensivo,diasPet;
+    public TextView nombre,dur,fechaHoraPet,intensivo,diasPet,asig1,asig2,asig3,asig4,asig5,asig6,asig7,asig8;
     public ImageView userfoto;
     public Flow flowLayout;
     public ImageView aceptar,rechazar,info;
@@ -27,6 +27,15 @@ public class ElViewHolder extends RecyclerView.ViewHolder {
         aceptar=(ImageView) itemView.findViewById(R.id.aceptar_btn);
         rechazar=(ImageView) itemView.findViewById(R.id.rechazar_btn);
         info=(ImageView) itemView.findViewById(R.id.info_btn);
+        asig1=(TextView) itemView.findViewById(R.id.asig1);
+        asig2=(TextView) itemView.findViewById(R.id.asig2);
+        asig3=(TextView) itemView.findViewById(R.id.asig3);
+        asig4=(TextView) itemView.findViewById(R.id.asig4);
+        asig5=(TextView) itemView.findViewById(R.id.asig5);
+        asig6=(TextView) itemView.findViewById(R.id.asig6);
+        asig7=(TextView) itemView.findViewById(R.id.asig7);
+        asig8=(TextView) itemView.findViewById(R.id.asig8);
+
 
     }
 

@@ -61,4 +61,11 @@
     <string name="borrarcuuenta">Ezabatu kontua</string>
     <string name="cambiaridioma">Hizkuntza aldatu</string>
     <string name="ajustes">Ezarpenak</string>
+    <string name="guardar">Guardar</string>
+    <string name="contraAnti">Contraseña antigua</string>
+    <string name="cambioContra">Cambiar contraseña</string>
+    <string name="datosPer">Datos personales</string>
+    <string name="miDir">Mi dirección</string>
+    <string name="calle">Calle</string>
+    <string name="opcional">(Opcional)</string>
 </resources>

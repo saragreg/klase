@@ -4,7 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegLoc">
+    tools:context=".CambiosLoc">
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/calle"
+        app:layout_constraintStart_toStartOf="@+id/textView34"
+        app:layout_constraintTop_toBottomOf="@+id/barrio1" />
+
+    <TextView
+        android:id="@+id/opcional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/opcional"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/barrio1" />
+
+    <EditText
+        android:id="@+id/barrio1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Indautxu"
+        android:inputType="textPersonName"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textView34"
+        app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
     <TextView
         android:id="@+id/textView32"
@@ -18,11 +49,13 @@
 
     <EditText
         android:id="@+id/editTextTextPersonName2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="España"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="20dp"
         android:editable="false"
         app:layout_constraintStart_toStartOf="@+id/textView32"
         app:layout_constraintTop_toBottomOf="@+id/textView32" />
@@ -33,16 +66,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/ciudad"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
+        app:layout_constraintStart_toStartOf="@+id/textView32"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
     <EditText
         android:id="@+id/ciudad"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="ex:Bilbao"
+        android:hint="Bilbao"
         android:inputType="textPersonName"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView33"
         app:layout_constraintTop_toBottomOf="@+id/textView33" />
 
@@ -52,43 +87,31 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/barrio"
-        app:layout_constraintStart_toStartOf="@+id/ciudad"
+        app:layout_constraintStart_toStartOf="@+id/textView33"
         app:layout_constraintTop_toBottomOf="@+id/ciudad" />
 
     <EditText
-        android:id="@+id/barrio"
-        android:layout_width="wrap_content"
+        android:id="@+id/calle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="ex:Indautxu"
+        android:hint="Licenciado Pozas"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/fragmentContainerView"
-        app:layout_constraintStart_toStartOf="@+id/textView34"
-        app:layout_constraintTop_toBottomOf="@+id/textView34" />
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <Button
         android:id="@+id/regLoc"
         android:layout_width="113dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="149dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="149dp"
-        android:onClick="onClickRegLoc"
-        android:text="@string/sig"
-        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
-        app:layout_constraintStart_toStartOf="@+id/fragmentContainerView"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:name="com.example.tfg_profes.FragmentBac"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/regLoc"
+        android:onClick="onClickRegLoc2"
+        android:text="@string/aceptar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.406"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrio"
-        tools:layout="@layout/fragment_bac" />
+        app:layout_constraintTop_toBottomOf="@+id/calle" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

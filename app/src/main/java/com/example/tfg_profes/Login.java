@@ -62,10 +62,8 @@ public class Login extends AppCompatActivity {
     public void onclick_login(View v){
         TextView usu = findViewById(R.id.user);
         usuIntro = usu.getText().toString();
-        System.out.println("usuario introducido: "+usuIntro);
         TextView contra = findViewById(R.id.contra);
         String contraIntro = contra.getText().toString();
-        System.out.println("contra introducido: "+contraIntro);
 
         if (usuIntro.equals("") || contra.equals("")){
             Toast.makeText(this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();

@@ -40,7 +40,7 @@ public class Menu extends AppCompatActivity {
     ArrayList<String> usus= new ArrayList<String>();
     ArrayList<String> locs= new ArrayList<String>();
     private static final String DEFAULT_LANGUAGE = "default";
-    private static final String DEFAULT_PERFIL = "p";
+    private static final String DEFAULT_PERFIL = "nada";
     private SharedPreferences sharedPreferences;
     private String perfil;
     Double latUsu,lngUsu;
@@ -59,7 +59,7 @@ public class Menu extends AppCompatActivity {
         } else {
             FileUtils fileUtils= new FileUtils();
             String user= fileUtils.readFile(this, "config.txt");
-            sharedPreferences = getPreferences(MODE_PRIVATE);
+            sharedPreferences = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
             String idioma = sharedPreferences.getString("idioma", DEFAULT_LANGUAGE);
             perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
             setIdioma(idioma);
@@ -72,7 +72,7 @@ public class Menu extends AppCompatActivity {
                 }
             }
             cargarEventos();
-
+            cargarDatosUsu();
             bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
             // Configurar el listener para el menú inferior
@@ -91,6 +91,9 @@ public class Menu extends AppCompatActivity {
                         replaceFragment(new UserListFragment());
                     } else if (item.getItemId() == R.id.agenda_bar) {
                         replaceFragment(new AgendaFragment());
+                    } else if (item.getItemId() == R.id.perfil_bar) {
+                        Intent intent = new Intent(Menu.this, Perfil.class);
+                        startActivity(intent);
                 } else if (item.getItemId() == R.id.settings_bar) {
                     replaceFragment(new SettingsFragment());
                 }
@@ -98,6 +101,29 @@ public class Menu extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void cargarFotoPerfil() {
+        FileUtils fileUtils=new FileUtils();
+        String user = fileUtils.readFile(this, "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "cargarFotoPerfil")
+                .putString("user",user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String fotoPer=workInfo.getOutputData().getString("img");
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("fotoPer", fotoPer); // Ejemplo: Guardar una cadena de texto
+                            editor.apply(); // Guardar los cambios
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
     }
 
     private void cargarEventos() {
@@ -114,6 +140,26 @@ public class Menu extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
 
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
+
+    }
+    private void cargarDatosUsu() {
+        FileUtils fileUtils=new FileUtils();
+        String user = fileUtils.readFile(this, "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "cargarDatosUsu")
+                .putString("user",user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            //cargarFotoPerfil();
                         }
                     }
                 });
