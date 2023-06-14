@@ -24,8 +24,6 @@ import java.util.ArrayList;
 
 public class FragmentPeticiones extends Fragment {
 
-    private ArrayList<String> asignaturas=new ArrayList<>(),noms=new ArrayList<>(),fotos=new ArrayList<>(),duraciones=new ArrayList<>(),fechas=new ArrayList<>(),intens=new ArrayList<>(),diasSem=new ArrayList<>();
-    private View view;
     public FragmentPeticiones() {
         // Required empty public constructor
     }
@@ -74,7 +72,6 @@ public class FragmentPeticiones extends Fragment {
                             String feccrea = workInfo.getOutputData().getString("feccrea");
                             String asig = workInfo.getOutputData().getString("asig");
                             String nombre = workInfo.getOutputData().getString("nombre");
-                            String fotoper = workInfo.getOutputData().getString("fotoper");
                             String duracion = workInfo.getOutputData().getString("duracion");
                             String fechahora = workInfo.getOutputData().getString("fechahora");
                             String intensivo = workInfo.getOutputData().getString("intensivo");
@@ -84,7 +81,6 @@ public class FragmentPeticiones extends Fragment {
                             String[] arrayfeccrea = feccrea.split(",");
                             String[] arraya = asig.split(";");
                             String[] arrayn = nombre.split(",");
-                            String[] arrayf = fotoper.split(",");
                             String[] arrayd = duracion.split(",");
                             String[] arrayh = fechahora.split(",");
                             String[] arrayi = intensivo.split(",");
@@ -92,7 +88,7 @@ public class FragmentPeticiones extends Fragment {
                              int i=0;
                              if(!idUsu.equals("")) {
                                  while (i < arraya.length) {
-                                     Peticion peticion = new Peticion(user, arrayidUsu[i], arrayf[i], arrayn[i], arraya[i], arrayd[i], arrayh[i], arrayfeccrea[i], arrayi[i], arraydd[i], "p");
+                                     Peticion peticion = new Peticion(user, arrayidUsu[i], Imagenes.obtenerImagen(arrayidUsu[i]), arrayn[i], arraya[i], arrayd[i], arrayh[i], arrayfeccrea[i], arrayi[i], arraydd[i], "p");
                                      Peticion.peticionesLis.add(peticion);
                                      i++;
                                  }

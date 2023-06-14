@@ -1,16 +1,21 @@
 package com.example.tfg_profes;
 
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 public class InfoProfes extends AppCompatActivity {
     String usuario;
@@ -45,8 +50,32 @@ public class InfoProfes extends AppCompatActivity {
 
     }
 
-    public void notificacion(View v) {
-        enviarnotificacion(usuario);
+    public void klase(View v) {
+        // Crear el diálogo personalizado
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_registro_peticiones, null);
+        dialogBuilder.setView(dialogView);
+
+        // Configurar el diálogo
+        dialogBuilder.setTitle("Solicitar una Klase");
+        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Obtener los datos del diálogo
+                EditText editTextDate = dialogView.findViewById(R.id.editTextDate);
+                EditText editTextTime = dialogView.findViewById(R.id.editTextTime2);
+                String fecha = editTextDate.getText().toString();
+                String hora = editTextTime.getText().toString();
+                // Realizar acciones con los datos recolectados
+                Toast.makeText(InfoProfes.this, "Fecha: " + fecha + " Hora: " + hora, Toast.LENGTH_SHORT).show();
+                enviarnotificacion(usuario);
+            }
+        });
+        // Mostrar el diálogo
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+
     }
 
     private void enviarnotificacion(String usuIntro) {

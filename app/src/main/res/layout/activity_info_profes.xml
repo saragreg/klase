@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InfoProfes">
-
     <RatingBar
         android:id="@+id/ratingBar2"
         android:layout_width="wrap_content"
@@ -24,36 +23,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
-    <Button
-        android:id="@+id/info"
-        android:layout_width="147dp"
-        android:layout_height="55dp"
-        android:layout_gravity="top|left"
-        android:layout_marginStart="36dp"
-        android:text="Información"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar2" />
-
-    <Button
-        android:id="@+id/horario"
-        android:layout_width="165dp"
-        android:layout_height="55dp"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="16dp"
-        android:text="Horario"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar2" />
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView6"
         android:name="com.example.tfg_profes.FragmentProfes"
-        android:layout_width="414dp"
-        android:layout_height="390dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horario"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         app:layout_constraintVertical_bias="0.0"
         tools:layout="@layout/fragment_profes" />
 
@@ -76,9 +55,42 @@
         android:text="Klase!"
         android:textColor="@color/white"
         android:textSize="20dp"
-        android:onClick="notificacion"
+        android:onClick="klase"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView6" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar2">
+
+        <Button
+            android:id="@+id/info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Información" />
+
+        <Button
+            android:id="@+id/horario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Horario" />
+
+        <Button
+            android:id="@+id/reseñas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reseñas" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

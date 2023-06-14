@@ -576,13 +576,14 @@ public class conexionBDWebService extends Worker {
                     feccrea = feccrea+jsonArray.getJSONObject(i).getString("feccrea")+",";
                     asigPet = asigPet+jsonArray.getJSONObject(i).getString("asignaturas")+";";
                     nombrePet = nombrePet+jsonArray.getJSONObject(i).getString("nombre")+",";
-                    fotoperPet = fotoperPet+jsonArray.getJSONObject(i).getString("imagen")+",";
+                    Imagenes imagenes=new Imagenes(jsonArray.getJSONObject(i).getString("idUsu"),jsonArray.getJSONObject(i).getString("imagen"));
+                    Imagenes.lisimagenes.add(imagenes);
                     duracionPet = duracionPet+jsonArray.getJSONObject(i).getString("duracion")+",";
                     fechahoraPet = fechahoraPet+jsonArray.getJSONObject(i).getString("fechaClase")+" ";
                     fechahoraPet = fechahoraPet+jsonArray.getJSONObject(i).getString("horaClase")+",";
                     int puntual = jsonArray.getJSONObject(i).getInt("puntual");
                     if (puntual==1){
-                        intensivoPet=intensivoPet+"puntual"+",";
+                        intensivoPet=intensivoPet+"ocasional"+",";
                     }else{
                         intensivoPet=intensivoPet+"intensivo"+",";
                     }

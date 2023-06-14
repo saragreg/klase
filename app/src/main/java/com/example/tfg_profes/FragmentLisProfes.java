@@ -21,7 +21,12 @@ import androidx.work.WorkManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ListaProfesores extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link FragmentLisProfes#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class FragmentLisProfes extends Fragment {
     ArrayList<String> noms= new ArrayList<String>();
     ArrayList<String> precios= new ArrayList<String>();
     ArrayList<String> punt= new ArrayList<String>();
@@ -29,43 +34,12 @@ public class ListaProfesores extends Fragment {
     ArrayList<String> usus= new ArrayList<String>();
     Double latUsu,lngUsu;
     String usuario;
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_profesores);
-        usuario=getIntent().getExtras().getString("usuario");
-        usus = getIntent().getExtras().getStringArrayList("usus");
-        noms = getIntent().getExtras().getStringArrayList("noms");
-        precios = getIntent().getExtras().getStringArrayList("precios");
-        punt = getIntent().getExtras().getStringArrayList("punt");
-        locs = getIntent().getExtras().getStringArrayList("locs");
-
-        ListView lisprofes = findViewById(R.id.listView);
-        AdaptadorProfesLista eladap = new AdaptadorProfesLista(getApplicationContext(), usus, precios, punt,locs);
-        lisprofes.setAdapter(eladap);
-        lisprofes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                noms.remove(i);
-                precios.remove(i);
-                eladap.notifyDataSetChanged();
-                return true;
-            }
-        });
-        lisprofes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                obtenerInfoProfe(usus.get(i),precios.get(i),punt.get(i));
-            }
-        });
-    }*/
-    public ListaProfesores() {
+    public FragmentLisProfes() {
         // Required empty public constructor
     }
-    public static ListaProfesores newInstance(String param1, String param2) {
-        ListaProfesores fragment = new ListaProfesores();
+
+    public static FragmentLisProfes newInstance() {
+        FragmentLisProfes fragment = new FragmentLisProfes();
         return fragment;
     }
 
@@ -73,11 +47,13 @@ public class ListaProfesores extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_lista_profesores, container, false);
-    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_lis_profes, container, false);
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -173,57 +149,12 @@ public class ListaProfesores extends Fragment {
         WorkManager.getInstance(getContext()).enqueue(otwr);
     }
 
-    public void obtenerDatosProfes() {
-        Data inputData = new Data.Builder()
-                .putString("tipo", "infoLista")
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
-        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            String usuarios = workInfo.getOutputData().getString("usu");
-                            String nombre = workInfo.getOutputData().getString("nombre");
-                            String precio = workInfo.getOutputData().getString("precio");
-                            String punts = workInfo.getOutputData().getString("punt");
-                            String usuarios_conf = workInfo.getOutputData().getString("usu_conf");
-                            String loc = workInfo.getOutputData().getString("loc");
-                            String lat = workInfo.getOutputData().getString("lat");
-                            String lon = workInfo.getOutputData().getString("lng");
-
-                            String[] arrayu = usuarios.split(",");
-                            String[] arrayn = nombre.split(",");
-                            String[] arrayp = precio.split(",");
-                            String[] arraypp = punts.split(",");
-                            String[] arrayloc = loc.split(";");
-                            String[] arraylat = lat.split(",");
-                            String[] arraylon = lon.split(",");
-
-                            calcularDistancias(arraylat,arraylon,arrayu,arrayn,arrayp,arraypp,arrayloc);
-
-                            System.out.println("punt: "+punts);
-
-                            usus = new ArrayList<String>(Arrays.asList(arrayu));
-                            noms = new ArrayList<String>(Arrays.asList(arrayn));
-                            precios = new ArrayList<String>(Arrays.asList(arrayp));
-                            punt = new ArrayList<String>(Arrays.asList(arraypp));
-                            locs = new ArrayList<String>(Arrays.asList(arrayloc));
-                            AdaptadorProfesLista eladap = new AdaptadorProfesLista(requireContext(), usus, precios, punt, locs);
-                            //lisprofes.setAdapter(eladap);
-                        }
-                    }
-                });
-        WorkManager.getInstance(getContext()).enqueue(otwr);
-
-
-    }
     public void calcularDistancias(String[] lislat,String[] lislng,String[] usus,String[] nombres,String[] precios,String[] puntos,String[] locs){
         int i=0;
         Float[] distancias = new Float[lislat.length];
         Location location1 = new Location("loc1");
-        location1.setLatitude(latUsu);
-        location1.setLatitude(lngUsu);
+        location1.setLatitude(Float.parseFloat(lislat[i]));
+        location1.setLatitude(Float.parseFloat(lislng[i]));
         while (i<lislat.length){
             Double latitud=Double.parseDouble(lislat[i]);//obtenemos la latitud
             Double longitud=Double.parseDouble(lislng[i]);//obtenemos la longitud
@@ -303,6 +234,5 @@ public class ListaProfesores extends Fragment {
             quicksort(A, j + 1, der, B,C,D,E,F);          // ordenamos subarray derecho
         }
     }
-
 
 }

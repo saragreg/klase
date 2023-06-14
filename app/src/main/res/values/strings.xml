@@ -39,7 +39,6 @@
     <string name="alumno">Alumno</string>
     <string name="rol">Usted se va a registrar como:</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pais">País</string>
     <string name="ciudad">Ciudad</string>
     <string name="barrio">Barrio</string>
@@ -50,8 +49,8 @@
     <string name="cas">Castellano</string>
     <string name="exp">Años de experiencia</string>
     <string name="numhijos">Indica el número de hijos que tienes</string>
-    <string name="puntual">Clase Puntual</string>
-    <string name="continua">Clases Continuas</string>
+    <string name="puntual">Ocasional</string>
+    <string name="continua">Continuas</string>
     <string name="presencial">Presencial</string>
     <string name="semanal">Semanal</string>
     <string name="mensual">Mensual</string>
@@ -70,4 +69,8 @@
     <string name="miDir">Mi dirección</string>
     <string name="calle">Calle</string>
     <string name="opcional">(Opcional)</string>
+    <string name="ocasional">Ocasional</string>
+    <string name="tipoclase">Tipo de clase:</string>
+    <string name="horaclase">Hora de la clase:</string>
+    <string name="diaclase">Día de la calse:</string>
 </resources>

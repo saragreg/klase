@@ -66,12 +66,4 @@ public class Usuario {
     public void guardarEvento() {
         //llamar a la base de datos y guardarlo
     }
-    /*public static ArrayList<Evento> eventosdeldia(LocalDate date){
-        ArrayList<Evento> eventos=new ArrayList<>();
-        for (Evento evento : eventosLis){
-            if (evento.getDate().equals(date))
-                eventos.add(evento);
-        }
-        return eventos;
-    }*/
 }
