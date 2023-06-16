@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import androidx.work.WorkManager;
 
 public class InfoProfes extends AppCompatActivity {
     String usuario;
+    String tipo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,22 @@ public class InfoProfes extends AppCompatActivity {
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
 
+    }
+    public void onRadioButtonKlase (View v) {
+// Is the button now checked?
+        boolean checked = ((RadioButton) v).isChecked();
+
+// Check which radio button was clicked
+        switch (v.getId()) {
+            case R.id.profesor:
+                if (checked)
+                    tipo = "p";
+                break;
+            case R.id.alumno:
+                if (checked)
+                    tipo = "a";
+                break;
+        }
     }
 
     private void enviarnotificacion(String usuIntro) {
