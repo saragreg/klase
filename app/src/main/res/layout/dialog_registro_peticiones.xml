@@ -24,7 +24,14 @@
             android:ems="10"
             android:inputType="date" />
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/opci"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="@string/opcional"
+        android:layout_gravity="left"
+        android:layout_marginLeft="24dp"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,6 +44,7 @@
             android:layout_weight="1"
             android:text="@string/horaclase"
             android:layout_gravity="center"/>
+
         <EditText
             android:id="@+id/editTextTime2"
             android:layout_width="wrap_content"
@@ -64,16 +72,18 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/continua"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/continua" />
+                android:text="@string/continua"
+                android:onClick="onRadioButtonKlase"/>
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/puntual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/puntual" />
+                android:text="@string/puntual"
+                android:onClick="onRadioButtonKlase"/>
         </RadioGroup>
     </LinearLayout>
 
@@ -92,7 +102,7 @@
             android:text="Días de la semana" />
 
         <TextView
-            android:id="@+id/textView16"
+            android:id="@+id/l"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -100,7 +110,7 @@
             android:text="L" />
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -108,7 +118,7 @@
             android:text="M" />
 
         <TextView
-            android:id="@+id/textView18"
+            android:id="@+id/x"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -116,7 +126,7 @@
             android:text="X" />
 
         <TextView
-            android:id="@+id/textView23"
+            android:id="@+id/j"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -124,7 +134,7 @@
             android:text="J" />
 
         <TextView
-            android:id="@+id/textView24"
+            android:id="@+id/v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -132,7 +142,7 @@
             android:text="V" />
 
         <TextView
-            android:id="@+id/textView26"
+            android:id="@+id/s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -140,7 +150,7 @@
             android:text="S" />
 
         <TextView
-            android:id="@+id/textView27"
+            android:id="@+id/d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -153,122 +163,137 @@
         android:layout_marginTop="10dp">
 
         <TextView
-            android:id="@+id/textView36"
+            android:id="@+id/asig1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:clickable="true"
+            android:gravity="center"
             android:text="@string/mate"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textView38"
+            android:id="@+id/asig2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:clickable="true"
+            android:gravity="center"
             android:text="@string/lengua"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textView39"
+            android:id="@+id/asig3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:clickable="true"
+            android:gravity="center"
             android:text="@string/euskera"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textView40"
+            android:id="@+id/asig4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:clickable="true"
+            android:gravity="center"
             android:text="@string/ingles"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:visibility="gone" />
 
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
+
         <TextView
-            android:id="@+id/textView41"
+            android:id="@+id/asig5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:gravity="center"
             android:text="@string/fiki"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textView42"
+            android:id="@+id/asig6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/natura"
-            android:layout_weight="1"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:gravity="center"
+            android:text="@string/natura"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
+
         <TextView
-            android:id="@+id/textView43"
+            android:id="@+id/asig7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:gravity="center"
             android:text="@string/sociales"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textView44"
+            android:id="@+id/asig8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:gravity="center"
             android:text="@string/apoyo"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textView45"
+            android:id="@+id/asig9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tics"
-            android:layout_weight="1"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:background="@drawable/btn_asig"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_asig"
+            android:gravity="center"
+            android:text="@string/tics"
+            android:visibility="gone" />
     </LinearLayout>
 
 

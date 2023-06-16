@@ -75,26 +75,26 @@ public class FragmentBac extends Fragment {
     public String getCurso(){
         String curso="";
         if(prim.isChecked()){
-            curso="prim,";
+            curso="Primaria,";
         }
         if(eso.isChecked()){
-            curso=curso+"eso,";
+            curso=curso+"ESO,";
         }
         if(bac.isChecked()){
-            curso=curso+"bac";
+            curso=curso+"Bachiller";
         }
         return curso;
     }
     public String getIdiom(){
         String curso="";
         if(cas.isChecked()){
-            curso="cas,";
+            curso="castellano,";
         }
         if(eus.isChecked()){
-            curso=curso+"eus,";
+            curso=curso+"euskera,";
         }
         if(ing.isChecked()){
-            curso=curso+"ing";
+            curso=curso+"inglés";
         }
         return curso;
     }
@@ -102,31 +102,31 @@ public class FragmentBac extends Fragment {
         String asig="";
 
         if(mx){
-            asig="mate";
+            asig="Matemáticas";
         }
         if(lx){
-            asig=asig+"len,";
+            asig=asig+"Lengua,";
         }
         if(ex){
-            asig=asig+"eus,";
+            asig=asig+"Euskera,";
         }
         if(ix){
-            asig="ing,";
+            asig="Inglés,";
         }
         if(qx){
-            asig=asig+"fiki,";
+            asig=asig+"Física y Química,";
         }
         if(nx){
-            asig=asig+"nat,";
+            asig=asig+"Ciencias de la naturaleza,";
         }
         if(sx){
-            asig="soc,";
+            asig="Ciencias sociales,";
         }
         if(tx){
-            asig=asig+"tic,";
+            asig=asig+"Tics,";
         }
         if(ax){
-            asig=asig+"apo";
+            asig=asig+"Apoyo escolar";
         }
         return asig;
     }
