@@ -82,6 +82,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="h" />
+        <EditText
+            android:id="@+id/duracionmins"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:text="00"
+            android:gravity="center"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/minstit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="min" />
 
     </LinearLayout>
 

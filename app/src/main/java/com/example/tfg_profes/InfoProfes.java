@@ -517,7 +517,13 @@ public class InfoProfes extends AppCompatActivity {
                         String fecha = editTextDate.getText().toString();
                         String hora = editTextTime.getText().toString();
                         EditText dur = dialogView.findViewById(R.id.duracion);
-                        String duracion = dur.getText().toString();
+                        EditText min = dialogView.findViewById(R.id.duracionmins);
+                        String duracion;
+                        if (min.getText().toString().equals("00")|| min.getText().toString().equals("")) {
+                            duracion = dur.getText().toString()+"h";
+                        }else{
+                            duracion = dur.getText().toString()+"h "+min.getText().toString();
+                        }
                         if (tipo == 2 || fecha.equals("") || duracion.equals("") || (!textViewClicked[0] && !textViewClicked[1] && !textViewClicked[2] && !textViewClicked[3] && !textViewClicked[4] && !textViewClicked[5] && !textViewClicked[6] && !textViewClicked[7] && !textViewClicked[8])) {
                             Toast.makeText(InfoProfes.this, "Todos los campos obligatorios deben estar completos", Toast.LENGTH_SHORT).show();
                             // No hacer nada más si los campos no están completos
@@ -626,7 +632,7 @@ public class InfoProfes extends AppCompatActivity {
                 .putString("dias",dias)
                 .putString("puntual",String.valueOf(tipo))
                 .putString("asig",asignaturas)
-                .putString("dur",dur+"h")
+                .putString("dur",dur)
                 .build();
        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
