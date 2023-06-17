@@ -254,7 +254,6 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
         return lista.size();
     }
     private void enviarnotificacion(String usuIntro) {
-        usuIntro="monica";
         Data inputData = new Data.Builder()
                 .putString("usuario",usuIntro)
                 .putString("descr","su solicitud ha sido aceptada")

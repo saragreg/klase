@@ -183,10 +183,71 @@ public class conexionBDWebService extends Worker {
                 String contraHasheada = getInputData().getString("contra");
                 updateContra(usuarioContra,contraHasheada);
                 return Result.success();
+            case "addSolicitud":
+                String profeKlase = getInputData().getString("idProfe");
+                String clieKlase = getInputData().getString("idCli");
+                String fechaActualKlase = getInputData().getString("fechaActual");
+                String fechaKlase = getInputData().getString("fecha");
+                String horaKlase = getInputData().getString("hora");
+                String diasKlase = getInputData().getString("dias");
+                String puntualKlase = getInputData().getString("puntual");
+                String asigKlase = getInputData().getString("asig");
+                String durKlase = getInputData().getString("dur");
+                addSolicitud(profeKlase,clieKlase,fechaActualKlase,fechaKlase,horaKlase,diasKlase,puntualKlase,asigKlase,durKlase);
+                return Result.success();
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void addSolicitud(String profeKlase, String clieKlase, String fechaActualKlase, String fechaKlase, String horaKlase, String diasKlase, String puntualKlase, String asigKlase, String durKlase) {
+        String url = URL_BASE + "addSolicitud.php";
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("idProfe", profeKlase);
+            parametrosJSON.put("idCli", clieKlase);
+            parametrosJSON.put("FechaHora", fechaActualKlase);
+            parametrosJSON.put("fechaClase", fechaKlase);
+            parametrosJSON.put("horaClase", horaKlase);
+            parametrosJSON.put("dias",diasKlase);
+            parametrosJSON.put("puntual", puntualKlase);
+            parametrosJSON.put("asignaturas", asigKlase);
+            parametrosJSON.put("duracion", durKlase);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void updateContra(String usuarioContra, String contraHasheada) {

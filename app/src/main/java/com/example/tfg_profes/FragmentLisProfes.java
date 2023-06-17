@@ -135,7 +135,7 @@ public class FragmentLisProfes extends Fragment {
 
                             System.out.println("cursos: "+cursos);
                             Intent intent = new Intent(getContext(), InfoProfes.class);
-                            intent.putExtra("usus",usuario);
+                            intent.putExtra("usu",usu);
                             intent.putExtra("precio",prec);
                             intent.putExtra("asig",asig);
                             intent.putExtra("cursos",cursos);

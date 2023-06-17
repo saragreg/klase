@@ -72,4 +72,5 @@
     <string name="tipoclase">Tipo de clase:</string>
     <string name="horaclase">Hora de la clase:</string>
     <string name="diaclase">Día de la calse:</string>
+    <string name="duracion">Duración</string>
 </resources>

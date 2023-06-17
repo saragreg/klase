@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,13 +24,17 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.example.tfg_profes.utils.FileUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class InfoProfes extends AppCompatActivity {
     String usuario;
     int tipo=2;
-    TextView asig1,asig2,asig3,asig4,asig5,asig6,asig7,asig8,asig9,l,m,x,j,v,s,d;
+    TextView asig1,asig2,asig3,asig4,asig5,asig6,asig7,asig8,asig9,l,m,x,j,vi,s,d;
     boolean[] textViewClicked = new boolean[9];
     boolean[] textViewClickedDias = new boolean[7];
     String asig;
@@ -42,7 +47,7 @@ public class InfoProfes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_profes);
         //obtenemos info del usuario
-        usuario = getIntent().getExtras().getString("usus");
+        usuario = getIntent().getExtras().getString("usu");
         String precio = getIntent().getExtras().getString("precio");
         asig = getIntent().getExtras().getString("asig");
         String cursos = getIntent().getExtras().getString("cursos");
@@ -52,6 +57,7 @@ public class InfoProfes extends AppCompatActivity {
 
         TextView n=findViewById(R.id.nombreusu);
         RatingBar p=findViewById(R.id.ratingBar2);
+        p.setIsIndicator(true);
         n.setText(usuario);
         p.setRating(Float.parseFloat(punts));
 
@@ -156,7 +162,7 @@ public class InfoProfes extends AppCompatActivity {
         m = dialogView.findViewById(R.id.m);
         x = dialogView.findViewById(R.id.x);
         j = dialogView.findViewById(R.id.j);
-        v = dialogView.findViewById(R.id.v);
+        vi = dialogView.findViewById(R.id.v);
         s = dialogView.findViewById(R.id.s);
         d = dialogView.findViewById(R.id.d);
         asig1.setOnClickListener(new View.OnClickListener() {
@@ -321,6 +327,59 @@ public class InfoProfes extends AppCompatActivity {
                 }
             }
         });
+        j.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textViewClickedDias[3]==false) {
+                    textViewClickedDias[3] = true;
+                    j.setBackgroundResource(R.drawable.redondo_blanco_borde_naranja);
+                    // Realiza otras acciones necesarias cuando se pulsa el TextView
+                }else{
+                    textViewClickedDias[3] = false;
+                    j.setBackgroundResource(R.drawable.redondo_blanco_10);
+                }
+            }
+        });
+
+        vi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textViewClickedDias[4]==false) {
+                    textViewClickedDias[4] = true;
+                    vi.setBackgroundResource(R.drawable.redondo_blanco_borde_naranja);
+                    // Realiza otras acciones necesarias cuando se pulsa el TextView
+                }else{
+                    textViewClickedDias[4] = false;
+                    vi.setBackgroundResource(R.drawable.redondo_blanco_10);
+                }
+            }
+        });
+        s.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textViewClickedDias[5]==false) {
+                    textViewClickedDias[5] = true;
+                    s.setBackgroundResource(R.drawable.redondo_blanco_borde_naranja);
+                    // Realiza otras acciones necesarias cuando se pulsa el TextView
+                }else{
+                    textViewClickedDias[5] = false;
+                    s.setBackgroundResource(R.drawable.redondo_blanco_10);
+                }
+            }
+        });
+        d.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textViewClickedDias[6]==false) {
+                    textViewClickedDias[6] = true;
+                    d.setBackgroundResource(R.drawable.redondo_blanco_borde_naranja);
+                    // Realiza otras acciones necesarias cuando se pulsa el TextView
+                }else{
+                    textViewClickedDias[6] = false;
+                    d.setBackgroundResource(R.drawable.redondo_blanco_10);
+                }
+            }
+        });
 
         asig4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -431,30 +490,161 @@ public class InfoProfes extends AppCompatActivity {
             }
         });
 
-
-// Repite este proceso para los otros TextViews
-
         // Configurar el diálogo
         dialogBuilder.setTitle("Solicitar una Klase");
-        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton("Aceptar",null);
+        // Configurar el botón "Cancelar"
+        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Obtener los datos del diálogo
-                String fecha = editTextDate.getText().toString();
-                String hora = editTextTime.getText().toString();
-                if (tipo==2|| fecha.equals("")|| (!textViewClicked[0] && !textViewClicked[1] && !textViewClicked[2] && !textViewClicked[3] && !textViewClicked[4] && !textViewClicked[5] && !textViewClicked[6] && !textViewClicked[7] && !textViewClicked[8])){
-                    Toast.makeText(InfoProfes.this, "Todos los campos obligatorios deben estar completos", Toast.LENGTH_SHORT).show();
-                }
-                // Realizar acciones con los datos recolectados
-                Toast.makeText(InfoProfes.this, "Fecha: " + fecha + " Hora: " + hora, Toast.LENGTH_SHORT).show();
-                enviarnotificacion(usuario);
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Acciones a realizar cuando se hace clic en el botón "Cancelar"
+                dialogInterface.dismiss(); // Cerrar el diálogo
             }
         });
-        // Mostrar el diálogo
+
         AlertDialog dialog = dialogBuilder.create();
+        dialog.setCancelable(false);//para evitar que se cierre si se pulsa fuera del diálogo
+
+// Obtener el botón "Aceptar" del diálogo y configurar el OnClickListener personalizado
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button acceptButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                acceptButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Obtener los datos del diálogo
+                        String fecha = editTextDate.getText().toString();
+                        String hora = editTextTime.getText().toString();
+                        EditText dur = dialogView.findViewById(R.id.duracion);
+                        String duracion = dur.getText().toString();
+                        if (tipo == 2 || fecha.equals("") || duracion.equals("") || (!textViewClicked[0] && !textViewClicked[1] && !textViewClicked[2] && !textViewClicked[3] && !textViewClicked[4] && !textViewClicked[5] && !textViewClicked[6] && !textViewClicked[7] && !textViewClicked[8])) {
+                            Toast.makeText(InfoProfes.this, "Todos los campos obligatorios deben estar completos", Toast.LENGTH_SHORT).show();
+                            // No hacer nada más si los campos no están completos
+                        } else {
+                            // Realizar acciones con los datos recolectados
+                            Toast.makeText(InfoProfes.this, "Fecha: " + fecha + " Hora: " + hora, Toast.LENGTH_SHORT).show();
+                            enviarnotificacion();
+                            addSolicitud(fecha,hora,duracion);
+                            dialog.dismiss(); // Cerrar el diálogo después de realizar acciones
+                        }
+                    }
+                });
+            }
+        });
+
+        // Mostrar el diálogo
+
         dialog.show();
 
     }
+
+    private void addSolicitud(String fecha, String hora, String dur) {
+        FileUtils fileUtils =new FileUtils();
+        String cliente=fileUtils.readFile(this,"config.txt");
+        // Obtener la fecha y hora actuales
+        Date currentDate = new Date();
+        // Definir el formato deseado
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // Obtener la fecha y hora formateadas
+        String formattedDateTime = dateFormat.format(currentDate);
+        String dias="";
+        if(tipo==0){
+            for (int i = 0; i < textViewClickedDias.length; i++) {
+                if (textViewClickedDias[i]){
+                    switch (i) {
+                        case 0:
+                            dias="L ";
+                            break;
+                        case 1:
+                            dias=dias+"M ";
+                            break;
+                        case 2:
+                            dias=dias+"X ";
+                            break;
+                        case 3:
+                            dias=dias+"J ";
+                            break;
+                        case 4:
+                            dias=dias+"V ";
+                            break;
+                        case 5:
+                            dias=dias+"S ";
+                            break;
+                        case 6:
+                            dias=dias+"D";
+                            break;
+                    }
+                }
+            }
+        }
+        String asignaturas="";
+        for (int i = 0; i < textViewClicked.length; i++) {
+            if (textViewClicked[i]){
+                switch (i) {
+                    case 0:
+                        asignaturas=asig1.getText().toString()+",";
+                        break;
+                    case 1:
+                        asignaturas=asignaturas+asig2.getText().toString()+",";
+                        break;
+                    case 2:
+                        asignaturas=asignaturas+asig3.getText().toString()+",";
+                        break;
+                    case 3:
+                        asignaturas=asignaturas+asig4.getText().toString()+",";
+                        break;
+                    case 4:
+                        asignaturas=asignaturas+asig5.getText().toString()+",";
+                        break;
+                    case 5:
+                        asignaturas=asignaturas+asig6.getText().toString()+",";
+                        break;
+                    case 6:
+                        asignaturas=asignaturas+asig7.getText().toString()+",";
+                        break;
+                    case 7:
+                        asignaturas=asignaturas+asig8.getText().toString()+",";
+                        break;
+                    case 8:
+                        asignaturas=asignaturas+asig9.getText().toString();
+                        break;
+                }
+            }
+        }
+        if(!textViewClicked[8]){
+            asignaturas=asignaturas.substring(0, asignaturas.length() - 1);
+        }
+        //usuario,cliente,fechaActual,fecha,hora,dur,tipo,textViewClickedDias,textViewClicked
+        Data inputData = new Data.Builder()
+                .putString("tipo", "addSolicitud")
+                .putString("idProfe", usuario)
+                .putString("idCli", cliente)
+                .putString("fechaActual", formattedDateTime)
+                .putString("fecha", fecha)
+                .putString("hora", hora)
+                .putString("dias",dias)
+                .putString("puntual",String.valueOf(tipo))
+                .putString("asig",asignaturas)
+                .putString("dur",dur+"h")
+                .build();
+       OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(InfoProfes.this);
+                            builder.setTitle("Solicitud completada");
+                            builder.setMessage("La solicitud se ha realizado con éxito");
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
     public void onRadioButtonKlase (View v) {
 // Is the button now checked?
         boolean checked = ((RadioButton) v).isChecked();
@@ -474,9 +664,12 @@ public class InfoProfes extends AppCompatActivity {
         }
     }
 
-    private void enviarnotificacion(String usuIntro) {
+    private void enviarnotificacion() {
+        FileUtils fileUtils=new FileUtils();
+        String cliente = fileUtils.readFile(this,"config.txt");
         Data inputData = new Data.Builder()
-                .putString("usuario",usuIntro)
+                .putString("usuario",usuario)
+                .putString("descr","Hola soy "+cliente+", ¿Quieres ser mi profe?")
                 .build();
 
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDmensajes.class).setInputData(inputData).build();

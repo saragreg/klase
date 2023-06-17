@@ -50,6 +50,7 @@ public class AdaptadorProfesLista extends BaseAdapter {
         TextView precio=(TextView) view.findViewById(R.id.precio);
         TextView loc = (TextView) view.findViewById(R.id.localProf);
         RatingBar barra= (RatingBar) view.findViewById(R.id.ratingBar);
+        barra.setIsIndicator(true);
         nombre.setText(nombres.get(i));
         precio.setText(precios.get(i)+"€");
         loc.setText(locs.get(i));
