@@ -31,6 +31,7 @@ public class conexionBDWebService extends Worker {
     private String perfil;
     private String usuario;
     private String latObt,lngObt;
+    private String idCli="",val="",comentario="",fecha="";
     private String usupend="",usuacept="";
     private String nombres="",imgs="",img="",filePath="";
     private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="",idProfe="",idUsu="",feccrea="";
@@ -195,10 +196,64 @@ public class conexionBDWebService extends Worker {
                 String durKlase = getInputData().getString("dur");
                 addSolicitud(profeKlase,clieKlase,fechaActualKlase,fechaKlase,horaKlase,diasKlase,puntualKlase,asigKlase,durKlase);
                 return Result.success();
+            case "ListaResennas":
+                String profeRes = getInputData().getString("profe");
+                ListaResennas(profeRes);
+                Data resenas = new Data.Builder()
+                        .putString("idCli",idCli)
+                        .putString("val",val)
+                        .putString("comentario",comentario)
+                        .putString("fecha",fecha)
+                        .build();
+                return Result.success(resenas);
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void ListaResennas(String profeRes) {
+        String url = URL_BASE + "lisResennas.php?idProfe="+profeRes;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    idCli = idCli + jsonArray.getJSONObject(i).getString("idCli") + ",";
+                    val = val+jsonArray.getJSONObject(i).getString("val")+";";
+                    if (jsonArray.getJSONObject(i).getString("comentario").equals("")) {
+                        comentario = comentario + "nada20011114s";
+                    }else{
+                        comentario = comentario + jsonArray.getJSONObject(i).getString("comentario") + "20011114s";
+                    }
+                    fecha = fecha+jsonArray.getJSONObject(i).getString("fecha")+",";
+
+                }
+
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void addSolicitud(String profeKlase, String clieKlase, String fechaActualKlase, String fechaKlase, String horaKlase, String diasKlase, String puntualKlase, String asigKlase, String durKlase) {

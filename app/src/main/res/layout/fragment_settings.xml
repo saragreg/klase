@@ -42,7 +42,7 @@
             android:layout_weight="1"
             android:text="@string/miDir"
             android:textColor="@color/black"
-            android:gravity="left"
+            android:gravity="center"
             android:background="@drawable/redondo_back_light_10"/>
         <Button
             android:id="@+id/cambiarIdioma"

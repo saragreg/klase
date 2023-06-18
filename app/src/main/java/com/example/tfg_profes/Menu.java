@@ -62,6 +62,9 @@ public class Menu extends AppCompatActivity {
             perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
             setIdioma(idioma);
             setContentView(R.layout.activity_menu);
+            if (perfil.equals("a")) {
+                replaceFragment(new FragmentLisProfes());
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) !=
                         PackageManager.PERMISSION_GRANTED) {

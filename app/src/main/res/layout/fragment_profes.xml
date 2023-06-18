@@ -23,6 +23,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="24dp"
         android:text="@string/años"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idio" />
 
@@ -42,6 +43,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="24dp"
         android:text="@string/idiom"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cur" />
 
@@ -61,6 +63,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="32dp"
         android:text="@string/asig"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,6 +74,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="24dp"
         android:text="@string/curso"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/asigProfe" />
 

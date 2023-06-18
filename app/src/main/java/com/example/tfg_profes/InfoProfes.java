@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -70,9 +72,61 @@ public class InfoProfes extends AppCompatActivity {
         bundle.putString("idioma",idiomas);
         bundle.putString("exp",exp);
         fragInfo.setArguments(bundle);
+        Button info=findViewById(R.id.info);
+        Button horario=findViewById(R.id.horario);
+        Button resennas=findViewById(R.id.resennas_btn);
+        info.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Do something in response to button click
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentProfes fragmentProfes=new FragmentProfes();
+                Bundle bundle=new Bundle();
+                bundle.putString("asig",asig);
+                bundle.putString("curso",cursos);
+                bundle.putString("idioma",idiomas);
+                bundle.putString("exp",exp);
+                fragmentProfes.setArguments(bundle);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView6, fragmentProfes)
+                        .commit();
+            }
+        });
+        horario.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Do something in response to button click
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentHorario fragmentHorario=new FragmentHorario();
+                Bundle bundle=new Bundle();
+                bundle.putString("user",usuario);
+                fragmentHorario.setArguments(bundle);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView6, fragmentHorario)
+                        .commit();
+            }
+        });
+        resennas.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Do something in response to button click
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentResennas fragmentResennas=new FragmentResennas();
+                Bundle bundle=new Bundle();
+                bundle.putString("user",usuario);
+                fragmentResennas.setArguments(bundle);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView6, fragmentResennas)
+                        .commit();
+            }
+        });
+
 
     }
-
+    private void replaceFragment(Fragment fragment) {
+        // Reemplazar el fragmento actual con el fragmento proporcionado
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView3, fragment)
+                .commit();
+    }
     public void klase(View v) {
         String[] asignaturas=asig.split(",");
         // Crear el diálogo personalizado
