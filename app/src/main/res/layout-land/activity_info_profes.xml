@@ -78,7 +78,7 @@
                 android:layout_width="147dp"
                 android:layout_height="59dp"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="@color/boton_dorado"
+                android:backgroundTint="#eac102"
                 android:onClick="notificacion"
                 android:text="Klase!"
                 android:textColor="@color/white"

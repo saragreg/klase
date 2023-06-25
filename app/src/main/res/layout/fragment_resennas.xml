@@ -2,14 +2,35 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_gravity="center"
-    app:layout_anchorGravity="center"
     tools:context=".FragmentResennas">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/resennasRecyclerView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/escribirResenna"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/redondo_blanco_borde_naranja"
+            android:drawableLeft="@drawable/baseline_rate_review_24"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="Escribir una reseña"
+            android:textColor="@android:color/white"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="100dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/resennasRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
 </FrameLayout>

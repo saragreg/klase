@@ -111,6 +111,7 @@ public class InfoProfes extends AppCompatActivity {
                 FragmentResennas fragmentResennas=new FragmentResennas();
                 Bundle bundle=new Bundle();
                 bundle.putString("user",usuario);
+                bundle.putString("val",punts);
                 fragmentResennas.setArguments(bundle);
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView6, fragmentResennas)

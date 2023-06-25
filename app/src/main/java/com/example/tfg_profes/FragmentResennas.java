@@ -1,13 +1,19 @@
 package com.example.tfg_profes;
 
+import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -52,7 +58,67 @@ public class FragmentResennas extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String profe=getArguments().getString("user");
+        Button resenna=view.findViewById(R.id.escribirResenna);
+        String profe = getArguments().getString("user");
+        String val = getArguments().getString("val");
+        resenna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Crear el diálogo personalizado
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_escribir_resenna, null);
+                dialogBuilder.setView(dialogView);
+                int grayColor = Color.GRAY;
+                int primaryColor;
+                primaryColor= getResources().getColor(R.color.theme_color);
+                dialogBuilder.setPositiveButton("Aceptar", null);
+                dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                // Crear el diálogo y obtener referencias a los elementos
+                AlertDialog alertDialog = dialogBuilder.create();
+                RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar4);
+
+// Configurar el listener para controlar el estado del botón Aceptar
+                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                        if (rating < 1.0) {
+                            // Valoración menor a 1.0: deshabilitar botón Aceptar y cambiar a color gris
+                            positiveButton.setEnabled(false);
+                            positiveButton.setBackgroundTintList(ColorStateList.valueOf(grayColor));
+                        } else {
+                            // Valoración de 1.0 o más: habilitar botón Aceptar y cambiar a color naranja
+                            positiveButton.setEnabled(true);
+                            positiveButton.setBackgroundTintList(ColorStateList.valueOf(primaryColor)); // Color naranja en formato hexadecimal
+                        }
+                    }
+                });
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        Button acceptButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        acceptButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // Obtener los datos del diálogo
+                                Toast.makeText(getContext(), "valoracion: "+ratingBar.getRating(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+// Mostrar el diálogo
+                alertDialog.show();
+
+
+            }
+        });
         Resenna.resennasLis=new ArrayList<>();
 
         MutableLiveData<Boolean> workerFinishedLiveData = new MutableLiveData<>();
@@ -71,36 +137,14 @@ public class FragmentResennas extends Fragment {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-
-                            String idCli = workInfo.getOutputData().getString("idCli");
-                            String val = workInfo.getOutputData().getString("val");
-                            String comentario = workInfo.getOutputData().getString("comentario");
-                            String fecha = workInfo.getOutputData().getString("fecha");
-
-                            String[] arrayi = idCli.split(",");
-                            String[] arrayv = val.split(";");
-                            String[] arrayc = comentario.split("20011114s");
-                            String[] arrayf = fecha.split(",");
-
-                            int i=0;
-                            if(!idCli.equals("")) {
-                                while (i < arrayi.length) {
-                                    if (arrayc[i].equals("nada")){
-                                        arrayc[i]="";
-                                    }
-                                    Resenna resenna = new Resenna(profe, arrayi[i],Float.parseFloat(arrayv[i]),arrayc[i],arrayf[i]);
-                                    Resenna.resennasLis.add(resenna);
-                                    i++;
-                                }
-                            }
-                            if (i!=0) {
+                            if (Resenna.resennasLis.size()!=0) {
                                 RecyclerView lista = view.findViewById(R.id.resennasRecyclerView);
                                 AdaptadorResennas eladap = new AdaptadorResennas(Resenna.resennasLis);
                                 lista.setAdapter(eladap);
                                 LinearLayoutManager elLayoutLineal = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                                 lista.setLayoutManager(elLayoutLineal);
                             }else{
-                                Toast.makeText(getContext(), "No hay reseñas", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "No hay reseñas disponibles", Toast.LENGTH_SHORT).show();
                             }
 
                             workerFinishedLiveData.setValue(true); // Notificar que el worker ha terminado

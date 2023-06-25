@@ -74,5 +74,10 @@
     <string name="diaclase">Día de la calse:</string>
     <string name="duracion">Duración</string>
     <string name="comentario">Comentario</string>
+    <string name="peticiones">Peticiones</string>
+    <string name="aceptadas">Aceptadas</string>
+    <string name="fav">Favoritos</string>
+    <string name="pendientes">Pendientes</string>
+    <string name="misresennas">Mis reseñas</string>
 
 </resources>

@@ -21,6 +21,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 
 public class conexionBDWebService extends Worker {
@@ -213,6 +214,7 @@ public class conexionBDWebService extends Worker {
     }
 
     private void ListaResennas(String profeRes) {
+        Resenna.resennasLis=new ArrayList<>();
         String url = URL_BASE + "lisResennas.php?idProfe="+profeRes;
         System.out.println("url: "+url);
         HttpURLConnection urlConnection = null;
@@ -234,15 +236,16 @@ public class conexionBDWebService extends Worker {
                 JSONArray jsonArray = new JSONArray(result);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    idCli = idCli + jsonArray.getJSONObject(i).getString("idCli") + ",";
-                    val = val+jsonArray.getJSONObject(i).getString("val")+";";
+                    idCli = jsonArray.getJSONObject(i).getString("idCli");
+                    val = jsonArray.getJSONObject(i).getString("val");
                     if (jsonArray.getJSONObject(i).getString("comentario").equals("")) {
-                        comentario = comentario + "nada20011114s";
+                        comentario = "";
                     }else{
-                        comentario = comentario + jsonArray.getJSONObject(i).getString("comentario") + "20011114s";
+                        comentario = jsonArray.getJSONObject(i).getString("comentario") ;
                     }
-                    fecha = fecha+jsonArray.getJSONObject(i).getString("fecha")+",";
-
+                    fecha = jsonArray.getJSONObject(i).getString("fecha");
+                    Resenna resenna = new Resenna(profeRes, idCli,Float.parseFloat(val),comentario,fecha);
+                    Resenna.resennasLis.add(resenna);
                 }
 
 
@@ -416,6 +419,7 @@ public class conexionBDWebService extends Worker {
                     String loc = jsonArray.getJSONObject(i).getString("loc");
                     String foto="default";
                     Usuario usu=new Usuario(usuDatos,nombre,tel,loc,foto);
+                    Usuario.usuariosLis=new ArrayList<>();
                     Usuario.usuariosLis.add(usu);
                 }
 

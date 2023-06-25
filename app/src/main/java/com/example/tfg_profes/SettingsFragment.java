@@ -90,6 +90,7 @@ public class SettingsFragment extends Fragment {
         Button idiomas=view.findViewById(R.id.cambiarIdioma);
         Button cerrarSes=view.findViewById(R.id.cerrarsesion);
         Button datosPer=view.findViewById(R.id.cambiarDatosPer);
+        Button resennas=view.findViewById(R.id.verreseñas);
         Button cambiarLoc=view.findViewById(R.id.cambiarDire);
         Button borrarcuenta=view.findViewById(R.id.borrarcuenta);
 
@@ -143,6 +144,13 @@ public class SettingsFragment extends Fragment {
                     }
                 });
                 builder.show();
+            }
+        });
+        resennas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ResennasLisProfes.class);
+                startActivity(intent);
             }
         });
         datosPer.setOnClickListener(new View.OnClickListener() {

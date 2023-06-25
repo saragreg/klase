@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:layout_gravity="center"
-    app:cardCornerRadius="8dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:backgroundTint="#ffebb3"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
         <TextView
             android:id="@+id/intensivo"
@@ -47,7 +54,7 @@
             android:maxLines="1"
             android:text="User Name"
             android:textColor="#424242"
-            android:textSize="24sp"
+            android:textSize="25dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/fotoPerfil"
             app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
@@ -66,22 +73,22 @@
             android:paddingBottom="5dp"
             android:text="1h"
             android:textColor="#424242"
-            android:textSize="24sp"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/username"
             app:layout_constraintStart_toEndOf="@+id/username"
             app:layout_constraintTop_toTopOf="@+id/username" />
 
-        <ImageView
-            android:id="@+id/aceptar_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="70dp"
-            android:src="@drawable/baseline_check_circle_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/duracion"
-            app:layout_constraintTop_toTopOf="@+id/duracion" />
+            <ImageView
+                android:id="@+id/aceptar_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/baseline_check_circle_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/duracion"
+                app:layout_constraintTop_toTopOf="@+id/duracion" />
 
         <ImageView
             android:id="@+id/rechazar_btn"
@@ -113,7 +120,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:text="14/05/2023 6pm"
-            android:textSize="24sp"
+            android:textSize="15dp"
             app:layout_constraintStart_toStartOf="@+id/fotoPerfil"
             app:layout_constraintTop_toBottomOf="@+id/fotoPerfil" />
 
@@ -133,127 +140,129 @@
             app:layout_constraintTop_toBottomOf="@+id/fechaHoraPet" />
 
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/info_btn"
-            app:layout_constraintStart_toStartOf="@+id/flowlayout"
-            app:layout_constraintTop_toTopOf="@+id/flowlayout">
-
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginEnd="24dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/info_btn"
+                app:layout_constraintStart_toStartOf="@+id/flowlayout"
+                app:layout_constraintTop_toTopOf="@+id/flowlayout">
 
-                <TextView
-                    android:id="@+id/asig1"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/asig2"
+                    <TextView
+                        android:id="@+id/asig1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/asig2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/asig3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/asig4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/asig3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/asig5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/asig4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/asig6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
 
+                    <TextView
+                        android:id="@+id/asig7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/asig8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_asig_pulsada"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="mate"
+                        android:visibility="gone" />
+
+                </LinearLayout>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/asig5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/asig6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/asig7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/asig8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_color"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:text="mate"
-                    android:visibility="gone"/>
-
-            </LinearLayout>
-        </LinearLayout>
 
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flowlayout"
@@ -267,6 +276,7 @@
             app:layout_constraintTop_toBottomOf="@+id/intensivo">
 
         </androidx.constraintlayout.helper.widget.Flow>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

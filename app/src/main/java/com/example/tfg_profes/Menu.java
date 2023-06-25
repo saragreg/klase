@@ -117,7 +117,7 @@ public class Menu extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             String fotoPer=workInfo.getOutputData().getString("img");
-                            //Usuario.usuariosLis.get(0).setImagen(fotoPer);
+                            Usuario.usuariosLis.get(0).setImagen(fotoPer);
 
                         }
                     }
