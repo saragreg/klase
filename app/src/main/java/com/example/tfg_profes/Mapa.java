@@ -1,26 +1,14 @@
 package com.example.tfg_profes;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Observer;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -71,9 +59,20 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
         Iterator<LatLng> iterator = pend.iterator();
         while (iterator.hasNext()) {
             LatLng location = iterator.next();
+            // Obtener un desplazamiento aleatorio en metros (por ejemplo, 10 metros)
+            double displacement = 0.0009; // Aproximadamente 10 metros en latitud/longitud (ajustar según tus necesidades)
 
+            // Generar un desplazamiento aleatorio en latitud y longitud
+            double randomLat = (Math.random() * 2 - 1) * displacement;
+            double randomLng = (Math.random() * 2 - 1) * displacement;
+
+            // Calcular nuevas coordenadas aleatorias para mover el marcador
+            double newLat = location.latitude + randomLat;
+            double newLng = location.longitude + randomLng;
+
+            LatLng newLocation = new LatLng(newLat, newLng);
             MarkerOptions markerOptions = new MarkerOptions()
-                    .position(location)
+                    .position(newLocation)
                     .title("pendiente")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             googleMap.addMarker(markerOptions);

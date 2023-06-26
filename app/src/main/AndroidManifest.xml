@@ -55,7 +55,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="AIzaSyB9yJVseOId-7-75w-m8n7FReVpeluG188" />
 
         <activity
             android:name=".LisAlumnos"

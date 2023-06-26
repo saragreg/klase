@@ -207,10 +207,114 @@ public class conexionBDWebService extends Worker {
                         .putString("fecha",fecha)
                         .build();
                 return Result.success(resenas);
+            case "escribir_resenna":
+                String profeRese = getInputData().getString("idProfe");
+                String clieRes = getInputData().getString("idClie");
+                String fechaActualRes = getInputData().getString("FechaHora");
+                String comentario = getInputData().getString("comentario");
+                String valoracion = getInputData().getString("valoracion");
+                escribir_resenna(profeRese,clieRes,fechaActualRes,comentario,valoracion);
+                return Result.success();
+            case "updateValoracion":
+                String profeVal = getInputData().getString("idProfe");
+                String clieVal = getInputData().getString("idClie");
+                String val = getInputData().getString("val");
+                String nuevaVal = getInputData().getString("valoracion");
+                updateValoracion(profeVal,clieVal,val,nuevaVal);
+                return Result.success();
             default:
                 return Result.failure();
         }
 
+    }
+
+    private void updateValoracion(String profeVal, String clieVal, String val, String nuevaVal) {
+        String url = URL_BASE + "update_valoracion.php";
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("idProfe", profeVal);
+            parametrosJSON.put("idClie", clieVal);
+            parametrosJSON.put("val", val);
+            parametrosJSON.put("valoracion", nuevaVal);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void escribir_resenna(String profeRese, String clieRes, String fechaActualRes, String comentario, String valoracion) {
+        String url = URL_BASE + "escribir_resenna.php";
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("idProfe", profeRese);
+            parametrosJSON.put("idClie", clieRes);
+            parametrosJSON.put("FechaHora", fechaActualRes);
+            parametrosJSON.put("valoracion", valoracion);
+            parametrosJSON.put("comentario", comentario);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void ListaResennas(String profeRes) {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -24,6 +25,10 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.example.tfg_profes.utils.FileUtils;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -61,6 +66,9 @@ public class FragmentResennas extends Fragment {
         Button resenna=view.findViewById(R.id.escribirResenna);
         String profe = getArguments().getString("user");
         String val = getArguments().getString("val");
+        FileUtils fileUtils=new FileUtils();
+        String idClie=fileUtils.readFile(getContext(),"config.txt");
+        AdaptadorResennas eladap = new AdaptadorResennas(Resenna.resennasLis);
         resenna.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,8 +114,39 @@ public class FragmentResennas extends Fragment {
                         acceptButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                RatingBar ratingBar1=dialogView.findViewById(R.id.ratingBar4);
+                                EditText comentario=dialogView.findViewById(R.id.editTextTextMultiLine);
+                                LocalDateTime fechaHoraActual = LocalDateTime.now();
+                                DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                                String fechaHoraActualFormateada = fechaHoraActual.format(formato);
+                                Resenna resenna1=new Resenna(profe,idClie,ratingBar1.getRating(),comentario.getText().toString(),fechaHoraActualFormateada);
+                                Resenna.resennasLis.add(resenna1);
+                                eladap.notifyDataSetChanged();
                                 // Obtener los datos del diálogo
                                 Toast.makeText(getContext(), "valoracion: "+ratingBar.getRating(), Toast.LENGTH_SHORT).show();
+                                Data inputData = new Data.Builder()
+                                        .putString("tipo", "escribir_resenna")
+                                        .putString("idProfe", profe)
+                                        .putString("idClie", idClie)
+                                        .putString("FechaHora",fechaHoraActualFormateada)
+                                        .putString("valoracion", String.valueOf(ratingBar1.getRating()))
+                                        .putString("comentario", comentario.getText().toString())
+                                        .build();
+                                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+                                WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                                        .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
+                                            @Override
+                                            public void onChanged(WorkInfo workInfo) {
+                                                if (workInfo != null && workInfo.getState().isFinished()) {
+
+                                                    Toast.makeText(getContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+                                                    dialogInterface.dismiss();
+                                                    updateValoracion(profe,idClie,val,String.valueOf(ratingBar1.getRating()));
+
+                                                }
+                                            }
+                                        });
+                                WorkManager.getInstance(getContext()).enqueue(otwr);
                             }
                         });
                     }
@@ -139,7 +178,6 @@ public class FragmentResennas extends Fragment {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             if (Resenna.resennasLis.size()!=0) {
                                 RecyclerView lista = view.findViewById(R.id.resennasRecyclerView);
-                                AdaptadorResennas eladap = new AdaptadorResennas(Resenna.resennasLis);
                                 lista.setAdapter(eladap);
                                 LinearLayoutManager elLayoutLineal = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                                 lista.setLayoutManager(elLayoutLineal);
@@ -162,5 +200,29 @@ public class FragmentResennas extends Fragment {
                 }
             }
         });
+    }
+
+    private void updateValoracion(String profe, String idClie, String val, String s) {
+        // Obtener los datos del diálogo
+        Data inputData = new Data.Builder()
+                .putString("tipo", "updateValoracion")
+                .putString("idProfe", profe)
+                .putString("idClie", idClie)
+                .putString("val",val)
+                .putString("valoracion",s)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(getContext()).enqueue(otwr);
+
     }
 }

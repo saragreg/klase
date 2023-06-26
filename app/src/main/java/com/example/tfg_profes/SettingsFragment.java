@@ -2,6 +2,8 @@ package com.example.tfg_profes;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static java.lang.Double.parseDouble;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,9 +20,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.example.tfg_profes.utils.FileUtils;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -42,6 +51,12 @@ public class SettingsFragment extends Fragment {
     private String idioma;
     private int indiceSeleccionado = 0;
     private SharedPreferences sharedPreferences;
+    private String profe="";
+    private String res="";
+    String user;
+    Double latProfe,lngProfe;
+    private ArrayList<LatLng> locationsAccepted = new ArrayList<LatLng>();
+    private ArrayList<LatLng> locationsPend = new ArrayList<LatLng>();
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -91,11 +106,13 @@ public class SettingsFragment extends Fragment {
         Button cerrarSes=view.findViewById(R.id.cerrarsesion);
         Button datosPer=view.findViewById(R.id.cambiarDatosPer);
         Button resennas=view.findViewById(R.id.verreseñas);
+        Button mapa=view.findViewById(R.id.vermapa);
+        Button graficas=view.findViewById(R.id.vergraficas);
         Button cambiarLoc=view.findViewById(R.id.cambiarDire);
         Button borrarcuenta=view.findViewById(R.id.borrarcuenta);
 
         FileUtils fileUtils = new FileUtils();
-        String user = fileUtils.readFile(requireContext(), "config.txt");
+        user = fileUtils.readFile(requireContext(), "config.txt");
         cerrarSes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +184,42 @@ public class SettingsFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        graficas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Graph_demanda_asig_annos.class);
+                startActivity(intent);
+            }
+        });
+        mapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                obtenerLoc(user,0,false);
+                //se obtienen los alumnos pendientes
+                Data inputData = new Data.Builder()
+                        .putString("tipo", "pendientes")
+                        .putString("profe",user)
+                        .build();
+                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+                WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                        .observe(getActivity(), new Observer<WorkInfo>() {
+                            @Override
+                            public void onChanged(WorkInfo workInfo) {
+                                if (workInfo != null && workInfo.getState().isFinished()) {
+                                    String usupend = workInfo.getOutputData().getString("usupend");
+                                    String[] arrayusu = usupend.split(",");
+                                    int i=0;
+                                    while ( i < (arrayusu.length)) {
+                                        obtenerLoc(arrayusu[i],1,false);
+                                        i++;
+                                    }
+                                    obtenerAceptados(user,locationsPend);
+                                }
+                            }
+                        });
+                WorkManager.getInstance(getContext()).enqueue(otwr);
+            }
+        });
     }
     public void setIdioma(String idiomCod){
 
@@ -181,4 +234,66 @@ public class SettingsFragment extends Fragment {
 
         resources.updateConfiguration(configuration, displayMetrics);
     }
+
+    private void obtenerAceptados(String profe,ArrayList<LatLng> locationsPend) {
+        //se obtienen los alumnos pendientes
+        Data inputData = new Data.Builder()
+                .putString("tipo", "aceptados")
+                .putString("profe",profe)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String usuacep = workInfo.getOutputData().getString("usuacept");
+                            String[] arrayusu = usuacep.split(",");
+                            for (int i = 0; i < arrayusu.length; i++) {
+                                if (i==arrayusu.length-1) {
+                                    obtenerLoc(arrayusu[i], 2,true);
+                                }else{
+                                    obtenerLoc(arrayusu[i], 2,false);
+                                }
+                            }
+                        }
+                    }
+                });
+        WorkManager.getInstance(getContext()).enqueue(otwr);
+    }
+    private void obtenerLoc(String usu,int n, boolean last) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "selectLoc")
+                .putString("usuario", usu)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String lat = workInfo.getOutputData().getString("lat");
+                            String lng = workInfo.getOutputData().getString("lng");
+                            LatLng loc=new LatLng(parseDouble(lat), parseDouble(lng));
+                            if(n==0){
+                                latProfe= parseDouble(lat);
+                                lngProfe= parseDouble(lng);
+                            } else if (n==1){
+                                locationsPend.add(loc);
+                            }else{
+                                locationsAccepted.add(loc);
+                            }
+                            if (last) {
+                                Intent intent = new Intent(getActivity(), Mapa.class);
+                                intent.putParcelableArrayListExtra("pend", locationsPend);
+                                intent.putParcelableArrayListExtra("acept", locationsAccepted);
+                                intent.putExtra("latProfe",latProfe);
+                                intent.putExtra("lngProfe",lngProfe);
+                                startActivity(intent);
+                            }
+                            }
+                        }
+                    });
+        WorkManager.getInstance(getContext()).enqueue(otwr);
+                }
 }

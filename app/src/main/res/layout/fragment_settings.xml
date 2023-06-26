@@ -60,6 +60,23 @@
             android:text="@string/misresennas"
             android:textColor="@color/black"
             android:background="@drawable/redondo_back_light_10"/>
+
+        <Button
+            android:id="@+id/vermapa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/redondo_back_light_10"
+            android:text="@string/mapa"
+            android:textColor="@color/black" />
+        <Button
+            android:id="@+id/vergraficas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/grafica"
+            android:textColor="@color/black"
+            android:background="@drawable/redondo_back_light_10"/>
         <Button
             android:id="@+id/cerrarsesion"
             android:layout_width="match_parent"

@@ -82,4 +82,6 @@
     <string name="fav">Favoritos</string>
     <string name="pendientes">Pendientes</string>
     <string name="misresennas">Mis reseñas</string>
+    <string name="mapa">Mapa</string>
+    <string name="grafica">Estadísticas</string>
 </resources>

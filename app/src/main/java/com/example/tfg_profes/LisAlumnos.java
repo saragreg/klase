@@ -2,25 +2,21 @@ package com.example.tfg_profes;
 
 import static java.lang.Double.parseDouble;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.navigation.Navigation;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.GoogleMap;
+import com.example.tfg_profes.utils.FileUtils;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class LisAlumnos extends AppCompatActivity {
     private String profe="";
@@ -32,7 +28,9 @@ public class LisAlumnos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lis_alumnos);
-        profe=getIntent().getExtras().getString("usuario");
+        //profe=getIntent().getExtras().getString("usuario");
+        FileUtils fileUtils=new FileUtils();
+        profe=fileUtils.readFile(this,"config.txt");
     }
 
     public void onClickMapa(View v){
