@@ -114,15 +114,16 @@ public class RegLoc extends AppCompatActivity {
         int numHijos=fragAlu.getNumHijos();
         String[] hijos=fragAlu.getHijos();
         for (int i = 0; i < numHijos; i++) {
-            insertarAlu(usu,hijos[i]);
+            insertarAlu(usu,hijos[i],numHijos);
         }
     }
 
-    private void insertarAlu(String usu, String hijo) {
+    private void insertarAlu(String usu, String hijo, int numHijos) {
         Data inputData = new Data.Builder()
                 .putString("tipo", "addAlumno")
                 .putString("padre",usu)
                 .putString("hijo",hijo)
+                .putInt("numHijos",numHijos)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
@@ -132,9 +133,12 @@ public class RegLoc extends AppCompatActivity {
                         if (workInfo != null && workInfo.getState().isFinished()) {
 
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
-
-                            if (per.equals("p")) {
-                                Intent intent = new Intent(RegLoc.this, LisAlumnos.class);
+                            Intent intent = new Intent(RegLoc.this, Login.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                    Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                           /* if (per.equals("p")) {
+                                Intent intent = new Intent(RegLoc.this, Menu.class);
                                 intent.putExtra("usuario", usu);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                         Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -145,7 +149,7 @@ public class RegLoc extends AppCompatActivity {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                         Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
-                            }
+                            }*/
 
                         } else {
 

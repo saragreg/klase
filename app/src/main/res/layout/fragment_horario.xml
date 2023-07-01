@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".FragmentHorario">
 
+
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
@@ -47,10 +49,73 @@
         android:id="@+id/editTextTime"
         android:layout_width="85dp"
         android:layout_height="37dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="time"
         app:layout_constraintStart_toEndOf="@+id/textView15"
         app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/alunes"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:text="a"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+        app:layout_constraintStart_toEndOf="@+id/editTextTime"
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
+    <EditText
+        android:id="@+id/editTextTime3"
+        android:layout_width="85dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTime"
+        app:layout_constraintStart_toEndOf="@+id/alunes"
+        app:layout_constraintTop_toTopOf="@+id/editTextTime" />
+    <TextView
+        android:id="@+id/martesh"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:text="Martes, de"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <EditText
+        android:id="@+id/editTextmartes"
+        android:layout_width="85dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintStart_toEndOf="@+id/martesh"
+        app:layout_constraintTop_toTopOf="@+id/martesh" />
+
+    <TextView
+        android:id="@+id/amartes"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:text="a"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/martesh"
+        app:layout_constraintStart_toEndOf="@+id/editTextmartes"
+        app:layout_constraintTop_toTopOf="@+id/martesh" />
+    <EditText
+        android:id="@+id/editTextmartes2"
+        android:layout_width="85dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextmartes"
+        app:layout_constraintStart_toEndOf="@+id/amartes"
+        app:layout_constraintTop_toTopOf="@+id/editTextmartes" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

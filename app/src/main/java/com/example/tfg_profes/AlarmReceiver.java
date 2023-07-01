@@ -26,7 +26,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Construir la notificación
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
                 .setSmallIcon(R.drawable.libro)
-                .setContentTitle("Alarma")
+                .setContentTitle("Recordatorio de Klase")
                 .setContentText("¡Mañana tienes clase!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);

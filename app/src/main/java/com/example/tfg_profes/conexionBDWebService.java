@@ -87,6 +87,12 @@ public class conexionBDWebService extends Worker {
 
                 addLocUsu(usuario,locU,latU,lngU);
                 return Result.success();
+            case "addAlu":
+                String usuCli = getInputData().getString("padre");
+                int numhijos = getInputData().getInt("numHijos",1);
+                String nomshijos = getInputData().getString("hijos");
+                addCliente(usuCli,numhijos,nomshijos);
+                return Result.success();
             case "selectLoc":
                 String usuLocInt = getInputData().getString("usuario");
 
@@ -936,6 +942,47 @@ public class conexionBDWebService extends Worker {
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+    private void addCliente(String usuCli, int numhijos, String nomshijos) {
+        String url = URL_BASE + "addCliente.php";
+        System.out.println(url);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+
+            JSONObject parametrosJSON = new JSONObject();
+            parametrosJSON.put("idClie", usuCli);
+            parametrosJSON.put("numHijos", numhijos);
+            parametrosJSON.put("nomshijos", nomshijos);
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON);
+            out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();

@@ -95,11 +95,11 @@ public class EventEdit extends AppCompatActivity {
         // Intent para la clase BroadcastReceiver que manejará la alarma
         Intent intent = new Intent(this, AlarmReceiver.class);
         // Crear un Bundle para incluir datos adicionales
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         bundle.putString("descripcion",descr);
 
 // Agregar el Bundle al intent
-        intent.putExtras(bundle);
+        intent.putExtras(bundle);*/
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         // Establecer la alarma con el tipo RTC_WAKEUP para que se dispare incluso si el dispositivo está en suspensión

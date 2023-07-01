@@ -1,5 +1,12 @@
 package com.example.tfg_profes;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -8,19 +15,9 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class RegistroUSuario extends AppCompatActivity {
 
@@ -111,7 +108,7 @@ public class RegistroUSuario extends AppCompatActivity {
 
             }
         });
-
+        insertarUsu(usuInt,contraInt,nomInt,telInt,"");
     }
     private void insertarUsu(String usuInt, String contraInt, String nomInt, String telInt, String token) {
         Data inputData = new Data.Builder()

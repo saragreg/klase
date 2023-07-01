@@ -60,7 +60,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
         while (iterator.hasNext()) {
             LatLng location = iterator.next();
             // Obtener un desplazamiento aleatorio en metros (por ejemplo, 10 metros)
-            double displacement = 0.0009; // Aproximadamente 10 metros en latitud/longitud (ajustar según tus necesidades)
+            double displacement = 0.00045; // Aproximadamente 10 metros en latitud/longitud (ajustar según tus necesidades)
 
             // Generar un desplazamiento aleatorio en latitud y longitud
             double randomLat = (Math.random() * 2 - 1) * displacement;
@@ -74,7 +74,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(newLocation)
                     .title("pendiente")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             googleMap.addMarker(markerOptions);
         }
         Iterator<LatLng> iterator2 = acept.iterator();
@@ -84,7 +84,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(location)
                     .title("aceptado")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
             googleMap.addMarker(markerOptions);
         }
         //ajustar camara a la ubicacion del profesor
