@@ -113,16 +113,13 @@ public class RegLoc extends AppCompatActivity {
         FragmentEso fragAlu= (FragmentEso) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         int numHijos=fragAlu.getNumHijos();
         String[] hijos=fragAlu.getHijos();
-        for (int i = 0; i < numHijos; i++) {
-            insertarAlu(usu,hijos[i],numHijos);
-        }
+        insertarCliente(usu,numHijos,hijos);
     }
 
-    private void insertarAlu(String usu, String hijo, int numHijos) {
+    private void insertarCliente(String usu, int numHijos, String[] hijos) {
         Data inputData = new Data.Builder()
-                .putString("tipo", "addAlumno")
+                .putString("tipo", "addCliente")
                 .putString("padre",usu)
-                .putString("hijo",hijo)
                 .putInt("numHijos",numHijos)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
@@ -132,11 +129,35 @@ public class RegLoc extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
 
+                            for (int i = 0; i < numHijos; i++) {
+                                insertarAlu(usu,hijos[i]);
+                            }
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegLoc.this, Login.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                     Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
+    private void insertarAlu(String usu, String hijo) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "addAlumno")
+                .putString("padre",usu)
+                .putString("hijo",hijo)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+
                            /* if (per.equals("p")) {
                                 Intent intent = new Intent(RegLoc.this, Menu.class);
                                 intent.putExtra("usuario", usu);

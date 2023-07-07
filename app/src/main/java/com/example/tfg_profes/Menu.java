@@ -72,6 +72,7 @@ public class Menu extends AppCompatActivity {
                             String[]{POST_NOTIFICATIONS}, 11);
                 }
             }
+            obtenerLoc(user);
             cargarEventos();
             cargarDatosUsu();
             bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -117,7 +118,7 @@ public class Menu extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             String fotoPer=workInfo.getOutputData().getString("img");
-                            Usuario.usuariosLis.get(0).setImagen(fotoPer);
+                            Usuario.usuariosLis.get(0).setImagen("");
 
                         }
                     }

@@ -3,6 +3,7 @@ package com.example.tfg_profes;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -23,6 +24,11 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.example.tfg_profes.utils.FileUtils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +40,13 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
     private LifecycleOwner lifecycleOwner;
     private String estado;
     private View elLayoutDeCadaItem;
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mensajeriafcm-ea7c9-default-rtdb.europe-west1.firebasedatabase.app/");
+    private String chatKey = "", usuario;
+    String userComprobar1 = "";
+    String userComprobar2 = "";
+    private ArrayList<String> noms = new ArrayList<>();
+    private ArrayList<String> imgs = new ArrayList<>();
+    private ArrayList<String> users = new ArrayList<>();
 
     public AdaptadorPeticiones(Context pcontext, ArrayList<Peticion> peticionesLis, LifecycleOwner viewLifecycleOwner) {
         contexto = pcontext;
@@ -158,6 +171,49 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
                     }
                 });
                 builder.show();
+            }
+        });
+        holder.chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                obtenerClave(holder.nombre.toString(),holder.userfoto.toString());
+            }
+        });
+    }
+    private void obtenerClave(String otroMail, String foto) {
+        chatKey = "";
+        FileUtils fileUtils= new FileUtils();
+        usuario=fileUtils.readFile(contexto,"config.txt");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("chat")) {
+                    for (DataSnapshot messagesnapshot : snapshot.child("chat").getChildren()) {
+                        if (messagesnapshot.hasChild("user1") && messagesnapshot.hasChild("user2")) {
+                            userComprobar1 = messagesnapshot.child("user1").getValue(String.class);
+                            userComprobar2 = messagesnapshot.child("user2").getValue(String.class);
+                            if ((userComprobar1.equals(otroMail) || userComprobar1.equals(usuario)) && (userComprobar2.equals(otroMail) || userComprobar2.equals(usuario))) {
+                                //se asume que no existen mensajes contigo mismo
+                                chatKey = messagesnapshot.getKey();
+                            }
+                        }
+                    }
+                }
+                //se abre la ventana de chat
+                Intent intent = new Intent(contexto, Chat.class);
+                intent.putExtra("nombre",otroMail);
+                intent.putExtra("mail1",otroMail);
+                intent.putExtra("fotoPerfil",foto);
+                intent.putExtra("mailUser",usuario);
+                intent.putExtra("chatKey", chatKey);
+                //intent.putExtra("fotoPerfil",imgs.get(i));
+                contexto.startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

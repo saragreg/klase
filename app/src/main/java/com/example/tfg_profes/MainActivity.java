@@ -20,7 +20,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private Spinner idiomas;
     private String idiomSel;
-    private boolean idiomacargado = false;
     private static final String DEFAULT_LANGUAGE = "default";
     private SharedPreferences sharedPreferences;
     Activity a = this;
@@ -30,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //sharedPreferences = getPreferences(MODE_PRIVATE);
         sharedPreferences = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
         idioma = sharedPreferences.getString("idioma", DEFAULT_LANGUAGE);
         setIdioma(idioma);
@@ -46,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
         idiomas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //((TextView) adapterView.getChildAt(0)).setTextColor(Color.rgb(136,0,21));
-                //((TextView) adapterView.getChildAt(0)).setTextSize(35);
                 idiomSel = adapterView.getItemAtPosition(i).toString();
 
                 if (idiomSel.equals("Castellano")){
@@ -95,12 +91,5 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(getIntent());
     }
-
-    /*protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("mySpinner", idiomas.getSelectedItemPosition());
-        outState.putString("idiomaActual", idiomSel);
-        // do this for each or your Spinner
-    }*/
 
 }

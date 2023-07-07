@@ -108,7 +108,6 @@ public class RegistroUSuario extends AppCompatActivity {
 
             }
         });
-        insertarUsu(usuInt,contraInt,nomInt,telInt,"");
     }
     private void insertarUsu(String usuInt, String contraInt, String nomInt, String telInt, String token) {
         Data inputData = new Data.Builder()
@@ -143,31 +142,6 @@ public class RegistroUSuario extends AppCompatActivity {
                     }
                 });
         WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
-    }
-
-
-
-    private void subirProfe(String usuInt) {
-        Data inputData = new Data.Builder()
-                .putString("usuario", usuInt)
-                .putString("tipo","insertProf")
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
-        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            Intent intent = new Intent(RegistroUSuario.this, RegLoc.class);
-                            intent.putExtra("usuario", usuInt);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                    Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                    }
-                });
-        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
-
     }
 
 

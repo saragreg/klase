@@ -12,7 +12,7 @@ public class ElViewHolder extends RecyclerView.ViewHolder {
     public TextView nombre,dur,fechaHoraPet,intensivo,diasPet,asig1,asig2,asig3,asig4,asig5,asig6,asig7,asig8;
     public ImageView userfoto;
     public Flow flowLayout;
-    public ImageView aceptar,rechazar,info;
+    public ImageView aceptar,rechazar,chat;
     public String estado="p";
 
     public ElViewHolder(@NonNull View itemView) {
@@ -26,7 +26,7 @@ public class ElViewHolder extends RecyclerView.ViewHolder {
         flowLayout = (Flow) itemView.findViewById(R.id.flowlayout);
         aceptar=(ImageView) itemView.findViewById(R.id.aceptar_btn);
         rechazar=(ImageView) itemView.findViewById(R.id.rechazar_btn);
-        info=(ImageView) itemView.findViewById(R.id.info_btn);
+        chat=(ImageView) itemView.findViewById(R.id.info_btn);
         asig1=(TextView) itemView.findViewById(R.id.asig1);
         asig2=(TextView) itemView.findViewById(R.id.asig2);
         asig3=(TextView) itemView.findViewById(R.id.asig3);

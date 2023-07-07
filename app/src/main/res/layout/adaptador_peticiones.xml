@@ -20,127 +20,145 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-        <TextView
-            android:id="@+id/intensivo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/ocasional"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/fechaHoraPet"
-            app:layout_constraintTop_toBottomOf="@+id/fechaHoraPet" />
+            <TextView
+                android:id="@+id/intensivo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/ocasional"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/rechazar_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fechaHoraPet" />
 
-        <ImageView
-            android:id="@+id/fotoPerfil"
-            android:layout_width="62dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="41dp"
-            android:background="@drawable/redondo_back_light_10"
-            app:layout_constraintEnd_toStartOf="@+id/username"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icono_usuario" />
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:id="@+id/fotoPerfil"
+                    android:layout_width="62dp"
+                    android:layout_height="53dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/redondo_back_light_10"
+                    app:layout_constraintEnd_toStartOf="@+id/username"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/icono_usuario" />
 
 
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="User Name"
-            android:textColor="#424242"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/fotoPerfil"
-            app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
-            app:layout_constraintTop_toTopOf="@+id/fotoPerfil" />
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:maxLines="1"
+                    android:text="User Name"
+                    android:textColor="#424242"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:paddingTop="10sp"/>
 
-        <TextView
-            android:id="@+id/duracion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/redondo_light_naranja"
-            android:maxLines="1"
-            android:paddingStart="10dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp"
-            android:text="1h"
-            android:textColor="#424242"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/username"
-            app:layout_constraintStart_toEndOf="@+id/username"
-            app:layout_constraintTop_toTopOf="@+id/username" />
+                <TextView
+                    android:id="@+id/duracion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/redondo_light_naranja"
+                    android:maxLines="1"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="1h"
+                    android:textColor="#424242"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/aceptar_btn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="280dp"
                 android:src="@drawable/baseline_check_circle_24"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/duracion"
-                app:layout_constraintTop_toTopOf="@+id/duracion" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/rechazar_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/baseline_cancel_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/aceptar_btn"
-            app:layout_constraintTop_toBottomOf="@+id/aceptar_btn" />
+            <ImageView
+                android:id="@+id/rechazar_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/baseline_cancel_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/aceptar_btn"
+                app:layout_constraintTop_toBottomOf="@+id/aceptar_btn" />
 
-        <ImageView
-            android:id="@+id/info_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/baseline_help_outline_24"
-            app:layout_constraintEnd_toEndOf="@+id/rechazar_btn"
-            app:layout_constraintStart_toStartOf="@+id/rechazar_btn"
-            app:layout_constraintTop_toBottomOf="@+id/rechazar_btn" />
+            <ImageView
+                android:id="@+id/info_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/baseline_chat_24"
+                app:layout_constraintEnd_toEndOf="@+id/rechazar_btn"
+                app:layout_constraintStart_toStartOf="@+id/rechazar_btn"
+                app:layout_constraintTop_toBottomOf="@+id/rechazar_btn" />
 
-        <TextView
-            android:id="@+id/fechaHoraPet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="14/05/2023 6pm"
-            android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="@+id/fotoPerfil"
-            app:layout_constraintTop_toBottomOf="@+id/fotoPerfil" />
-
-        <TextView
-            android:id="@+id/diasPet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/redondo_light_naranja"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text=""
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@+id/intensivo"
-            app:layout_constraintTop_toBottomOf="@+id/fechaHoraPet" />
+            <TextView
+                android:id="@+id/fechaHoraPet"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="14/05/2023 6pm"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/rechazar_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
 
 
             <LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/info_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/intensivo">
+
+                <TextView
+                    android:id="@+id/diasPet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/redondo_light_naranja"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text=""
+                    android:textSize="20sp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toStartOf="@+id/info_btn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/intensivo" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
@@ -264,18 +282,18 @@
                 </LinearLayout>
             </LinearLayout>
 
-        <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/flowlayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/info_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/intensivo">
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flowlayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toStartOf="@+id/info_btn"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
-        </androidx.constraintlayout.helper.widget.Flow>
+            </androidx.constraintlayout.helper.widget.Flow>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,8 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.example.tfg_profes.utils.FileUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,7 +35,7 @@ public class FragmentLisProfes extends Fragment {
     ArrayList<String> locs= new ArrayList<String>();
     ArrayList<String> usus= new ArrayList<String>();
     Double latUsu,lngUsu;
-    String usuario;
+    ListView lisprofes;
     public FragmentLisProfes() {
         // Required empty public constructor
     }
@@ -57,7 +59,9 @@ public class FragmentLisProfes extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListView lisprofes = view.findViewById(R.id.listView);
+        FileUtils fileUtils= new FileUtils();
+        String user= fileUtils.readFile(getContext(), "config.txt");
+        lisprofes = view.findViewById(R.id.listView);
         Data inputData = new Data.Builder()
                 .putString("tipo", "infoLista")
                 .build();
@@ -83,18 +87,7 @@ public class FragmentLisProfes extends Fragment {
                             String[] arrayloc = loc.split(";");
                             String[] arraylat = lat.split(",");
                             String[] arraylon = lon.split(",");
-
-                            calcularDistancias(arraylat,arraylon,arrayu,arrayn,arrayp,arraypp,arrayloc);
-
-                            System.out.println("punt: "+punts);
-
-                            usus = new ArrayList<String>(Arrays.asList(arrayu));
-                            noms = new ArrayList<String>(Arrays.asList(arrayn));
-                            precios = new ArrayList<String>(Arrays.asList(arrayp));
-                            punt = new ArrayList<String>(Arrays.asList(arraypp));
-                            locs = new ArrayList<String>(Arrays.asList(arrayloc));
-                            AdaptadorProfesLista eladap = new AdaptadorProfesLista(requireContext(), usus, precios, punt, locs);
-                            lisprofes.setAdapter(eladap);
+                            obtenerLoc(user,arraylat,arraylon,arrayu,arrayn,arrayp,arraypp,arrayloc);
                         }
                     }
                 });
@@ -148,13 +141,44 @@ public class FragmentLisProfes extends Fragment {
                 });
         WorkManager.getInstance(getContext()).enqueue(otwr);
     }
+    private void obtenerLoc(String usu, String[] arraylat, String[] arraylon, String[] arrayu, String[] arrayn, String[] arrayp, String[] arraypp, String[] arrayloc) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "selectLoc")
+                .putString("usuario", usu)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String latUsuss = workInfo.getOutputData().getString("lat");
+                            String lngUsuss = workInfo.getOutputData().getString("lng");
+                            latUsu=Double.parseDouble(latUsuss);
+                            lngUsu=Double.parseDouble(lngUsuss);
+
+                            calcularDistancias(arraylat,arraylon,arrayu,arrayn,arrayp,arraypp,arrayloc);
+
+
+                            usus = new ArrayList<String>(Arrays.asList(arrayu));
+                            noms = new ArrayList<String>(Arrays.asList(arrayn));
+                            precios = new ArrayList<String>(Arrays.asList(arrayp));
+                            punt = new ArrayList<String>(Arrays.asList(arraypp));
+                            locs = new ArrayList<String>(Arrays.asList(arrayloc));
+                            AdaptadorProfesLista eladap = new AdaptadorProfesLista(requireContext(), usus, precios, punt, locs);
+                            lisprofes.setAdapter(eladap);
+                        }
+                    }
+                });
+        WorkManager.getInstance(getContext()).enqueue(otwr);
+    }
 
     public void calcularDistancias(String[] lislat,String[] lislng,String[] usus,String[] nombres,String[] precios,String[] puntos,String[] locs){
         int i=0;
         Float[] distancias = new Float[lislat.length];
         Location location1 = new Location("loc1");
-        location1.setLatitude(Float.parseFloat(lislat[i]));
-        location1.setLatitude(Float.parseFloat(lislng[i]));
+        location1.setLatitude(latUsu);
+        location1.setLatitude(lngUsu);
         while (i<lislat.length){
             Double latitud=Double.parseDouble(lislat[i]);//obtenemos la latitud
             Double longitud=Double.parseDouble(lislng[i]);//obtenemos la longitud
