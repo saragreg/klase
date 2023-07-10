@@ -49,7 +49,8 @@ public class FragmentPeticiones extends Fragment {
 
         FileUtils fileUtils = new FileUtils();
         String user = fileUtils.readFile(requireContext(), "config.txt");
-        Peticion.peticionesLis=new ArrayList<>();
+        Peticion.peticionesLis=new ArrayList<Peticion>();
+        Imagenes.lisimagenes=new ArrayList<Imagenes>();
 
         MutableLiveData<Boolean> workerFinishedLiveData = new MutableLiveData<>();
 

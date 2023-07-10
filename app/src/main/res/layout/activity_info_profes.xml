@@ -14,6 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <RatingBar
                 android:id="@+id/ratingBar2"
                 android:layout_width="wrap_content"
@@ -58,14 +59,12 @@
 
             <Button
                 android:id="@+id/button2"
-                android:layout_width="147dp"
-                android:layout_height="59dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="#eac102"
-                android:text="Klase!"
-                android:textColor="@color/white"
-                android:textSize="20dp"
                 android:onClick="klase"
+                android:text="Solicitar Klase"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView6" />
@@ -102,6 +101,19 @@
                     android:layout_weight="1"
                     android:text="Reseñas" />
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="50dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="16dp"
+                android:background="#3B82C9"
+                android:padding="8dp"
+                android:onClick="mandarMensaje"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingBar2"
+                app:layout_constraintStart_toEndOf="@+id/ratingBar2"
+                app:layout_constraintTop_toTopOf="@+id/ratingBar2"
+                app:srcCompat="@drawable/baseline_chat_bubble_24" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

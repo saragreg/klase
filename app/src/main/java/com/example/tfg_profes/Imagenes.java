@@ -5,6 +5,9 @@ import java.util.Iterator;
 
 public class Imagenes {
     public static ArrayList<Imagenes> lisimagenes=new ArrayList<>();
+    public static Imagenes perfilusuario = new Imagenes("","");
+
+    public static ArrayList<Imagenes> lisimagenesProfes=new ArrayList<>();
 
     public Imagenes(String user,String imagen) {
         this.user = user;
@@ -19,6 +22,13 @@ public class Imagenes {
 
     public static void setimagenesLis(ArrayList<Imagenes> lisimagenes) {
         Imagenes.lisimagenes = lisimagenes;
+    }
+    public static ArrayList<Imagenes> getLisimagenesProfes() {
+        return lisimagenesProfes;
+    }
+
+    public static void setLisimagenesProfes(ArrayList<Imagenes> lisimagenesProfes) {
+        Imagenes.lisimagenesProfes = lisimagenesProfes;
     }
 
     public String getUser() {
@@ -39,6 +49,19 @@ public class Imagenes {
     public static String obtenerImagen(String user){
         String res="";
         Iterator<Imagenes> iterator = lisimagenes.iterator();
+        boolean salir=false;
+        while (iterator.hasNext()||!salir) {
+            Imagenes element = iterator.next();
+            if (element.getUser().equals(user)){
+                res=element.getImagen();
+                salir=true;
+            }
+        }
+        return res;
+    }
+    public static String obtenerImagen2(String user){
+        String res="";
+        Iterator<Imagenes> iterator = lisimagenesProfes.iterator();
         boolean salir=false;
         while (iterator.hasNext()||!salir) {
             Imagenes element = iterator.next();

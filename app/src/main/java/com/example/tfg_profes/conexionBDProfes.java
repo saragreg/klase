@@ -166,6 +166,8 @@ public class conexionBDProfes extends Worker {
                     punt = punt+jsonArray.getJSONObject(i).getString("punt")+",";
                     usua_conf = usua+jsonArray.getJSONObject(i).getString("usu")+",";
                     nombre = usua+jsonArray.getJSONObject(i).getString("nombre")+",";
+                    Imagenes imagenes=new Imagenes(jsonArray.getJSONObject(i).getString("usu"),jsonArray.getJSONObject(i).getString("imagen"));
+                    Imagenes.lisimagenesProfes.add(imagenes);
                     loc = loc+jsonArray.getJSONObject(i).getString("loc")+";";
                     lat = lat+jsonArray.getJSONObject(i).getString("lat")+",";
                     lng = lng+jsonArray.getJSONObject(i).getString("lng")+",";

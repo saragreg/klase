@@ -93,8 +93,7 @@ public class Menu extends AppCompatActivity {
                     } else if (item.getItemId() == R.id.agenda_bar) {
                         replaceFragment(new AgendaFragment());
                     } else if (item.getItemId() == R.id.perfil_bar) {
-                        Intent intent = new Intent(Menu.this, Perfil.class);
-                        startActivity(intent);
+                        replaceFragment(new DatosPerfilFragment());
                 } else if (item.getItemId() == R.id.settings_bar) {
                     replaceFragment(new SettingsFragment());
                 }

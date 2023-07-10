@@ -1,6 +1,7 @@
 package com.example.tfg_profes;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,16 +11,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -38,7 +41,12 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Perfil extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link DatosPerfilFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class DatosPerfilFragment extends Fragment {
     public static final int CAMERA_PERM_CODE=101;
     public static final int CAMERA_REQUEST_CODE=102;
     public static final int GALLERY_REQUEST_CODE=105;
@@ -50,15 +58,30 @@ public class Perfil extends AppCompatActivity {
     String currentPhotoPath;
     StorageReference storageReference;
     String usu;
-    String path;
-    String path_mod;
 
+    public DatosPerfilFragment() {
+        // Required empty public constructor
+    }
+
+    public static DatosPerfilFragment newInstance(String param1, String param2) {
+        DatosPerfilFragment fragment = new DatosPerfilFragment();
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil);
-        selectedImage=findViewById(R.id.imageView4);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_datos_perfil, container, false);
+    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        selectedImage=view.findViewById(R.id.imageView4);
         String fotoperfil=Imagenes.perfilusuario.getImagen();
         if (!fotoperfil.equals("")) {
             if (fotoperfil.length()<100){
@@ -74,11 +97,11 @@ public class Perfil extends AppCompatActivity {
             }
         }
         FileUtils fileUtils=new FileUtils();
-        usu=fileUtils.readFile(this, "config.txt");
-        selectedImage=findViewById(R.id.imageView4);
+        usu=fileUtils.readFile(getContext(), "config.txt");
+        selectedImage=view.findViewById(R.id.imageView4);
 
-        camara=findViewById(R.id.camara);
-        galeria=findViewById(R.id.galeria);
+        camara=view.findViewById(R.id.camara);
+        galeria=view.findViewById(R.id.galeria);
         storageReference= FirebaseStorage.getInstance().getReference();
         //ponerFotoPerfil(usu);
         camara.setOnClickListener(new View.OnClickListener() {
@@ -96,26 +119,23 @@ public class Perfil extends AppCompatActivity {
                 startActivityForResult(gallery, GALLERY_REQUEST_CODE);
             }
         });
-
-
     }
-
     private void askCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA }, CAMERA_PERM_CODE);
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[] { android.Manifest.permission.CAMERA }, CAMERA_PERM_CODE);
             return;
         }else{
             dispatchTakePictureIntent();
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // El permiso no ha sido otorgado, solicítalo
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             return;
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // El permiso no ha sido otorgado, solicítalo
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             return;
         }
 
@@ -132,7 +152,7 @@ public class Perfil extends AppCompatActivity {
 
             } else {
                 // El permiso fue denegado
-                Toast.makeText(getApplicationContext(), "No da permisos camara", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No da permisos camara", Toast.LENGTH_SHORT).show();
             }
         }
         if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
@@ -140,7 +160,7 @@ public class Perfil extends AppCompatActivity {
                 // El permiso ha sido otorgado
             } else {
                 // El permiso ha sido denegado
-                Toast.makeText(getApplicationContext(), "No da permisos lectura", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No da permisos lectura", Toast.LENGTH_SHORT).show();
             }
         }
         if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
@@ -148,7 +168,7 @@ public class Perfil extends AppCompatActivity {
                 // El permiso ha sido otorgado
             } else {
                 // El permiso ha sido denegado
-                Toast.makeText(getApplicationContext(), "No da permisos escritura", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No da permisos escritura", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -156,10 +176,10 @@ public class Perfil extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE) {
-            if (resultCode == this.RESULT_OK) {
+            if (resultCode == getActivity().RESULT_OK) {
                 Bitmap image = (Bitmap) data.getExtras().get("data");
                 selectedImage.setImageBitmap(image);
                 // Transform the photo to a Base64 String and compress it
@@ -173,13 +193,13 @@ public class Perfil extends AppCompatActivity {
         }
 
         if (requestCode == GALLERY_REQUEST_CODE) {
-            if (resultCode == this.RESULT_OK) {
+            if (resultCode == getActivity().RESULT_OK) {
                 Uri contentUri = data.getData();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentUri);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentUri);
                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                     String imageFileName = "IMG_" + timeStamp + ".jpg";
-                    File storageDir = getFilesDir(); // O usa getCacheDir() si prefieres almacenar en la memoria caché
+                    File storageDir = getActivity().getFilesDir(); // O usa getCacheDir() si prefieres almacenar en la memoria caché
                     File imageFile = new File(storageDir, imageFileName);
                     try (OutputStream outputStream = new FileOutputStream(imageFile)) {
                         bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream); // Ajusta la calidad de compresión según tus necesidades
@@ -206,7 +226,7 @@ public class Perfil extends AppCompatActivity {
                 .putString("tipo","insertarImagen")
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
-        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
                 .observe(this, new Observer<WorkInfo>() {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
@@ -215,7 +235,7 @@ public class Perfil extends AppCompatActivity {
                         }
                     }
                 });
-        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+        WorkManager.getInstance(getContext()).enqueue(otwr);
 
     }
 
@@ -239,7 +259,5 @@ public class Perfil extends AppCompatActivity {
 
         return Bitmap.createBitmap(bitmap, 0, 0, width, length, matrix, true);
     }
-
-
 
 }

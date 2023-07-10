@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,13 +69,18 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ElViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Peticion p=lista.get(position);
-        if (!p.getFotoper().equals("null")) {
-            String image64 = p.getFotoper();
-            byte[] b = Base64.decode(image64, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(b,0,
-                    b.length);
-            Bitmap rescaledImage = adjustImageSize(bitmap);
-            holder.userfoto.setImageBitmap(rescaledImage);
+        if (!p.getFotoper().equals("imagen")) {
+            if (p.getFotoper().length()<100){
+                Uri imageUri = Uri.parse(p.getFotoper());
+                holder.userfoto.setImageURI(imageUri);
+            }else {
+                String image64 = p.getFotoper();
+                byte[] b = Base64.decode(image64, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0,
+                        b.length);
+                Bitmap rescaledImage = adjustImageSize(bitmap);
+                holder.userfoto.setImageBitmap(rescaledImage);
+            }
         }
         holder.nombre.setText(p.getNombre());
         holder.dur.setText(p.getDuracion());

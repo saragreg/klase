@@ -3,12 +3,19 @@ package com.example.tfg_profes;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RatingBar;
@@ -16,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -27,6 +35,11 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.example.tfg_profes.utils.FileUtils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,6 +53,10 @@ public class InfoProfes extends AppCompatActivity {
     boolean[] textViewClicked = new boolean[9];
     boolean[] textViewClickedDias = new boolean[7];
     String asig;
+    private String chatKey = "",userfoto="";
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mensajeriafcm-ea7c9-default-rtdb.europe-west1.firebasedatabase.app/");
+    String userComprobar1 = "";
+    String userComprobar2 = "";
     LinearLayout diassemana;
     int numCaracteres1=0,numCaracteres2=0,numCaracteres3=0,numasig=0;
 
@@ -56,9 +73,24 @@ public class InfoProfes extends AppCompatActivity {
         String idiomas = getIntent().getExtras().getString("idiomas");
         String exp = getIntent().getExtras().getString("exp");
         String punts = getIntent().getExtras().getString("punt");
+        String foto=Imagenes.obtenerImagen2(usuario);
 
         TextView n=findViewById(R.id.nombreusu);
         RatingBar p=findViewById(R.id.ratingBar2);
+        ImageView fotoper=findViewById(R.id.imageView5);
+        if (!foto.equals("imagen")) {
+            if (foto.length()<100){
+                Uri imageUri = Uri.parse(foto);
+                fotoper.setImageURI(imageUri);
+            }else {
+                String image64 = foto;
+                byte[] b = Base64.decode(image64, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0,
+                        b.length);
+                Bitmap rescaledImage = adjustImageSize(bitmap);
+                fotoper.setImageBitmap(rescaledImage);
+            }
+        }
         p.setIsIndicator(true);
         n.setText(usuario);
         p.setRating(Float.parseFloat(punts));
@@ -121,12 +153,65 @@ public class InfoProfes extends AppCompatActivity {
 
 
     }
+    private Bitmap adjustImageSize(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int length = bitmap.getHeight();
+
+        int newSize = 800;
+        float scaleWidth = ((float) newSize/width);
+        float scaleLength = ((float) newSize/length);
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleLength);
+
+        return Bitmap.createBitmap(bitmap, 0,0, width, length, matrix, true);
+    }
     private void replaceFragment(Fragment fragment) {
         // Reemplazar el fragmento actual con el fragmento proporcionado
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView3, fragment)
                 .commit();
+    }
+    public void mandarMensaje(View v) {
+        obtenerClave(usuario,userfoto);
+    }
+    private void obtenerClave(String otroMail, String foto) {
+        chatKey = "";
+        FileUtils fileUtils= new FileUtils();
+        usuario=fileUtils.readFile(this,"config.txt");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("chat")) {
+                    for (DataSnapshot messagesnapshot : snapshot.child("chat").getChildren()) {
+                        if (messagesnapshot.hasChild("user1") && messagesnapshot.hasChild("user2")) {
+                            userComprobar1 = messagesnapshot.child("user1").getValue(String.class);
+                            userComprobar2 = messagesnapshot.child("user2").getValue(String.class);
+                            if ((userComprobar1.equals(otroMail) || userComprobar1.equals(usuario)) && (userComprobar2.equals(otroMail) || userComprobar2.equals(usuario))) {
+                                //se asume que no existen mensajes contigo mismo
+                                chatKey = messagesnapshot.getKey();
+                            }
+                        }
+                    }
+                }
+                //se abre la ventana de chat
+                Intent intent = new Intent(getApplicationContext(), Chat.class);
+                intent.putExtra("nombre",otroMail);
+                intent.putExtra("mail1",otroMail);
+                intent.putExtra("fotoPerfil",foto);
+                intent.putExtra("mailUser",usuario);
+                intent.putExtra("chatKey", chatKey);
+                //intent.putExtra("fotoPerfil",imgs.get(i));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     public void klase(View v) {
         String[] asignaturas=asig.split(",");

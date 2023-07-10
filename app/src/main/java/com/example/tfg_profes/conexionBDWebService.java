@@ -145,8 +145,7 @@ public class conexionBDWebService extends Worker {
                 return Result.success();
             case "insertarImagen":
                 usu = getInputData().getString("usuario");
-                String uri = getInputData().getString("uri");
-                insertImagen(usu,uri);
+                insertImagen(usu);
                 return Result.success();
             case "cargarEventos":
                 usu = getInputData().getString("user");
@@ -1181,8 +1180,8 @@ public class conexionBDWebService extends Worker {
             }
         }
     }
-    private void insertImagen(String usu, String uri) {
-        String imagen=obtenerImagenEnString(uri);
+    private void insertImagen(String usu) {
+        String imagen=Imagenes.perfilusuario.getImagen();
         String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/insertar_imagenes.php";
 
         HttpURLConnection urlConnection = null;
