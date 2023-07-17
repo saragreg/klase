@@ -593,7 +593,20 @@ public class InfoProfes extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         // Aquí puedes obtener la fecha seleccionada y realizar acciones con ella
                         // Por ejemplo, puedes mostrarla en el EditText
-                        String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                        String selectedDate;
+                        if (monthOfYear<10) {
+                            if (dayOfMonth<10) {
+                                selectedDate = year + "-0" + (monthOfYear + 1) + "-0" + dayOfMonth;
+                            }else{
+                                selectedDate = year + "-0" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            }
+                        }else{
+                            if (dayOfMonth<10) {
+                                selectedDate = year + "-" + (monthOfYear + 1) + "-0" + dayOfMonth;
+                            }else{
+                                selectedDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            }
+                        }
                         editTextDate.setText(selectedDate);
                     }
                 }, year, month, day);
