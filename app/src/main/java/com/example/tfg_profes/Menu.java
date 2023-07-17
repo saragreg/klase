@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -63,7 +64,7 @@ public class Menu extends AppCompatActivity {
             setIdioma(idioma);
             setContentView(R.layout.activity_menu);
             if (perfil.equals("a")) {
-                replaceFragment(new FragmentLisProfes());
+                cargarListaProfe();
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) !=
@@ -72,7 +73,6 @@ public class Menu extends AppCompatActivity {
                             String[]{POST_NOTIFICATIONS}, 11);
                 }
             }
-            obtenerLoc(user);
             cargarEventos();
             cargarDatosUsu();
             bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -101,6 +101,25 @@ public class Menu extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void cargarListaProfe() {
+        FileUtils fileUtils=new FileUtils();
+        String user = fileUtils.readFile(this, "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoLista")
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            obtenerLoc(user);
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
     }
 
     private void cargarFotoPerfil() {
@@ -191,6 +210,8 @@ public class Menu extends AppCompatActivity {
                             String lngUsus = workInfo.getOutputData().getString("lng");
                             latUsu=Double.parseDouble(latUsus);
                             lngUsu=Double.parseDouble(lngUsus);
+                            calcularDistancias();
+                            replaceFragment(new FragmentLisProfes());
                         }
                     }
                 });
@@ -210,7 +231,73 @@ public class Menu extends AppCompatActivity {
 
         resources.updateConfiguration(configuration, displayMetrics);
     }
+    public void calcularDistancias(){
+        int i=0;
+        Float[] distancias = new Float[Profesor.lisProfes.size()];
+        Location location1 = new Location("loc1");
+        location1.setLatitude(latUsu);
+        location1.setLatitude(lngUsu);
+        while (i<Profesor.lisProfes.size()){
+            Profesor p=Profesor.lisProfes.get(i);
+            Double latitud=Double.parseDouble(p.getLat());//obtenemos la latitud
+            Double longitud=Double.parseDouble(p.getLng());//obtenemos la longitud
+            Location location2 = new Location("loc2");
+            location2.setLatitude(latitud);
+            location2.setLatitude(longitud);
+            float distance = location1.distanceTo(location2);
+            distancias[i]=distance;
+            i++;
+        }
 
+        quicksort(distancias,0,i-1);
+
+    }
+
+    public static void quicksort(Float A[], int izq, int der) {
+
+        Float pivote = A[izq]; // tomamos primer elemento como pivote
+        int i = izq;         // i realiza la búsqueda de izquierda a derecha
+        int j = der;         // j realiza la búsqueda de derecha a izquierda
+        Float aux;
+
+        Profesor pivote2 = Profesor.lisProfes.get(izq);
+        Profesor aux2;
+
+        while (i < j) {                          // mientras no se crucen las búsquedas
+            while (A[i] <= pivote && i < j) i++; // busca elemento mayor que pivote
+            while (A[j] > pivote) j--;           // busca elemento menor que pivote
+            if (i < j) {                        // si no se han cruzado
+                aux = A[i];                      // los intercambia
+                A[i] = A[j];
+                A[j] = aux;
+
+                aux2 = Profesor.lisProfes.get(i);
+                Profesor.lisProfes.add(i,Profesor.lisProfes.get(j));
+                Profesor.lisProfes.remove(i+1);
+                Profesor.lisProfes.add(j,aux2);
+                Profesor.lisProfes.remove(j+1);
+                //B[i] = B[j];
+                //B[j] = aux2;
+
+            }
+        }
+
+        A[izq] = A[j];      // se coloca el pivote en su lugar de forma que tendremos
+        A[j] = pivote;      // los menores a su izquierda y los mayores a su derecha
+
+        Profesor.lisProfes.add(izq,Profesor.lisProfes.get(j));
+        Profesor.lisProfes.remove(izq+1);
+        Profesor.lisProfes.add(j,pivote2);
+        Profesor.lisProfes.remove(j+1);
+        //B[izq] = B[j];
+        //B[j] = pivote2;
+        if (izq < j - 1) {
+            quicksort(A, izq, j - 1);
+        }// ordenamos subarray izquierdo
+        if (j + 1 < der){
+            quicksort(A, j + 1, der);          // ordenamos subarray derecho
+        }
+    }
 
 
 }

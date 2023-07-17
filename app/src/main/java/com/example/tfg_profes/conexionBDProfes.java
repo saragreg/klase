@@ -169,12 +169,15 @@ public class conexionBDProfes extends Worker {
                     usua_conf = jsonArray.getJSONObject(i).getString("usu");
                     nombre = jsonArray.getJSONObject(i).getString("nombre");
                     asignaturas = jsonArray.getJSONObject(i).getString("asignaturas");
+                    String experiencia = jsonArray.getJSONObject(i).getString("experiencia");
+                    idiomas = jsonArray.getJSONObject(i).getString("idiomas");
+                    cursos = jsonArray.getJSONObject(i).getString("cursos");
                     Imagenes imagenes=new Imagenes(jsonArray.getJSONObject(i).getString("usu"),jsonArray.getJSONObject(i).getString("imagen"));
                     Imagenes.lisimagenesProfes.add(imagenes);
                     loc = jsonArray.getJSONObject(i).getString("loc");
                     lat = jsonArray.getJSONObject(i).getString("lat");
                     lng = jsonArray.getJSONObject(i).getString("lng");
-                    Profesor profesor=new Profesor(usua,nombre,asignaturas,Float.parseFloat(punt),loc,precio,lat,lng);
+                    Profesor profesor=new Profesor(usua,nombre,asignaturas,Float.parseFloat(punt),loc,lat,lng,precio,experiencia,idiomas,cursos);
                     Profesor.lisProfes.add(profesor);
                 }
 

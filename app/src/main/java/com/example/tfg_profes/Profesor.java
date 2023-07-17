@@ -11,6 +11,49 @@ public class Profesor {
     private String direccion;
     private String lat;
 
+    public String getExperiencia() {
+        return experiencia;
+    }
+
+    public void setExperiencia(String experiencia) {
+        this.experiencia = experiencia;
+    }
+
+    public String getCursos() {
+        return cursos;
+    }
+
+    public void setCursos(String cursos) {
+        this.cursos = cursos;
+    }
+
+    public String getIdiomas() {
+        return idiomas;
+    }
+
+    public void setIdiomas(String idiomas) {
+        this.idiomas = idiomas;
+    }
+
+    private String experiencia;
+    private String cursos;
+
+    public Profesor(String idProfe, String nombre, String asig, Float val, String direccion, String lat, String lng, String precio, String experiencia, String idiomas, String cursos) {
+        this.idProfe = idProfe;
+        this.nombre = nombre;
+        this.asig = asig;
+        this.val = val;
+        this.direccion = direccion;
+        this.lat = lat;
+        this.experiencia = experiencia;
+        this.cursos = cursos;
+        this.idiomas = idiomas;
+        this.lng = lng;
+        this.precio = precio;
+    }
+
+    private String idiomas;
+
     public String getLat() {
         return lat;
     }
@@ -38,17 +81,6 @@ public class Profesor {
     }
 
     private String precio;
-
-    public Profesor(String idProfe, String nombre, String asig, Float val, String direccion, String precio, String lat, String lng) {
-        this.idProfe = idProfe;
-        this.nombre = nombre;
-        this.asig = asig;
-        this.val = val;
-        this.direccion = direccion;
-        this.precio = precio;
-        this.lat = lat;
-        this.lng = lng;
-    }
 
     public static ArrayList<Profesor> getLisProfes() {
         return lisProfes;

@@ -12,6 +12,7 @@ public class ProfesViewHolder extends RecyclerView.ViewHolder{
     public TextView nombre,asignaturas,direccion,precio;
     public ImageView perfilprofe;
     private AdaptadorProfesLista.OnItemClickListener listener;
+
     public RatingBar val;
     public ProfesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -22,16 +23,5 @@ public class ProfesViewHolder extends RecyclerView.ViewHolder{
         asignaturas=(TextView) itemView.findViewById(R.id.asignaturas);
         direccion = (TextView) itemView.findViewById(R.id.direccion);
         precio=(TextView) itemView.findViewById(R.id.preciousulis);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(position);
-                    }
-                }
-            }
-        });
     }
 }

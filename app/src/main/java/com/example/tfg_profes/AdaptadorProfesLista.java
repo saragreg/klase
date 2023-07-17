@@ -1,6 +1,7 @@
 package com.example.tfg_profes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -19,15 +20,37 @@ import java.util.ArrayList;
 public class AdaptadorProfesLista extends RecyclerView.Adapter<ProfesViewHolder> {
 
     private Context contexto;
-    private LifecycleOwner lifecycleOwner;
     private View elLayoutDeCadaItem;
-    private ArrayList<Profesor> lista;
     private OnItemClickListener listener;
+    private ArrayList<Profesor> lista;
     public AdaptadorProfesLista(Context pcontext, ArrayList<Profesor> profesLis, LifecycleOwner viewLifecycleOwner)
     {
         contexto = pcontext;
         lista=profesLis;
-        lifecycleOwner=viewLifecycleOwner;
+    }
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+    public void onItemClick(int position) {
+        // Obtén el elemento en la posición seleccionada
+        Profesor item = lista.get(position);
+
+        // Crea un Intent con el contexto del adaptador y la actividad de destino
+        Intent intent = new Intent(contexto, InfoProfes.class);
+        intent.putExtra("usu", item.getIdProfe());
+        intent.putExtra("precio", item.getPrecio());
+        intent.putExtra("asig", item.getAsig());
+        intent.putExtra("cursos", item.getCursos());
+        intent.putExtra("idiomas", item.getIdiomas());
+        intent.putExtra("exp", item.getExperiencia());
+        intent.putExtra("punt", String.valueOf(item.getVal()));
+
+        // Inicia la actividad con el Intent
+        contexto.startActivity(intent);
     }
 
     @NonNull
@@ -60,15 +83,12 @@ public class AdaptadorProfesLista extends RecyclerView.Adapter<ProfesViewHolder>
         holder.direccion.setText(p.getDireccion());
         holder.val.setRating(p.getVal());
         holder.precio.setText(p.getPrecio()+"€/h");
-    }
-
-
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick(position);
+            }
+        });
     }
 
     @Override
