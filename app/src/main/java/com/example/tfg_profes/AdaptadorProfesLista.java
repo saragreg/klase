@@ -22,14 +22,38 @@ public class AdaptadorProfesLista extends RecyclerView.Adapter<ProfesViewHolder>
     private Context contexto;
     private View elLayoutDeCadaItem;
     private OnItemClickListener listener;
-    private ArrayList<Profesor> lista;
+    private ArrayList<Profesor> lista,listaCompleta;
     public AdaptadorProfesLista(Context pcontext, ArrayList<Profesor> profesLis, LifecycleOwner viewLifecycleOwner)
     {
         contexto = pcontext;
         lista=profesLis;
+        listaCompleta = new ArrayList<>(profesLis);
     }
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+    public void filtrarPorAsignaturas(ArrayList<String> asignaturasSeleccionadas) {
+        ArrayList<Profesor> profesFiltrados = new ArrayList<>();
+
+        // Itera sobre cada profesor en la lista original
+        for (Profesor profesor : listaCompleta) {
+            // Verifica si alguna de las asignaturas del profesor coincide con las asignaturas seleccionadas
+            for (String asignatura : asignaturasSeleccionadas) {
+                if (profesor.getAsig().contains(asignatura)) {
+                    profesFiltrados.add(profesor); // Agrega el profesor a la lista filtrada
+                    break; // Rompe el bucle interno si se encuentra una coincidencia
+                }
+            }
+        }
+
+        // Actualiza la lista de profesores con la lista filtrada
+        lista = profesFiltrados;
+        notifyDataSetChanged();
+    }
+
+    public void restaurarListaCompleta() {
+        lista = new ArrayList<>(listaCompleta); // Restaura la lista con todos los profesores
+        notifyDataSetChanged();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
