@@ -21,16 +21,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="370dp"
-        android:layout_height="393dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="8dp"
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+        <Button
+            android:id="@+id/escribirResenna"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/redondo_blanco_borde_naranja"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="@string/filtrar"
+            android:textColor="@android:color/white"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

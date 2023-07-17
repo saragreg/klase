@@ -8,18 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ListaProfesores extends Fragment {
     ArrayList<String> noms= new ArrayList<String>();
@@ -30,37 +32,6 @@ public class ListaProfesores extends Fragment {
     Double latUsu,lngUsu;
     String usuario;
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_profesores);
-        usuario=getIntent().getExtras().getString("usuario");
-        usus = getIntent().getExtras().getStringArrayList("usus");
-        noms = getIntent().getExtras().getStringArrayList("noms");
-        precios = getIntent().getExtras().getStringArrayList("precios");
-        punt = getIntent().getExtras().getStringArrayList("punt");
-        locs = getIntent().getExtras().getStringArrayList("locs");
-
-        ListView lisprofes = findViewById(R.id.listView);
-        AdaptadorProfesLista eladap = new AdaptadorProfesLista(getApplicationContext(), usus, precios, punt,locs);
-        lisprofes.setAdapter(eladap);
-        lisprofes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                noms.remove(i);
-                precios.remove(i);
-                eladap.notifyDataSetChanged();
-                return true;
-            }
-        });
-        lisprofes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                obtenerInfoProfe(usus.get(i),precios.get(i),punt.get(i));
-            }
-        });
-    }*/
     public ListaProfesores() {
         // Required empty public constructor
     }
@@ -91,34 +62,16 @@ public class ListaProfesores extends Fragment {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-                            String usuarios = workInfo.getOutputData().getString("usu");
-                            String nombre = workInfo.getOutputData().getString("nombre");
-                            String precio = workInfo.getOutputData().getString("precio");
-                            String punts = workInfo.getOutputData().getString("punt");
-                            String usuarios_conf = workInfo.getOutputData().getString("usu_conf");
-                            String loc = workInfo.getOutputData().getString("loc");
-                            String lat = workInfo.getOutputData().getString("lat");
-                            String lon = workInfo.getOutputData().getString("lng");
 
-                            String[] arrayu = usuarios.split(",");
-                            String[] arrayn = nombre.split(",");
-                            String[] arrayp = precio.split(",");
-                            String[] arraypp = punts.split(",");
-                            String[] arrayloc = loc.split(";");
-                            String[] arraylat = lat.split(",");
-                            String[] arraylon = lon.split(",");
-
-                            calcularDistancias(arraylat,arraylon,arrayu,arrayn,arrayp,arraypp,arrayloc);
-
-                            System.out.println("punt: "+punts);
-
-                            usus = new ArrayList<String>(Arrays.asList(arrayu));
-                            noms = new ArrayList<String>(Arrays.asList(arrayn));
-                            precios = new ArrayList<String>(Arrays.asList(arrayp));
-                            punt = new ArrayList<String>(Arrays.asList(arraypp));
-                            locs = new ArrayList<String>(Arrays.asList(arrayloc));
-                            AdaptadorProfesLista eladap = new AdaptadorProfesLista(requireContext(), usus, precios, punt, locs);
-                            lisprofes.setAdapter(eladap);
+                            if (Profesor.lisProfes.size()!=0) {
+                                RecyclerView lista = view.findViewById(R.id.resennasRecyclerView);
+                                AdaptadorProfesLista eladap = new AdaptadorProfesLista(requireContext(),Profesor.lisProfes,getViewLifecycleOwner());
+                                lista.setAdapter(eladap);
+                                LinearLayoutManager elLayoutLineal = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                                lista.setLayoutManager(elLayoutLineal);
+                            }else{
+                                Toast.makeText(getContext(), "No hay tutores disponibles", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -173,51 +126,7 @@ public class ListaProfesores extends Fragment {
         WorkManager.getInstance(getContext()).enqueue(otwr);
     }
 
-    public void obtenerDatosProfes() {
-        Data inputData = new Data.Builder()
-                .putString("tipo", "infoLista")
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDProfes.class).setInputData(inputData).build();
-        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            String usuarios = workInfo.getOutputData().getString("usu");
-                            String nombre = workInfo.getOutputData().getString("nombre");
-                            String precio = workInfo.getOutputData().getString("precio");
-                            String punts = workInfo.getOutputData().getString("punt");
-                            String usuarios_conf = workInfo.getOutputData().getString("usu_conf");
-                            String loc = workInfo.getOutputData().getString("loc");
-                            String lat = workInfo.getOutputData().getString("lat");
-                            String lon = workInfo.getOutputData().getString("lng");
 
-                            String[] arrayu = usuarios.split(",");
-                            String[] arrayn = nombre.split(",");
-                            String[] arrayp = precio.split(",");
-                            String[] arraypp = punts.split(",");
-                            String[] arrayloc = loc.split(";");
-                            String[] arraylat = lat.split(",");
-                            String[] arraylon = lon.split(",");
-
-                            calcularDistancias(arraylat,arraylon,arrayu,arrayn,arrayp,arraypp,arrayloc);
-
-                            System.out.println("punt: "+punts);
-
-                            usus = new ArrayList<String>(Arrays.asList(arrayu));
-                            noms = new ArrayList<String>(Arrays.asList(arrayn));
-                            precios = new ArrayList<String>(Arrays.asList(arrayp));
-                            punt = new ArrayList<String>(Arrays.asList(arraypp));
-                            locs = new ArrayList<String>(Arrays.asList(arrayloc));
-                            AdaptadorProfesLista eladap = new AdaptadorProfesLista(requireContext(), usus, precios, punt, locs);
-                            //lisprofes.setAdapter(eladap);
-                        }
-                    }
-                });
-        WorkManager.getInstance(getContext()).enqueue(otwr);
-
-
-    }
     public void calcularDistancias(String[] lislat,String[] lislng,String[] usus,String[] nombres,String[] precios,String[] puntos,String[] locs){
         int i=0;
         Float[] distancias = new Float[lislat.length];
@@ -303,6 +212,5 @@ public class ListaProfesores extends Fragment {
             quicksort(A, j + 1, der, B,C,D,E,F);          // ordenamos subarray derecho
         }
     }
-
 
 }

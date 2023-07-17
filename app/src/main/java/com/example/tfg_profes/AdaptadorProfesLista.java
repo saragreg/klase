@@ -9,75 +9,73 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class AdaptadorProfesLista extends BaseAdapter {
+public class AdaptadorProfesLista extends RecyclerView.Adapter<ProfesViewHolder> {
 
     private Context contexto;
-    private LayoutInflater inflater;
-    private ArrayList<String> nombres;
-    private ArrayList<String> precios;
-    private ArrayList<String> puntuaciones;
-    private ArrayList<String> locs;
-    public AdaptadorProfesLista(Context pcontext, ArrayList<String> pnombres, ArrayList<String> pprecio, ArrayList<String> ppuntuaciones,ArrayList<String> plocs)
+    private LifecycleOwner lifecycleOwner;
+    private View elLayoutDeCadaItem;
+    private ArrayList<Profesor> lista;
+    private OnItemClickListener listener;
+    public AdaptadorProfesLista(Context pcontext, ArrayList<Profesor> profesLis, LifecycleOwner viewLifecycleOwner)
     {
         contexto = pcontext;
-        nombres = pnombres;
-        precios=pprecio;
-        puntuaciones=ppuntuaciones;
-        locs=plocs;
-        inflater = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        lista=profesLis;
+        lifecycleOwner=viewLifecycleOwner;
+    }
+
+    @NonNull
+    @Override
+    public ProfesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        elLayoutDeCadaItem= LayoutInflater.from(parent.getContext()).inflate(R.layout.adaptador_profes,null);
+        ProfesViewHolder pvh = new ProfesViewHolder(elLayoutDeCadaItem);
+        return pvh;
     }
 
     @Override
-    public int getCount() {
-        return nombres.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return nombres.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        view=inflater.inflate(R.layout.adaptador_profes,null);
-        TextView nombre= (TextView) view.findViewById(R.id.nombre);
-        TextView precio=(TextView) view.findViewById(R.id.precio);
-        TextView loc = (TextView) view.findViewById(R.id.localProf);
-        RatingBar barra= (RatingBar) view.findViewById(R.id.ratingBar);
-        ImageView fotoper= view.findViewById(R.id.fotoPerLis);
-        String p=Imagenes.obtenerImagen2(nombres.get(i));
-        if (!p.equals("imagen")) {
-            if (p.length()<100){
-                Uri imageUri = Uri.parse(p);
-                fotoper.setImageURI(imageUri);
+    public void onBindViewHolder(@NonNull ProfesViewHolder holder, int position) {
+        Profesor p=lista.get(position);
+        String foto=Imagenes.obtenerImagen2(p.getIdProfe());
+        if (!foto.equals("imagen")) {
+            if (foto.length()<100){
+                Uri imageUri = Uri.parse(foto);
+                holder.perfilprofe.setImageURI(imageUri);
             }else {
-                String image64 = p;
+                String image64 = foto;
                 byte[] b = Base64.decode(image64, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0,
                         b.length);
                 Bitmap rescaledImage = adjustImageSize(bitmap);
-                fotoper.setImageBitmap(rescaledImage);
+                holder.perfilprofe.setImageBitmap(rescaledImage);
             }
         }
-        barra.setIsIndicator(true);
-        nombre.setText(nombres.get(i));
-        precio.setText(precios.get(i)+"€");
-        loc.setText(locs.get(i));
-        barra.setRating(Float.parseFloat(puntuaciones.get(i)));
-        return view;
+        holder.nombre.setText(p.getNombre());
+        holder.asignaturas.setText(p.getAsig());
+        holder.direccion.setText(p.getDireccion());
+        holder.val.setRating(p.getVal());
+        holder.precio.setText(p.getPrecio()+"€/h");
     }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public int getItemCount() {
+        return lista.size();
+    }
+
     private Bitmap adjustImageSize(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int length = bitmap.getHeight();

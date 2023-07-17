@@ -45,9 +45,6 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
     private String chatKey = "", usuario;
     String userComprobar1 = "";
     String userComprobar2 = "";
-    private ArrayList<String> noms = new ArrayList<>();
-    private ArrayList<String> imgs = new ArrayList<>();
-    private ArrayList<String> users = new ArrayList<>();
 
     public AdaptadorPeticiones(Context pcontext, ArrayList<Peticion> peticionesLis, LifecycleOwner viewLifecycleOwner) {
         contexto = pcontext;
@@ -334,55 +331,6 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
         WorkManager.getInstance(contexto).enqueue(otwr);
     }
 
-
-   /* @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        //ArrayList<String> asigindiv=new ArrayList<String>();
-        view=inflater.inflate(R.layout.adaptador_peticiones,null);
-        TextView nombre= (TextView) view.findViewById(R.id.username);
-        ImageView userfoto=(ImageView) view.findViewById(R.id.fotoPerfil);
-        TextView dur = (TextView) view.findViewById(R.id.duracion);
-        TextView fechaHoraPet = (TextView) view.findViewById(R.id.fechaHoraPet);
-        TextView intensivo = (TextView) view.findViewById(R.id.intensivo);
-        TextView diasPet = (TextView) view.findViewById(R.id.diasPet);
-        Flow flowLayout = (Flow) view.findViewById(R.id.flowlayout);
-
-
-
-        if (!perfil.get(i).equals("default")) {
-            String image64 = perfil.get(i);
-            byte[] b = Base64.decode(image64, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(b,0,
-                    b.length);
-            Bitmap rescaledImage = adjustImageSize(bitmap);
-            userfoto.setImageBitmap(rescaledImage);
-        }
-        nombre.setText(nombres.get(i));
-        dur.setText(duracion.get(i)+'h');
-        fechaHoraPet.setText(fechahora.get(i));
-        intensivo.setText(intensivos.get(i));
-        if (intensivos.get(i).equals("intensivo")){
-            diasPet.setVisibility(View.VISIBLE);
-            diasPet.setText(dias.get(i));
-        }else{
-            diasPet.setVisibility(View.GONE);
-        }
-        String[] asigind=asig.get(i).split(",");
-        int j=0;
-        while (j<asigind.length){
-            TextView textView = new TextView(contexto);
-            textView.setText(asigind[j]);
-            textView.setBackground(view.getResources().getDrawable(R.drawable.btn_asig_pulsada, null));
-            textView.setPadding(10, 0, 10, 0);
-            textView.setTextSize(24f);
-
-            FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT);
-            textView.setLayoutParams(layoutParams);
-
-            flowLayout.addView(textView);
-        }
-        return view;
-    }*/
     private Bitmap adjustImageSize(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int length = bitmap.getHeight();

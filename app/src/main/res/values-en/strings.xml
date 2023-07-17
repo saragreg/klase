@@ -81,5 +81,6 @@
     <string name="misresennas">Mis reseñas</string>
     <string name="mapa">Mapa</string>
     <string name="grafica">Estadísticas</string>
+    <string name="filtrar">filtrar</string>
 
 </resources>

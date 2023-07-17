@@ -17,10 +17,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class conexionBDProfes extends Worker {
     private String URL_BASE = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/sgarcia216/WEB/";
-    private String usua="",usua_conf="",nombre="",precio="",asig="",cursos="",idiomas="",exp="",punt="",loc="",lat="",lng="";
+    private String usua="",usua_conf="",nombre="",precio="",asig="",cursos="",idiomas="",exp="",punt="",loc="",lat="",lng="",asignaturas="";
 
     public conexionBDProfes(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -159,18 +160,22 @@ public class conexionBDProfes extends Worker {
                 bufferedReader.close();
 
                 JSONArray jsonArray = new JSONArray(result);
+                Profesor.lisProfes=new ArrayList<Profesor>();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    usua = usua+jsonArray.getJSONObject(i).getString("idProfe")+",";
-                    precio = precio+jsonArray.getJSONObject(i).getString("precio")+",";
-                    punt = punt+jsonArray.getJSONObject(i).getString("punt")+",";
-                    usua_conf = usua+jsonArray.getJSONObject(i).getString("usu")+",";
-                    nombre = usua+jsonArray.getJSONObject(i).getString("nombre")+",";
+                    usua = jsonArray.getJSONObject(i).getString("idProfe");
+                    precio = jsonArray.getJSONObject(i).getString("precio");
+                    punt = jsonArray.getJSONObject(i).getString("punt");
+                    usua_conf = jsonArray.getJSONObject(i).getString("usu");
+                    nombre = jsonArray.getJSONObject(i).getString("nombre");
+                    asignaturas = jsonArray.getJSONObject(i).getString("asignaturas");
                     Imagenes imagenes=new Imagenes(jsonArray.getJSONObject(i).getString("usu"),jsonArray.getJSONObject(i).getString("imagen"));
                     Imagenes.lisimagenesProfes.add(imagenes);
-                    loc = loc+jsonArray.getJSONObject(i).getString("loc")+";";
-                    lat = lat+jsonArray.getJSONObject(i).getString("lat")+",";
-                    lng = lng+jsonArray.getJSONObject(i).getString("lng")+",";
+                    loc = jsonArray.getJSONObject(i).getString("loc");
+                    lat = jsonArray.getJSONObject(i).getString("lat");
+                    lng = jsonArray.getJSONObject(i).getString("lng");
+                    Profesor profesor=new Profesor(usua,nombre,asignaturas,Float.parseFloat(punt),loc,precio,lat,lng);
+                    Profesor.lisProfes.add(profesor);
                 }
 
 
