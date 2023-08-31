@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:onClick="klase"
-                android:text="Solicitar Klase"
+                android:text="@string/SolicitarKlase"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,21 +85,21 @@
                     android:layout_weight="1"
                     android:paddingLeft="2dp"
                     android:paddingRight="2dp"
-                    android:text="Información" />
+                    android:text="@string/info" />
 
                 <Button
                     android:id="@+id/horario"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Horario" />
+                    android:text="@string/horario" />
 
                 <Button
                     android:id="@+id/resennas_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Reseñas" />
+                    android:text="@string/resenas" />
             </LinearLayout>
 
             <ImageButton

@@ -7,115 +7,375 @@
     android:layout_height="match_parent"
     tools:context=".FragmentHorario">
 
+   <LinearLayout
+       android:id="@+id/linearLayout14"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="40dp"
+       android:layout_marginEnd="40dp"
+       android:orientation="vertical"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent">
+
+      <LinearLayout
+          android:id="@+id/linearLayout7"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="visible">
+
+         <TextView
+             android:id="@+id/lunes"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingRight="15dp"
+             android:text="@string/lunes" />
+
+         <TextView
+             android:id="@+id/dee1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/de"
+             android:visibility="visible" />
+
+         <EditText
+             android:id="@+id/horal1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
+
+         <TextView
+             android:id="@+id/aa1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/a" />
+
+         <EditText
+             android:id="@+id/horal2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearLayout8"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+         <TextView
+             android:id="@+id/martes"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingRight="15dp"
+             android:text="@string/martes" />
+
+         <TextView
+             android:id="@+id/dee2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/de" />
+
+         <EditText
+             android:id="@+id/horam1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="13:00"
+             android:ems="10"
+             android:inputType="time" />
+
+         <TextView
+             android:id="@+id/aa2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/a" />
+
+         <EditText
+             android:id="@+id/horam2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="19:00"
+             android:ems="10"
+             android:inputType="time" />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearLayout9"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="visible">
 
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/theme_color_"
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="Horario"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+         <TextView
+             android:id="@+id/Miércoles"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingRight="15dp"
+             android:text="@string/miercoles" />
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
-        android:text="Lunes, de"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+         <TextView
+             android:id="@+id/dee3"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/de" />
 
-    <EditText
-        android:id="@+id/editTextTime"
-        android:layout_width="85dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintStart_toEndOf="@+id/textView15"
-        app:layout_constraintTop_toTopOf="@+id/textView15" />
+         <EditText
+             android:id="@+id/horax1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
 
-    <TextView
-        android:id="@+id/alunes"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:text="a"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView15"
-        app:layout_constraintStart_toEndOf="@+id/editTextTime"
-        app:layout_constraintTop_toTopOf="@+id/textView15" />
-    <EditText
-        android:id="@+id/editTextTime3"
-        android:layout_width="85dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTime"
-        app:layout_constraintStart_toEndOf="@+id/alunes"
-        app:layout_constraintTop_toTopOf="@+id/editTextTime" />
-    <TextView
-        android:id="@+id/martesh"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
-        android:text="Martes, de"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+         <TextView
+             android:id="@+id/aa3"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/a" />
 
-    <EditText
-        android:id="@+id/editTextmartes"
-        android:layout_width="85dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintStart_toEndOf="@+id/martesh"
-        app:layout_constraintTop_toTopOf="@+id/martesh" />
+         <EditText
+             android:id="@+id/horax2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
 
-    <TextView
-        android:id="@+id/amartes"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:text="a"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/martesh"
-        app:layout_constraintStart_toEndOf="@+id/editTextmartes"
-        app:layout_constraintTop_toTopOf="@+id/martesh" />
-    <EditText
-        android:id="@+id/editTextmartes2"
-        android:layout_width="85dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextmartes"
-        app:layout_constraintStart_toEndOf="@+id/amartes"
-        app:layout_constraintTop_toTopOf="@+id/editTextmartes" />
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearLayout10"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+
+         <TextView
+             android:id="@+id/Jueves"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingRight="15dp"
+             android:text="@string/jueves" />
+
+         <TextView
+             android:id="@+id/dee4"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/de" />
+
+         <EditText
+             android:id="@+id/horaj1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="13:00"
+             android:ems="10"
+             android:inputType="time" />
+
+         <TextView
+             android:id="@+id/a4"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/a" />
+
+         <EditText
+             android:id="@+id/horaj2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="19:00"
+             android:ems="10"
+             android:inputType="time" />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearLayout11"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+
+         <TextView
+             android:id="@+id/Viernes"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingRight="15dp"
+             android:text="@string/viernes" />
+
+         <TextView
+             android:id="@+id/dee5"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/de" />
+
+         <EditText
+             android:id="@+id/horav1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="16:00"
+             android:ems="10"
+             android:inputType="time" />
+
+         <TextView
+             android:id="@+id/aa5"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/a" />
+
+         <EditText
+             android:id="@+id/horav2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="17:30"
+             android:ems="10"
+             android:inputType="time" />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/linearLayout12"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="visible">
+
+         <TextView
+             android:id="@+id/Sabado"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingRight="15dp"
+             android:text="@string/sabado" />
+
+         <TextView
+             android:id="@+id/dee6"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/de" />
+
+         <EditText
+             android:id="@+id/horas1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
+
+         <TextView
+             android:id="@+id/aa6"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/a" />
+
+         <EditText
+             android:id="@+id/horas2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
+
+      </LinearLayout>
+
+
+      <LinearLayout
+          android:id="@+id/linearLayout13"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="visible">
+
+         <TextView
+             android:id="@+id/Domingo"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:paddingRight="15dp"
+             android:text="@string/domingo" />
+
+         <TextView
+             android:id="@+id/dee7"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/de" />
+
+         <EditText
+             android:id="@+id/horad1"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
+
+         <TextView
+             android:id="@+id/aa7"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:gravity="center"
+             android:text="@string/a" />
+
+         <EditText
+             android:id="@+id/horad2"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:ems="10"
+             android:inputType="time" />
+
+      </LinearLayout>
+   </LinearLayout>
+
+   <TextView
+       android:id="@+id/textView15"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="40dp"
+       android:layout_marginTop="16dp"
+       android:layout_marginEnd="40dp"
+       android:text="Horario flexible los fines de semana."
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="1.0"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/linearLayout14" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

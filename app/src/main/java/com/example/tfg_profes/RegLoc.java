@@ -157,21 +157,6 @@ public class RegLoc extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
 
-
-                           /* if (per.equals("p")) {
-                                Intent intent = new Intent(RegLoc.this, Menu.class);
-                                intent.putExtra("usuario", usu);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                        Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }else{
-                                Intent intent = new Intent(RegLoc.this, Menu.class);
-                                intent.putExtra("usuario", usu);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                        Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }*/
-
                         } else {
 
                         }
@@ -210,19 +195,11 @@ public class RegLoc extends AppCompatActivity {
 
                             Toast.makeText(getApplicationContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
 
-                            if (per.equals("p")) {
-                                Intent intent = new Intent(RegLoc.this, LisAlumnos.class);
-                                intent.putExtra("usuario", usu);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                        Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }else{
-                                Intent intent = new Intent(RegLoc.this, Menu.class);
-                                intent.putExtra("usuario", usu);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                        Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
+                            Intent intent = new Intent(RegLoc.this, HorarioInsertarActivity.class);
+                            intent.putExtra("usuario", usu);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                    Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
 
                         } else {
 

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,6 +51,8 @@ public class FragmentPeticiones extends Fragment {
         String user = fileUtils.readFile(requireContext(), "config.txt");
         Peticion.peticionesLis=new ArrayList<Peticion>();
         Imagenes.lisimagenes=new ArrayList<Imagenes>();
+        TextView nopeti=view.findViewById(R.id.nopeti);
+        nopeti.setVisibility(View.GONE);
 
         MutableLiveData<Boolean> workerFinishedLiveData = new MutableLiveData<>();
 
@@ -101,7 +103,7 @@ public class FragmentPeticiones extends Fragment {
                                 LinearLayoutManager elLayoutLineal = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                                 lista.setLayoutManager(elLayoutLineal);
                             }else{
-                                Toast.makeText(getContext(), "No hay peticiones nuevas", Toast.LENGTH_SHORT).show();
+                                nopeti.setVisibility(View.VISIBLE);
                             }
 
                             workerFinishedLiveData.setValue(true); // Notificar que el worker ha terminado

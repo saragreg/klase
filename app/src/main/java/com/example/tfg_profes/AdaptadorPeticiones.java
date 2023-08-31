@@ -79,7 +79,7 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
                 holder.userfoto.setImageBitmap(rescaledImage);
             }
         }
-        holder.nombre.setText(p.getNombre());
+        holder.nombre.setText(p.getIdUsu());
         holder.dur.setText(p.getDuracion());
         holder.fechaHoraPet.setText(p.getFechahora());
         holder.intensivo.setText(p.getIntensivo());
@@ -148,7 +148,9 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
                 addEvento(user,descr,fecha);
                 addEvento(p.getIdUsu(),descr2,fecha);
                 //añadir el contacto a la lista de contactos del chat
-                addContacto(user,p.getIdUsu());
+                if (!Imagenes.esContacto(p.getIdUsu())) {
+                    addContacto(user, p.getIdUsu());
+                }
                 //mostrar dialogo de reserva confirmada
                 AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                 builder.setTitle("Reserva confirmada");
@@ -179,7 +181,7 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
         holder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                obtenerClave(holder.nombre.toString(),holder.userfoto.toString());
+                obtenerClave(holder.nombre.getText().toString(),holder.userfoto.toString());
             }
         });
     }
@@ -221,11 +223,11 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
         });
     }
 
-    private void addContacto(String user, String idUsu) {
+    private void addContacto(String user1mail, String usermail) {
         Data inputData = new Data.Builder()
-                .putString("tipo", "addEvento")
-                .putString("usu1", user)
-                .putString("usu2", idUsu)
+                .putString("tipo", "addContacto")
+                .putString("usu1",user1mail)
+                .putString("usu2",usermail)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(contexto).getWorkInfoByIdLiveData(otwr.getId())
@@ -233,11 +235,29 @@ public class AdaptadorPeticiones extends RecyclerView.Adapter<ElViewHolder> {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-
-                            Toast.makeText(contexto, "Se ha añadido correctamente", Toast.LENGTH_SHORT).show();
-
-                        } else {
-
+                            cargarFotoPerfil(usermail);
+                        }
+                    }
+                });
+        WorkManager.getInstance(contexto).enqueue(otwr);
+    }
+    private void cargarFotoPerfil(String usu) {
+        FileUtils fileUtils=new FileUtils();
+        String user = fileUtils.readFile(contexto, "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "cargarFotoPerfil")
+                .putString("user",usu)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(contexto).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(lifecycleOwner, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String fotoPer=workInfo.getOutputData().getString("img");
+                            if (usu.equals(user)) {
+                                Usuario.usuariosLis.get(0).setImagen("");
+                            }
                         }
                     }
                 });

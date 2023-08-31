@@ -4,12 +4,20 @@ import java.util.ArrayList;
 
 public class Profesor {
     public static ArrayList<Profesor> lisProfes=new ArrayList<>();
+    public static Profesor profesor = new Profesor("","","",0.0F,"","","","","","","");
     private String idProfe;
     private String nombre;
     private String asig;
     private Float val;
     private String direccion;
     private String lat;
+
+    public static void updateval(String profe, float rating) {
+        for (Profesor profesor : lisProfes){
+            if (profesor.idProfe.equals(profe))
+                profesor.setVal(rating);
+        }
+    }
 
     public String getExperiencia() {
         return experiencia;

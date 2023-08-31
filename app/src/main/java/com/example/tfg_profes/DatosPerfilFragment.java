@@ -1,8 +1,11 @@
 package com.example.tfg_profes;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -34,12 +38,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,10 +51,11 @@ public class DatosPerfilFragment extends Fragment {
     public static final int GALLERY_REQUEST_CODE=105;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=103;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE=104;
+    private static final String DEFAULT_PERFIL = "nada";
+    private SharedPreferences sharedPreferences;
 
     ImageView selectedImage;
-    Button camara,galeria,comenzar;
-    String currentPhotoPath;
+    Button camara,galeria;
     StorageReference storageReference;
     String usu;
 
@@ -81,6 +81,15 @@ public class DatosPerfilFragment extends Fragment {
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getActivity().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        String perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
+        if (perfil.equals("a")){
+            view.findViewById(R.id.fragmentContainerView4).setVisibility(View.GONE);
+            view.findViewById(R.id.fragmentContainerView5).setVisibility(View.GONE);
+            view.findViewById(R.id.textView2).setVisibility(View.GONE);
+        }else{
+            view.findViewById(R.id.fragmentContainerView2).setVisibility(View.GONE);
+        }
         selectedImage=view.findViewById(R.id.imageView4);
         String fotoperfil=Imagenes.perfilusuario.getImagen();
         if (!fotoperfil.equals("")) {
@@ -119,6 +128,13 @@ public class DatosPerfilFragment extends Fragment {
                 startActivityForResult(gallery, GALLERY_REQUEST_CODE);
             }
         });
+    }
+    private void replaceFragment(Fragment fragment) {
+        // Reemplazar el fragmento actual con el fragmento proporcionado
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView2, fragment)
+                .commit();
     }
     private void askCameraPermissions() {
         if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -197,20 +213,12 @@ public class DatosPerfilFragment extends Fragment {
                 Uri contentUri = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentUri);
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                    String imageFileName = "IMG_" + timeStamp + ".jpg";
-                    File storageDir = getActivity().getFilesDir(); // O usa getCacheDir() si prefieres almacenar en la memoria caché
-                    File imageFile = new File(storageDir, imageFileName);
-                    try (OutputStream outputStream = new FileOutputStream(imageFile)) {
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream); // Ajusta la calidad de compresión según tus necesidades
-                        outputStream.flush();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    String imagePath = imageFile.getAbsolutePath();
-                    Uri imageUri = Uri.parse(imagePath);
-                    selectedImage.setImageURI(imageUri);
-                    Imagenes.perfilusuario.setImagen(imagePath);
+                    selectedImage.setImageBitmap(bitmap);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    String photo64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Imagenes.perfilusuario.setImagen(photo64);
                     subirUriImagen();
                 } catch (IOException e) {
                     throw new RuntimeException(e);

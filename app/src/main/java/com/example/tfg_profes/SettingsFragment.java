@@ -1,7 +1,6 @@
 package com.example.tfg_profes;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import static java.lang.Double.parseDouble;
 
 import android.content.DialogInterface;
@@ -51,12 +50,12 @@ public class SettingsFragment extends Fragment {
     private String idioma;
     private int indiceSeleccionado = 0;
     private SharedPreferences sharedPreferences;
-    private String profe="";
-    private String res="";
+    private static final String DEFAULT_PERFIL = "nada";
     String user;
     Double latProfe,lngProfe;
     private ArrayList<LatLng> locationsAccepted = new ArrayList<LatLng>();
     private ArrayList<LatLng> locationsPend = new ArrayList<LatLng>();
+    String[] arrayusuAcept,arrayusuPend;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -102,6 +101,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
         Button idiomas=view.findViewById(R.id.cambiarIdioma);
         Button cerrarSes=view.findViewById(R.id.cerrarsesion);
         Button datosPer=view.findViewById(R.id.cambiarDatosPer);
@@ -110,6 +110,10 @@ public class SettingsFragment extends Fragment {
         Button graficas=view.findViewById(R.id.vergraficas);
         Button cambiarLoc=view.findViewById(R.id.cambiarDire);
         Button borrarcuenta=view.findViewById(R.id.borrarcuenta);
+        if (perfil.equals("a")){
+            graficas.setVisibility(View.GONE);
+            resennas.setVisibility(View.GONE);
+        }
 
         FileUtils fileUtils = new FileUtils();
         user = fileUtils.readFile(requireContext(), "config.txt");
@@ -117,9 +121,29 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("¿Estás seguro de que quieres cerrar sesión?");
-                builder.setMessage("Sentimos mucho que te vayas");
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                builder.setTitle(R.string.cerrarses);
+                builder.setMessage(R.string.marchar);
+                builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        boolean success = getContext().deleteFile("config.txt");
+                        if (success) {
+
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+        borrarcuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(R.string.eliminarcuenta);
+                builder.setMessage(R.string.norecuperarinfo);
+                builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         boolean success = getContext().deleteFile("config.txt");
@@ -137,7 +161,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Cambiar idioma");
+                builder.setTitle(R.string.cambiaridioma);
                 final String[] opciones = {"Castellano", "Euskara", "English"};
                 final String[] opcionesCod = {"es", "eu", "en"};
                 // Establecer el índice del RadioButton por defecto (0 para "Castellano")
@@ -150,7 +174,7 @@ public class SettingsFragment extends Fragment {
                         indiceSeleccionado=i;
                     }
                 });
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         sharedPreferences = getActivity().getSharedPreferences("MisPreferencias", MODE_PRIVATE);
@@ -195,29 +219,42 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 obtenerLoc(user,0,false);
-                //se obtienen los alumnos pendientes
-                Data inputData = new Data.Builder()
-                        .putString("tipo", "pendientes")
-                        .putString("profe",user)
-                        .build();
-                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
-                WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
-                        .observe(getActivity(), new Observer<WorkInfo>() {
-                            @Override
-                            public void onChanged(WorkInfo workInfo) {
-                                if (workInfo != null && workInfo.getState().isFinished()) {
-                                    String usupend = workInfo.getOutputData().getString("usupend");
-                                    String[] arrayusu = usupend.split(",");
-                                    int i=0;
-                                    while ( i < (arrayusu.length)) {
-                                        obtenerLoc(arrayusu[i],1,false);
-                                        i++;
+                if (perfil.equals("p")) {
+                    //se obtienen los alumnos pendientes
+                    Data inputData = new Data.Builder()
+                            .putString("tipo", "pendientes")
+                            .putString("profe", user)
+                            .build();
+                    OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+                    WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                            .observe(getActivity(), new Observer<WorkInfo>() {
+                                @Override
+                                public void onChanged(WorkInfo workInfo) {
+                                    if (workInfo != null && workInfo.getState().isFinished()) {
+                                        String usupend = workInfo.getOutputData().getString("usupend");
+                                        if (!usupend.equals("")) {
+                                            arrayusuPend = usupend.split(",");
+                                            int i = 0;
+                                            while (i < (arrayusuPend.length)) {
+                                                obtenerLoc(arrayusuPend[i], 1, false);
+                                                i++;
+                                            }
+                                        }
+                                        obtenerAceptados(user, locationsPend);
                                     }
-                                    obtenerAceptados(user,locationsPend);
                                 }
-                            }
-                        });
-                WorkManager.getInstance(getContext()).enqueue(otwr);
+                            });
+                    WorkManager.getInstance(getContext()).enqueue(otwr);
+                }else{
+                    Intent intent = new Intent(getActivity(), Mapa.class);
+                    intent.putParcelableArrayListExtra("pend", locationsPend);
+                    intent.putParcelableArrayListExtra("acept", locationsAccepted);
+                    intent.putExtra("nomAcept",arrayusuAcept);
+                    intent.putExtra("nomPend",arrayusuPend);
+                    intent.putExtra("latProfe",latProfe);
+                    intent.putExtra("lngProfe",lngProfe);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -248,13 +285,24 @@ public class SettingsFragment extends Fragment {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             String usuacep = workInfo.getOutputData().getString("usuacept");
-                            String[] arrayusu = usuacep.split(",");
-                            for (int i = 0; i < arrayusu.length; i++) {
-                                if (i==arrayusu.length-1) {
-                                    obtenerLoc(arrayusu[i], 2,true);
-                                }else{
-                                    obtenerLoc(arrayusu[i], 2,false);
+                            if (!usuacep.equals("")) {
+                                arrayusuAcept = usuacep.split(",");
+                                for (int i = 0; i < arrayusuAcept.length; i++) {
+                                    if (i == arrayusuAcept.length - 1) {
+                                        obtenerLoc(arrayusuAcept[i], 2, true);
+                                    } else {
+                                        obtenerLoc(arrayusuAcept[i], 2, false);
+                                    }
                                 }
+                            }else{
+                                Intent intent = new Intent(getActivity(), Mapa.class);
+                                intent.putParcelableArrayListExtra("pend", locationsPend);
+                                intent.putParcelableArrayListExtra("acept", locationsAccepted);
+                                intent.putExtra("nomAcept",arrayusuAcept);
+                                intent.putExtra("nomPend",arrayusuPend);
+                                intent.putExtra("latProfe",latProfe);
+                                intent.putExtra("lngProfe",lngProfe);
+                                startActivity(intent);
                             }
                         }
                     }
@@ -287,6 +335,8 @@ public class SettingsFragment extends Fragment {
                                 Intent intent = new Intent(getActivity(), Mapa.class);
                                 intent.putParcelableArrayListExtra("pend", locationsPend);
                                 intent.putParcelableArrayListExtra("acept", locationsAccepted);
+                                intent.putExtra("nomAcept",arrayusuAcept);
+                                intent.putExtra("nomPend",arrayusuPend);
                                 intent.putExtra("latProfe",latProfe);
                                 intent.putExtra("lngProfe",lngProfe);
                                 startActivity(intent);

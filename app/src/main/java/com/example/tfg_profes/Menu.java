@@ -26,18 +26,16 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.example.tfg_profes.utils.FileUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 
 public class Menu extends AppCompatActivity {
-    ArrayList<String> noms= new ArrayList<String>();
-    ArrayList<String> precios= new ArrayList<String>();
-    ArrayList<String> punt= new ArrayList<String>();
-    ArrayList<String> usus= new ArrayList<String>();
-    ArrayList<String> locs= new ArrayList<String>();
     private static final String DEFAULT_LANGUAGE = "default";
     private static final String DEFAULT_PERFIL = "nada";
     private SharedPreferences sharedPreferences;
@@ -56,6 +54,16 @@ public class Menu extends AppCompatActivity {
                     | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    String token = task.getResult();
+                    System.out.println("el token:" + token);
+                }
+            });
             FileUtils fileUtils= new FileUtils();
             String user= fileUtils.readFile(this, "config.txt");
             sharedPreferences = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
@@ -65,6 +73,10 @@ public class Menu extends AppCompatActivity {
             setContentView(R.layout.activity_menu);
             if (perfil.equals("a")) {
                 cargarListaProfe();
+                cargarDatosAlu();
+            }else{
+                cargarDatosProfe();
+                cargarHorario();
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) !=
@@ -74,6 +86,7 @@ public class Menu extends AppCompatActivity {
                 }
             }
             cargarEventos();
+            cargarContactos();
             cargarDatosUsu();
             bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -103,6 +116,63 @@ public class Menu extends AppCompatActivity {
         }
     }
 
+    private void cargarHorario() {
+        FileUtils fileUtils=new FileUtils();
+        String user=fileUtils.readFile(getApplicationContext(), "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoHorario")
+                .putString("user", user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
+    private void cargarDatosAlu() {
+        FileUtils fileUtils=new FileUtils();
+        String user=fileUtils.readFile(getApplicationContext(), "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoAluDatos")
+                .putString("user", user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
+    private void cargarDatosProfe() {
+        FileUtils fileUtils=new FileUtils();
+        String user=fileUtils.readFile(getApplicationContext(), "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoProfeDatos")
+                .putString("user", user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
     private void cargarListaProfe() {
         FileUtils fileUtils=new FileUtils();
         String user = fileUtils.readFile(this, "config.txt");
@@ -121,13 +191,37 @@ public class Menu extends AppCompatActivity {
                 });
         WorkManager.getInstance(this).enqueue(otwr);
     }
+    private void cargarContactos() {
+        Imagenes.lisContactos=new ArrayList<>();
+        FileUtils fileUtils=new FileUtils();
+        String user=fileUtils.readFile(getApplicationContext(), "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "obtenerContactos")
+                .putString("idUser", user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String nombres = workInfo.getOutputData().getString("nombres");
+                            String[] noms=nombres.split(",");
+                            for (int i=0; i<noms.length; i++){
+                                cargarFotoPerfil(noms[i]);
+                            }
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
 
-    private void cargarFotoPerfil() {
+    private void cargarFotoPerfil(String usu) {
         FileUtils fileUtils=new FileUtils();
         String user = fileUtils.readFile(this, "config.txt");
         Data inputData = new Data.Builder()
                 .putString("tipo", "cargarFotoPerfil")
-                .putString("user",user)
+                .putString("user",usu)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
@@ -136,8 +230,9 @@ public class Menu extends AppCompatActivity {
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             String fotoPer=workInfo.getOutputData().getString("img");
-                            Usuario.usuariosLis.get(0).setImagen("");
-
+                            if (usu.equals(user)) {
+                                Usuario.usuariosLis.get(0).setImagen("");
+                            }
                         }
                     }
                 });
@@ -177,7 +272,7 @@ public class Menu extends AppCompatActivity {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
                         if (workInfo != null && workInfo.getState().isFinished()) {
-                            cargarFotoPerfil();
+                            cargarFotoPerfil(user);
                         }
                     }
                 });

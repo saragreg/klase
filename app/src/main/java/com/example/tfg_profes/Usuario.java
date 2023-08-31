@@ -63,7 +63,4 @@ public class Usuario {
         this.imagen = imagen;
     }
 
-    public void guardarEvento() {
-        //llamar a la base de datos y guardarlo
-    }
 }

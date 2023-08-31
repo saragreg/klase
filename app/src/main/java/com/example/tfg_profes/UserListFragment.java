@@ -7,14 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
 
 import com.example.tfg_profes.utils.FileUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -24,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,58 +43,22 @@ public class UserListFragment extends Fragment {
         FileUtils fileUtils=new FileUtils();
         usuario=fileUtils.readFile(requireContext(), "config.txt");
         lista = view.findViewById(R.id.users_list);
-        //obtenerContactos();
-        noms=new ArrayList<String>();
-        imgs=new ArrayList<String>();
-        noms.add("sara");
-        noms.add("sofia");
-        noms.add("prueba");
-        String imagen="https://lapi.com.mx/web/image/product.product/31740/image_1024/Perfil%20Mujer%20%28Balbuena%29?unique=a660b70";
-        imgs.add(imagen);
-        imgs.add(imagen);
-        imgs.add(imagen);
-        users.add("sara");
-        users.add("sofia");
-        users.add("prueba");
-        UserListAdapter userListAdapter=new UserListAdapter(getContext(),noms,imgs);
+        TextView noContacts=view.findViewById(R.id.nocontacts);
+        noContacts.setVisibility(View.GONE);
+        UserListAdapter userListAdapter=new UserListAdapter(getContext(),Imagenes.lisContactos);
         lista.setAdapter(userListAdapter);
+        if (Imagenes.lisContactos.size()==0){
+            noContacts.setVisibility(View.VISIBLE);
+        }
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                obtenerClave(users.get(i), i);
+                obtenerClave(Imagenes.lisContactos.get(i).getUser(), i);
             }
         });
 
         return view;
     }
-
-    private void obtenerContactos() {
-        FileUtils fileUtils=new FileUtils();
-        String user=fileUtils.readFile(requireContext(), "config.txt");
-        Data inputData = new Data.Builder()
-                .putString("tipo", "obtenerContactos")
-                .putString("usuario", user)
-                .build();
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
-        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
-                .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            String nombres = workInfo.getOutputData().getString("nombres");
-                            String imagenes = workInfo.getOutputData().getString("imgs");
-                            String[] nomsArray=nombres.split(",");
-                            String[] imgsArray=imagenes.split(",");
-                            noms=new ArrayList<String>(Arrays.asList(nomsArray));
-                            imgs=new ArrayList<String>(Arrays.asList(imgsArray));
-                            UserListAdapter userListAdapter=new UserListAdapter(getContext(),noms,imgs);
-                            lista.setAdapter(userListAdapter);
-                        }
-                    }
-                });
-        WorkManager.getInstance(getContext()).enqueue(otwr);
-    }
-
     private void obtenerClave(String otroMail, int pos) {
         chatKey = "";
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -120,9 +79,9 @@ public class UserListFragment extends Fragment {
                 }
                 //se abre la ventana de chat
                 Intent intent = new Intent(requireActivity(), Chat.class);
-                intent.putExtra("nombre", noms.get(pos));
-                intent.putExtra("mail1",users.get(pos));
-                intent.putExtra("fotoPerfil",imgs.get(pos));
+                intent.putExtra("nombre", Imagenes.lisContactos.get(pos).getUser());
+                intent.putExtra("mail1",Imagenes.lisContactos.get(pos).getUser());
+                intent.putExtra("fotoPerfil",Imagenes.lisContactos.get(pos).getImagen());
                 intent.putExtra("mailUser",usuario);
                 intent.putExtra("chatKey", chatKey);
                 //intent.putExtra("fotoPerfil",imgs.get(i));

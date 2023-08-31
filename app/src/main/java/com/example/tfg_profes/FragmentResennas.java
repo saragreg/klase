@@ -30,6 +30,7 @@ import com.example.tfg_profes.utils.FileUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,7 +104,8 @@ public class FragmentResennas extends Fragment {
                         } else {
                             // Valoración de 1.0 o más: habilitar botón Aceptar y cambiar a color naranja
                             positiveButton.setEnabled(true);
-                            positiveButton.setBackgroundTintList(ColorStateList.valueOf(primaryColor)); // Color naranja en formato hexadecimal
+                            positiveButton.setBackgroundTintList(ColorStateList.valueOf(primaryColor));
+                            positiveButton.setTextColor(Color.WHITE);// Color naranja en formato hexadecimal
                         }
                     }
                 });
@@ -121,6 +123,7 @@ public class FragmentResennas extends Fragment {
                                 String fechaHoraActualFormateada = fechaHoraActual.format(formato);
                                 Resenna resenna1=new Resenna(profe,idClie,ratingBar1.getRating(),comentario.getText().toString(),fechaHoraActualFormateada);
                                 Resenna.resennasLis.add(resenna1);
+                                Profesor.updateval(profe,ratingBar.getRating());
                                 eladap.notifyDataSetChanged();
                                 // Obtener los datos del diálogo
                                 Toast.makeText(getContext(), "valoracion: "+ratingBar.getRating(), Toast.LENGTH_SHORT).show();
@@ -141,7 +144,7 @@ public class FragmentResennas extends Fragment {
 
                                                     Toast.makeText(getContext(), "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
                                                     dialogInterface.dismiss();
-                                                    updateValoracion(profe,idClie,val,String.valueOf(ratingBar1.getRating()));
+                                                    updateValoracion(profe,ratingBar1.getRating());
 
                                                 }
                                             }
@@ -202,14 +205,20 @@ public class FragmentResennas extends Fragment {
         });
     }
 
-    private void updateValoracion(String profe, String idClie, String val, String s) {
+    private void updateValoracion(String profe, Float nuevaval) {
+        Float valoracionTot=0.0F;
+        Float tot=Float.parseFloat(String.valueOf(Resenna.resennasLis.size()));
+        Iterator<Resenna> iterator = Resenna.resennasLis.iterator();
+        while (iterator.hasNext()) {
+            Resenna res = iterator.next();
+            valoracionTot=valoracionTot+res.getValoracion();
+        }
+        valoracionTot=valoracionTot/tot;
         // Obtener los datos del diálogo
         Data inputData = new Data.Builder()
                 .putString("tipo", "updateValoracion")
                 .putString("idProfe", profe)
-                .putString("idClie", idClie)
-                .putString("val",val)
-                .putString("valoracion",s)
+                .putFloat("val",valoracionTot)
                 .build();
         OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
         WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())

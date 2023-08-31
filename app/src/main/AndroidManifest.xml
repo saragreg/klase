@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".HorarioInsertarActivity"
+            android:exported="false" />
+        <activity
             android:name=".ResennasLisProfes"
             android:exported="false" />
         <activity
@@ -58,16 +61,10 @@
             android:value="AIzaSyB9yJVseOId-7-75w-m8n7FReVpeluG188" />
 
         <activity
-            android:name=".LisAlumnos"
-            android:exported="false" />
-        <activity
             android:name=".RegLoc"
             android:exported="false" />
         <activity
             android:name=".Mapa"
-            android:exported="false" />
-        <activity
-            android:name=".RegistroProfe"
             android:exported="false" />
         <activity
             android:name=".InfoProfes"
@@ -108,9 +105,6 @@
 
         <activity
             android:name=".ListaProfesores"
-            android:exported="false" />
-        <activity
-            android:name=".Perfil"
             android:exported="false" />
         <activity
             android:name=".RegistroUSuario"

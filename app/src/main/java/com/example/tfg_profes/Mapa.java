@@ -1,5 +1,6 @@
 package com.example.tfg_profes;
 
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -25,17 +26,24 @@ import java.util.List;
 public class Mapa extends FragmentActivity implements OnMapReadyCallback {
     private GeocodeTask geocodeTask;
     private String usu;
-    String lat,lng;
+    String perfil;
     private ArrayList<LatLng> pend=new ArrayList<>();
     private ArrayList<LatLng> acept=new ArrayList<>();
+    private String[] nomAcept,nomPend;
     private Double latProfe,lngProfe;
+    private static final String DEFAULT_PERFIL = "p";
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
+        sharedPreferences = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
+        perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
         latProfe=getIntent().getExtras().getDouble("latProfe");
         lngProfe=getIntent().getExtras().getDouble("lngProfe");
+        nomAcept=getIntent().getExtras().getStringArray("nomAcept");
+        nomPend=getIntent().getExtras().getStringArray("nomPend");
         pend=getIntent().getParcelableArrayListExtra("pend");
         acept=getIntent().getParcelableArrayListExtra("acept");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -53,39 +61,56 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
         LatLng locProfe =new LatLng(latProfe,lngProfe);
         MarkerOptions marker = new MarkerOptions()
                 .position(locProfe)
-                .title("Este soy yo")
+                .title("Yo")
                 .icon(BitmapDescriptorFactory.defaultMarker());
         googleMap.addMarker(marker);
-        Iterator<LatLng> iterator = pend.iterator();
-        while (iterator.hasNext()) {
-            LatLng location = iterator.next();
-            // Obtener un desplazamiento aleatorio en metros (por ejemplo, 10 metros)
-            double displacement = 0.00045; // Aproximadamente 10 metros en latitud/longitud (ajustar según tus necesidades)
+        if (perfil.equals("p")) {
+            int i=0;
+            Iterator<LatLng> iterator = pend.iterator();
+            while (iterator.hasNext()) {
+                LatLng location = iterator.next();
+                // Obtener un desplazamiento aleatorio en metros
+                double displacement = 0.00045; // Aproximadamente 10 metros en latitud/longitud (ajustar según tus necesidades)
 
-            // Generar un desplazamiento aleatorio en latitud y longitud
-            double randomLat = (Math.random() * 2 - 1) * displacement;
-            double randomLng = (Math.random() * 2 - 1) * displacement;
+                // Generar un desplazamiento aleatorio en latitud y longitud
+                double randomLat = (Math.random() * 2 - 1) * displacement;
+                double randomLng = (Math.random() * 2 - 1) * displacement;
 
-            // Calcular nuevas coordenadas aleatorias para mover el marcador
-            double newLat = location.latitude + randomLat;
-            double newLng = location.longitude + randomLng;
+                // Calcular nuevas coordenadas aleatorias para mover el marcador
+                double newLat = location.latitude + randomLat;
+                double newLng = location.longitude + randomLng;
 
-            LatLng newLocation = new LatLng(newLat, newLng);
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(newLocation)
-                    .title("pendiente")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-            googleMap.addMarker(markerOptions);
-        }
-        Iterator<LatLng> iterator2 = acept.iterator();
-        while (iterator2.hasNext()) {
-            LatLng location = iterator2.next();
+                LatLng newLocation = new LatLng(newLat, newLng);
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(newLocation)
+                        .title(nomPend[i])
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                googleMap.addMarker(markerOptions);
+                i++;
+            }
+            int j=0;
+            Iterator<LatLng> iterator2 = acept.iterator();
+            while (iterator2.hasNext()) {
+                LatLng location = iterator2.next();
 
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(location)
-                    .title("aceptado")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-            googleMap.addMarker(markerOptions);
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(location)
+                        .title(nomAcept[j])
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                googleMap.addMarker(markerOptions);
+                j++;
+            }
+        }else {
+            Iterator<Profesor> iterator3 = Profesor.lisProfes.iterator();
+            while (iterator3.hasNext()) {
+                Profesor profe = iterator3.next();
+                LatLng location2 = new LatLng(Double.parseDouble(profe.getLat()), Double.parseDouble(profe.getLng()));
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(location2)
+                        .title(profe.getNombre())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                googleMap.addMarker(markerOptions);
+            }
         }
         //ajustar camara a la ubicacion del profesor
         CameraPosition cameraPosition = new CameraPosition.Builder()

@@ -85,4 +85,25 @@
     <string name="mapa">Mapa</string>
     <string name="grafica">Estadísticas</string>
     <string name="filtrar">filtrar</string>
+    <string name="horario">Horario</string>
+    <string name="SolicitarKlase">Solicitar Klase</string>
+    <string name="info">Información</string>
+    <string name="resenas">Reseñas</string>
+    <string name="lunes">Lunes</string>
+    <string name="martes">Martes</string>
+    <string name="miercoles">Miércoles</string>
+    <string name="jueves">Jueves</string>
+    <string name="viernes">Viernes</string>
+    <string name="sabado">Sábado</string>
+    <string name="domingo">Domingo</string>
+    <string name="de">de</string>
+    <string name="a">a</string>
+    <string name="escribirResena">Escribir una reseña</string>
+    <string name="marchar">Sentimos mucho que te vayas.</string>
+    <string name="cerrarses">¿Estás seguro de que quieres cerrar sesión?</string>
+    <string name="eliminarcuenta">¿Estás seguro de que quieres eliminar tu cuenta?</string>
+    <string name="norecuperarinfo">No podrás recuperar la información una vez eliminada la cuenta.</string>
+    <string name="nocontacts">No hay contactos disponibles.</string>
+    <string name="nopeti">No hay solicitudes disponibles.</string>
+    <string name="filtrarAsig">Filtrar por asignatura.</string>
 </resources>

@@ -21,6 +21,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.example.tfg_profes.utils.FileUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,7 @@ public class Chat extends AppCompatActivity {
     private ArrayList<String> nombres = new ArrayList<String>();
     private ArrayList<String> mensajes = new ArrayList<String>();
     private ArrayList<String> horas = new ArrayList<String>();
+    private boolean nuevakey = false;
 
 
     private PendingIntent pendingIntent;
@@ -96,6 +98,9 @@ public class Chat extends AppCompatActivity {
                     if (snapshot.hasChild("chat")) {
                         chatKey =
                                 String.valueOf(snapshot.child("chat").getChildrenCount() + 1);
+                        if (!Imagenes.esContacto(user1mail)) {
+                            nuevakey = true;
+                        }
                     }
                 } else {
                     if (snapshot.hasChild("chat")) {
@@ -148,6 +153,10 @@ public class Chat extends AppCompatActivity {
 
             String message = messageEditTxt.getText().toString();
             if (!message.isEmpty()) {
+                if (nuevakey){
+                    addContacto(user1mail,usermail);
+                    cargarFotoPerfil(user1mail);
+                }
                 databaseReference.child("chat").child(chatKey).child("user1").setValue(user1mail);
                 databaseReference.child("chat").child(chatKey).child("user2").setValue(usermail);
                 databaseReference.child("chat").child(chatKey).child("messages").child(formattedDateTime).child("msg").setValue(message);
@@ -164,6 +173,48 @@ public class Chat extends AppCompatActivity {
         atras.setOnClickListener(v -> {
             finish();
         });
+    }
+    private void cargarFotoPerfil(String usu) {
+        FileUtils fileUtils=new FileUtils();
+        String user = fileUtils.readFile(getApplicationContext(), "config.txt");
+        Data inputData = new Data.Builder()
+                .putString("tipo", "cargarFotoPerfil")
+                .putString("user",usu)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getApplicationContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            String fotoPer=workInfo.getOutputData().getString("img");
+                            if (usu.equals(user)) {
+                                Usuario.usuariosLis.get(0).setImagen("");
+                            }
+                        }
+                    }
+                });
+        WorkManager.getInstance(getApplicationContext()).enqueue(otwr);
+    }
+
+
+    private void addContacto(String user1mail, String usermail) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "addContacto")
+                .putString("usu1",user1mail)
+                .putString("usu2",usermail)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwr);
     }
 
     /*public void onClickPerfil(View v) {

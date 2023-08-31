@@ -13,7 +13,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 
@@ -23,11 +28,13 @@ public class AdaptadorProfesLista extends RecyclerView.Adapter<ProfesViewHolder>
     private View elLayoutDeCadaItem;
     private OnItemClickListener listener;
     private ArrayList<Profesor> lista,listaCompleta;
+    private LifecycleOwner lifecycleOwner;
     public AdaptadorProfesLista(Context pcontext, ArrayList<Profesor> profesLis, LifecycleOwner viewLifecycleOwner)
     {
         contexto = pcontext;
         lista=profesLis;
         listaCompleta = new ArrayList<>(profesLis);
+        lifecycleOwner=viewLifecycleOwner;
     }
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -63,18 +70,35 @@ public class AdaptadorProfesLista extends RecyclerView.Adapter<ProfesViewHolder>
         // Obtén el elemento en la posición seleccionada
         Profesor item = lista.get(position);
 
-        // Crea un Intent con el contexto del adaptador y la actividad de destino
-        Intent intent = new Intent(contexto, InfoProfes.class);
-        intent.putExtra("usu", item.getIdProfe());
-        intent.putExtra("precio", item.getPrecio());
-        intent.putExtra("asig", item.getAsig());
-        intent.putExtra("cursos", item.getCursos());
-        intent.putExtra("idiomas", item.getIdiomas());
-        intent.putExtra("exp", item.getExperiencia());
-        intent.putExtra("punt", String.valueOf(item.getVal()));
+        cargarHorario(item.getIdProfe(),item);
+    }
+    private void cargarHorario(String user,Profesor item) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "infoHorario")
+                .putString("user", user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(contexto).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(lifecycleOwner, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            // Crea un Intent con el contexto del adaptador y la actividad de destino
+                            Intent intent = new Intent(contexto, InfoProfes.class);
+                            intent.putExtra("usu", item.getIdProfe());
+                            intent.putExtra("precio", item.getPrecio());
+                            intent.putExtra("asig", item.getAsig());
+                            intent.putExtra("cursos", item.getCursos());
+                            intent.putExtra("idiomas", item.getIdiomas());
+                            intent.putExtra("exp", item.getExperiencia());
+                            intent.putExtra("punt", String.valueOf(item.getVal()));
 
-        // Inicia la actividad con el Intent
-        contexto.startActivity(intent);
+                            // Inicia la actividad con el Intent
+                            contexto.startActivity(intent);
+                        }
+                    }
+                });
+        WorkManager.getInstance(contexto).enqueue(otwr);
     }
 
     @NonNull

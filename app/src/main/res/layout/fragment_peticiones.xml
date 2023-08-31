@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".FragmentPeticiones">
 
+    <TextView
+        android:id="@+id/nopeti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="300dp"
+        android:text="@string/nopeti"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPeticiones"
         android:layout_gravity="center"

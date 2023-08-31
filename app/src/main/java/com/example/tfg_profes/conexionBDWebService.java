@@ -8,6 +8,8 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.example.tfg_profes.utils.FileUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,6 +99,18 @@ public class conexionBDWebService extends Worker {
                 String nomshijos = getInputData().getString("hijos");
                 addAlumno(padre,nomshijos);
                 return Result.success();
+            case "registrarHorario":
+                String profeHorario = getInputData().getString("usu");
+                String l = getInputData().getString("l");
+                String m = getInputData().getString("m");
+                String x = getInputData().getString("x");
+                String j = getInputData().getString("j");
+                String vie = getInputData().getString("v");
+                String s = getInputData().getString("s");
+                String d = getInputData().getString("d");
+                String desc = getInputData().getString("desc");
+                registrarHorario(profeHorario,l,m,x,j,vie,s,d,desc);
+                return Result.success();
             case "selectLoc":
                 String usuLocInt = getInputData().getString("usuario");
 
@@ -157,19 +171,18 @@ public class conexionBDWebService extends Worker {
                 String descrEvento = getInputData().getString("descr");
                 addEvento(usu,fechaEvento,descrEvento);
                 return Result.success();
-            case "cargarContactos":
-                usu = getInputData().getString("user");
-                cargarContactos(usu);
-                Data contactos = new Data.Builder()
-                        .putString("nombres",nombres)
-                        .putString("imgs",imgs)
-                        .build();
-                return Result.success(contactos);
             case "addContacto":
                 String usu1 = getInputData().getString("usu1");
                 String usu2 = getInputData().getString("usu2");
                 addContacto(usu1,usu2);
                 return Result.success();
+            case "obtenerContactos":
+                String idUser = getInputData().getString("idUser");
+                lisContactos(idUser);
+                Data contactos = new Data.Builder()
+                        .putString("nombres",nombres)
+                        .build();
+                return Result.success(contactos);
             case "cargarFotoPerfil":
                 String usuPer = getInputData().getString("user");
                 cargarFotoPerfil(usuPer);
@@ -181,6 +194,18 @@ public class conexionBDWebService extends Worker {
             case "cargarDatosUsu":
                 String usuDatos = getInputData().getString("user");
                 cargarDatosUsu(usuDatos);
+                return Result.success();
+            case "infoProfeDatos":
+                String profeDatos = getInputData().getString("user");
+                infoProfeDatos(profeDatos);
+                return Result.success();
+            case "infoHorario":
+                String horarioDatos = getInputData().getString("user");
+                infoHorario(horarioDatos);
+                return Result.success();
+            case "infoAluDatos":
+                String aluDatos = getInputData().getString("user");
+                infoAluDatos(aluDatos);
                 return Result.success();
             case "updateUsuario":
                 String usuarioDatosAnti = getInputData().getString("usuAnti");
@@ -226,10 +251,8 @@ public class conexionBDWebService extends Worker {
                 return Result.success();
             case "updateValoracion":
                 String profeVal = getInputData().getString("idProfe");
-                String clieVal = getInputData().getString("idClie");
-                String val = getInputData().getString("val");
-                String nuevaVal = getInputData().getString("valoracion");
-                updateValoracion(profeVal,clieVal,val,nuevaVal);
+                float val = getInputData().getFloat("val",0.0f);
+                updateValoracion(profeVal,val);
                 return Result.success();
             default:
                 return Result.failure();
@@ -237,8 +260,8 @@ public class conexionBDWebService extends Worker {
 
     }
 
-    private void updateValoracion(String profeVal, String clieVal, String val, String nuevaVal) {
-        String url = URL_BASE + "update_valoracion.php";
+    private void registrarHorario(String profeH, String l, String m, String x, String j, String vie, String s, String d, String desc) {
+        String url = URL_BASE + "registro_horario.php";
 
         HttpURLConnection urlConnection = null;
         try {
@@ -249,13 +272,244 @@ public class conexionBDWebService extends Worker {
             urlConnection.setRequestProperty("Content-Type", "application/json");
 
             JSONObject parametrosJSON = new JSONObject();
-            parametrosJSON.put("idProfe", profeVal);
-            parametrosJSON.put("idClie", clieVal);
-            parametrosJSON.put("val", val);
-            parametrosJSON.put("valoracion", nuevaVal);
+            parametrosJSON.put("usuario", "Miguel");
+            parametrosJSON.put("lunes", l);
+            parametrosJSON.put("martes", m);
+            parametrosJSON.put("miercoles", x);
+            parametrosJSON.put("jueves", j);
+            parametrosJSON.put("viernes", vie);
+            parametrosJSON.put("sabado", s);
+            parametrosJSON.put("domingo", d);
+            parametrosJSON.put("descr", desc);
             PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
             out.print(parametrosJSON.toString());
             out.close();
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void infoHorario(String horarioDatos) {
+        String url = URL_BASE + "select_horario.php?user="+horarioDatos;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                Horario.horario.setLun(jsonArray.getJSONObject(0).getString("lun"));
+                Horario.horario.setMar(jsonArray.getJSONObject(0).getString("mar"));
+                Horario.horario.setMie(jsonArray.getJSONObject(0).getString("mie"));
+                Horario.horario.setJue(jsonArray.getJSONObject(0).getString("jue"));
+                Horario.horario.setVie(jsonArray.getJSONObject(0).getString("vie"));
+                Horario.horario.setSab(jsonArray.getJSONObject(0).getString("sab"));
+                Horario.horario.setDom(jsonArray.getJSONObject(0).getString("dom"));
+                Horario.horario.setDescr(jsonArray.getJSONObject(0).getString("descr"));
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void infoAluDatos(String aluDatos) {
+        String url = URL_BASE + "infoAluDatos.php?user="+aluDatos;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+                String numAlu = jsonArray.getJSONObject(0).getString("numHijos");
+                obtenerHijos(aluDatos,numAlu);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void obtenerHijos(String aluDatos,String numHijos) {
+        String url = URL_BASE + "infoAluHijos.php?user="+aluDatos;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+                nombres="";
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    nombres = nombres+jsonArray.getJSONObject(i).getString("nombre")+",";
+                }
+                Alumno.alumno.setIdCliente(aluDatos);
+                Alumno.alumno.setNumHijos(Integer.parseInt(numHijos));
+                Alumno.alumno.setNombres(nombres);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void infoProfeDatos(String profeDatos) {
+        String url = URL_BASE + "infoProfeDatos.php?user="+profeDatos;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                String idProfe = jsonArray.getJSONObject(0).getString("idProfe");
+                String punt = jsonArray.getJSONObject(0).getString("punt");
+                String experiencia = jsonArray.getJSONObject(0).getString("experiencia");
+                String precio = jsonArray.getJSONObject(0).getString("precio");
+                String idiomas = jsonArray.getJSONObject(0).getString("idiomas");
+                String asignaturas = jsonArray.getJSONObject(0).getString("asignaturas");
+                String cursos = jsonArray.getJSONObject(0).getString("cursos");
+                Profesor.profesor.setIdProfe(idProfe);
+                Profesor.profesor.setVal(Float.parseFloat(punt));
+                Profesor.profesor.setExperiencia(experiencia);
+                Profesor.profesor.setPrecio(precio);
+                Profesor.profesor.setIdiomas(idiomas);
+                Profesor.profesor.setAsig(asignaturas);
+                Profesor.profesor.setCursos(cursos);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void lisContactos(String idUser) {
+        String url = URL_BASE + "lisContactos.php?idUser="+idUser;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+                nombres="";
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    String idUser1 = jsonArray.getJSONObject(i).getString("idUser1");
+                    String idUser2 = jsonArray.getJSONObject(i).getString("idUser2");
+                    if (idUser1.equals(idUser)){
+                        nombres=nombres+idUser2+",";
+                    }else{
+                        nombres=nombres+idUser1+",";
+                    }
+                }
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private void updateValoracion(String profeVal, float val) {
+        String url = URL_BASE + "update_valoracion.php?idProfe="+profeVal+"&val="+val;
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
 
             int statusCode = urlConnection.getResponseCode();
             if (statusCode == 200) {
@@ -568,25 +822,14 @@ public class conexionBDWebService extends Worker {
 
                 JSONArray jsonArray = new JSONArray(result);
                 img = jsonArray.getJSONObject(0).getString("imagen");
-                Usuario.usuariosLis.get(0).setImagen(img);
-                // Set a name to the photo and save it to internal storage
-                /*String imageFileName =
-                        "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss")
-                                .format(new Date());
-                File directory =
-                        getApplicationContext().getFilesDir();
-                File imageFile = new File(directory, imageFileName);
-                // Guardar el bitmap en el archivo temporal
-                try {
-                    FileOutputStream fos = new FileOutputStream(imageFile);
-                    //image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                    fos.write(img.getBytes());
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                FileUtils fileUtils= new FileUtils();
+                String user= fileUtils.readFile(getApplicationContext(), "config.txt");
+                if (!usu.equals(user)) {
+                    Imagenes imagenes = new Imagenes(usu, img);
+                    Imagenes.lisContactos.add(imagenes);
+                }else {
+                    Usuario.usuariosLis.get(0).setImagen(img);
                 }
-                // Obtener la ruta del archivo temporal
-                filePath = imageFile.getAbsolutePath();*/
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -598,7 +841,7 @@ public class conexionBDWebService extends Worker {
     }
 
     private void addContacto(String usu1, String usu2) {
-        String url = URL_BASE + "login_usuarios.php?iduser1="+usu1+"&iduser2="+usu2;
+        String url = URL_BASE + "addContacto.php?iduser1="+usu1+"&iduser2="+usu2;
         System.out.println("url: "+url);
         HttpURLConnection urlConnection = null;
         try {
@@ -625,37 +868,6 @@ public class conexionBDWebService extends Worker {
                 urlConnection.disconnect();
             }
         }
-    }
-
-    private void cargarContactos(String usu) {
-        String url = URL_BASE + "login_usuarios.php?iduser="+usu;
-        System.out.println("url: "+url);
-        HttpURLConnection urlConnection = null;
-        try {
-            URL requestUrl = new URL(url);
-            urlConnection = (HttpURLConnection) requestUrl.openConnection();
-            urlConnection.setRequestMethod("GET");
-
-            int statusCode = urlConnection.getResponseCode();
-            if (statusCode == 200) {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                String line, result = "";
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    result += line;
-                }
-                bufferedReader.close();
-
-                JSONArray jsonArray = new JSONArray(result);
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
-
     }
 
     private void addEvento(String usu, String fechaEvento, String descrEvento) {

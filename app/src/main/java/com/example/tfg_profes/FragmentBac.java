@@ -102,7 +102,7 @@ public class FragmentBac extends Fragment {
         String asig="";
 
         if(mx){
-            asig="Matemáticas";
+            asig=asig+"Matemáticas,";
         }
         if(lx){
             asig=asig+"Lengua,";
@@ -111,7 +111,7 @@ public class FragmentBac extends Fragment {
             asig=asig+"Euskera,";
         }
         if(ix){
-            asig="Inglés,";
+            asig=asig+"Inglés,";
         }
         if(qx){
             asig=asig+"Física y Química,";
@@ -120,13 +120,13 @@ public class FragmentBac extends Fragment {
             asig=asig+"Ciencias de la naturaleza,";
         }
         if(sx){
-            asig="Ciencias sociales,";
+            asig=asig+"Ciencias sociales,";
         }
         if(tx){
             asig=asig+"Tics,";
         }
         if(ax){
-            asig=asig+"Apoyo escolar";
+            asig=asig+"Apoyo escolar,";
         }
         return asig;
     }
@@ -143,8 +143,25 @@ public class FragmentBac extends Fragment {
         prim = view.findViewById(R.id.checkbox_prim);
         eso = view.findViewById(R.id.checkbox_eso);
         bac = view.findViewById(R.id.checkbox_bac);
+        String cursos=Profesor.profesor.getCursos();
+        if (!cursos.equals("")){
+            String[] curso=cursos.split(",");
+            for (int j = 0; j < curso.length; j++) {
+                if (curso[j].equals("Primaria")){
+                    prim.setChecked(true);
+                } else if (curso[j].equals("ESO")) {
+                    eso.setChecked(true);
+                } else if (curso[j].equals("Bachiller")) {
+                    bac.setChecked(true);
+                }
+            }
+        }
 
         prec = view.findViewById(R.id.precioreg);
+        String precio=Profesor.profesor.getPrecio();
+        if (!precio.equals("")){
+            prec.setText(precio);
+        }
 
         m = view.findViewById(R.id.mate);
         l = view.findViewById(R.id.lengua);
@@ -155,6 +172,41 @@ public class FragmentBac extends Fragment {
         s = view.findViewById(R.id.gizar);
         t = view.findViewById(R.id.tic);
         a = view.findViewById(R.id.apoyo);
+        String asignaturas=Profesor.profesor.getAsig();
+        if (!asignaturas.equals("")){
+            String[] asig=asignaturas.split(",");
+            for (int j = 0; j < asig.length; j++) {
+                if (asig[j].equals("Matemáticas")){
+                    m.setImageResource(R.drawable.btn_asig_pulsada);
+                    mx=true;
+                } else if (asig[j].equals("Lengua")) {
+                    l.setImageResource(R.drawable.btn_asig_pulsada);
+                    lx=true;
+                } else if (asig[j].equals("Euskera")) {
+                    e.setImageResource(R.drawable.btn_asig_pulsada);
+                    ex=true;
+                }else if (asig[j].equals("Inglés")) {
+                    i.setImageResource(R.drawable.btn_asig_pulsada);
+                    ix=true;
+                } else if (asig[j].equals("Física y Química")) {
+                    q.setImageResource(R.drawable.btn_asig_pulsada);
+                    qx=true;
+                }else if (asig[j].equals("Ciencias de la naturaleza")) {
+                    n.setImageResource(R.drawable.btn_asig_pulsada);
+                    nx=true;
+                }else if (asig[j].equals("Ciencias sociales")) {
+                    s.setImageResource(R.drawable.btn_asig_pulsada);
+                    sx=true;
+                } else if (asig[j].equals("Tics")) {
+                    t.setImageResource(R.drawable.btn_asig_pulsada);
+                    tx=true;
+                }else if (asig[j].equals("Apoyo escolar")) {
+                    a.setImageResource(R.drawable.btn_asig_pulsada);
+                    ax=true;
+                }
+
+            }
+        }
 
         m.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,8 +320,25 @@ public class FragmentBac extends Fragment {
         cas = view.findViewById(R.id.checkbox_cas);
         eus = view.findViewById(R.id.checkbox_eusk);
         ing = view.findViewById(R.id.checkbox_ing);
+        String idiomas=Profesor.profesor.getIdiomas();
+        if (!idiomas.equals("")){
+            String[] idiom=idiomas.split(",");
+            for (int j = 0; j < idiom.length; j++) {
+                if (idiom[j].equals("Castellano")||idiom[j].equals("castellano")){
+                    cas.setChecked(true);
+                } else if (idiom[j].equals("Euskera")||idiom[j].equals("euskera")) {
+                    eus.setChecked(true);
+                } else if (idiom[j].equals("Inglés")||idiom[j].equals("inglés")) {
+                    ing.setChecked(true);
+                }
+            }
+        }
 
         exp=view.findViewById(R.id.expNum);
+        String experiencia=Profesor.profesor.getExperiencia();
+        if (!experiencia.equals("")){
+            exp.setText(experiencia);
+        }
     }
 
 }

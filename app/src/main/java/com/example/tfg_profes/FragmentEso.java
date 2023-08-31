@@ -81,6 +81,67 @@ public class FragmentEso extends Fragment {
         Spinner numHijos= (Spinner) view.findViewById(R.id.hijos);
         ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(getContext(),R.array.hijos, android.R.layout.simple_spinner_item);
         numHijos.setAdapter(adapter);
+        if (!Alumno.alumno.getIdCliente().equals("")){
+            numHijos.setSelection(Alumno.alumno.getNumHijos()-1);
+            int num=Alumno.alumno.getNumHijos();
+            String[] nombres=Alumno.alumno.getNombres().split(",");
+            h1.setVisibility(View.GONE);
+            h2.setVisibility(View.GONE);
+            h3.setVisibility(View.GONE);
+            h4.setVisibility(View.GONE);
+            h5.setVisibility(View.GONE);
+            h6.setVisibility(View.GONE);
+            if (num==1) {
+                h1.setVisibility(View.VISIBLE);
+                h1.setText(nombres[0]);
+            } else if (num==2) {
+                h1.setVisibility(View.VISIBLE);
+                h2.setVisibility(View.VISIBLE);
+                h1.setText(nombres[0]);
+                h2.setText(nombres[1]);
+            } else if (num==3) {
+                h1.setVisibility(View.VISIBLE);
+                h2.setVisibility(View.VISIBLE);
+                h3.setVisibility(View.VISIBLE);
+                h1.setText(nombres[0]);
+                h2.setText(nombres[1]);
+                h3.setText(nombres[2]);
+            } else if (num==4) {
+                h1.setVisibility(View.VISIBLE);
+                h2.setVisibility(View.VISIBLE);
+                h3.setVisibility(View.VISIBLE);
+                h4.setVisibility(View.VISIBLE);
+                h1.setText(nombres[0]);
+                h2.setText(nombres[1]);
+                h3.setText(nombres[2]);
+                h4.setText(nombres[3]);
+            } else if (num==5) {
+                h1.setVisibility(View.VISIBLE);
+                h2.setVisibility(View.VISIBLE);
+                h3.setVisibility(View.VISIBLE);
+                h4.setVisibility(View.VISIBLE);
+                h5.setVisibility(View.VISIBLE);
+                h1.setText(nombres[0]);
+                h2.setText(nombres[1]);
+                h3.setText(nombres[2]);
+                h4.setText(nombres[3]);
+                h5.setText(nombres[4]);
+            } else if (num==6) {
+                h1.setVisibility(View.VISIBLE);
+                h2.setVisibility(View.VISIBLE);
+                h3.setVisibility(View.VISIBLE);
+                h4.setVisibility(View.VISIBLE);
+                h5.setVisibility(View.VISIBLE);
+                h6.setVisibility(View.VISIBLE);
+                h1.setText(nombres[0]);
+                h2.setText(nombres[1]);
+                h3.setText(nombres[2]);
+                h4.setText(nombres[3]);
+                h5.setText(nombres[4]);
+                h6.setText(nombres[5]);
+            }
+        }
+
         numHijos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -120,13 +181,10 @@ public class FragmentEso extends Fragment {
                     h6.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
-
     }
     public String[] getHijos(){
         String[] hijos = new String[6];
