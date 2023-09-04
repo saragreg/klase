@@ -48,6 +48,7 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
     private static final String DEFAULT_LANGUAGE = "default";
     private String idioma;
+    private String perfil;
     private int indiceSeleccionado = 0;
     private SharedPreferences sharedPreferences;
     private static final String DEFAULT_PERFIL = "nada";
@@ -55,6 +56,7 @@ public class SettingsFragment extends Fragment {
     Double latProfe,lngProfe;
     private ArrayList<LatLng> locationsAccepted = new ArrayList<LatLng>();
     private ArrayList<LatLng> locationsPend = new ArrayList<LatLng>();
+    private int[] mate=new int[4],lengua=new int[4],euskera=new int[4],ingles=new int[4],fiki=new int[4],natura=new int[4],sociales=new int[4],tics=new int[4],apoyo=new int[4];
     String[] arrayusuAcept,arrayusuPend;
 
     public SettingsFragment() {
@@ -101,7 +103,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
+        perfil = sharedPreferences.getString("perfil", DEFAULT_PERFIL);
         Button idiomas=view.findViewById(R.id.cambiarIdioma);
         Button cerrarSes=view.findViewById(R.id.cerrarsesion);
         Button datosPer=view.findViewById(R.id.cambiarDatosPer);
@@ -211,8 +213,7 @@ public class SettingsFragment extends Fragment {
         graficas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Graph_demanda_asig_annos.class);
-                startActivity(intent);
+                obtenerDatosGrafica("Matematicas");
             }
         });
         mapa.setOnClickListener(new View.OnClickListener() {
@@ -245,19 +246,66 @@ public class SettingsFragment extends Fragment {
                                 }
                             });
                     WorkManager.getInstance(getContext()).enqueue(otwr);
-                }else{
-                    Intent intent = new Intent(getActivity(), Mapa.class);
-                    intent.putParcelableArrayListExtra("pend", locationsPend);
-                    intent.putParcelableArrayListExtra("acept", locationsAccepted);
-                    intent.putExtra("nomAcept",arrayusuAcept);
-                    intent.putExtra("nomPend",arrayusuPend);
-                    intent.putExtra("latProfe",latProfe);
-                    intent.putExtra("lngProfe",lngProfe);
-                    startActivity(intent);
                 }
             }
         });
     }
+
+    private void obtenerDatosGrafica(String asig) {
+        Data inputData = new Data.Builder()
+                .putString("tipo", "grafica")
+                .putString("asignatura",asig)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(inputData).build();
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            if (asig.equals("Matematicas")){
+                                mate=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Lengua");
+                            } else if (asig.equals("Lengua")) {
+                                lengua=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Euskera");
+                            }else if (asig.equals("Euskera")) {
+                                euskera=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Inglés");
+                            }else if (asig.equals("Inglés")) {
+                                ingles=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Física y Química");
+                            }else if (asig.equals("Física y Química")) {
+                                fiki=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Ciencias de la naturaleza");
+                            }else if (asig.equals("Ciencias de la naturaleza")) {
+                                natura=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Ciencias sociales");
+                            }else if (asig.equals("Ciencias sociales")) {
+                                sociales=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Tics");
+                            }else if (asig.equals("Tics")) {
+                                tics=workInfo.getOutputData().getIntArray("resGraf");
+                                obtenerDatosGrafica("Apoyo escolar");
+                            }else if (asig.equals("Apoyo escolar")) {
+                                apoyo=workInfo.getOutputData().getIntArray("resGraf");
+                                Intent intent = new Intent(getActivity(), Graph_demanda_asig_annos.class);
+                                intent.putExtra("mate",mate);
+                                intent.putExtra("lengua",lengua);
+                                intent.putExtra("euskera",euskera);
+                                intent.putExtra("ingles",ingles);
+                                intent.putExtra("fiki",fiki);
+                                intent.putExtra("natura",natura);
+                                intent.putExtra("sociales",sociales);
+                                intent.putExtra("tics",tics);
+                                intent.putExtra("apoyo",apoyo);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
+        WorkManager.getInstance(getContext()).enqueue(otwr);
+    }
+
     public void setIdioma(String idiomCod){
 
         Locale locale = new Locale(idiomCod);
@@ -331,7 +379,7 @@ public class SettingsFragment extends Fragment {
                             }else{
                                 locationsAccepted.add(loc);
                             }
-                            if (last) {
+                            if (last|| perfil.equals("a")) {
                                 Intent intent = new Intent(getActivity(), Mapa.class);
                                 intent.putParcelableArrayListExtra("pend", locationsPend);
                                 intent.putParcelableArrayListExtra("acept", locationsAccepted);
@@ -341,7 +389,8 @@ public class SettingsFragment extends Fragment {
                                 intent.putExtra("lngProfe",lngProfe);
                                 startActivity(intent);
                             }
-                            }
+
+                        }
                         }
                     });
         WorkManager.getInstance(getContext()).enqueue(otwr);

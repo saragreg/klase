@@ -1,14 +1,15 @@
 package com.example.tfg_profes;
 
+import android.graphics.Color;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-
-import android.graphics.Color;
-import android.os.Bundle;
 
 import java.util.ArrayList;
 
@@ -19,22 +20,27 @@ public class Graph_demanda_asig_annos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_demanda_asig_annos);
+
         //obtener los datos de las clases
         //peti=getIntent().getParcelableArrayListExtra("peticiones_anno");
-        Integer[] petiM= new Integer[4];
-        Integer[] petiL= new Integer[4];
-        Integer[] petiE= new Integer[4];
-        Integer[] petiI= new Integer[4];
-        Integer[] petiF= new Integer[4];
-        Integer[] petiN= new Integer[4];
-        Integer[] petiS= new Integer[4];
-        Integer[] petiT= new Integer[4];
-        Integer[] petiA= new Integer[4];
-
-        petiM[0]=1;petiL[0]=2;petiE[0]=5;petiI[0]=1;petiF[0]=6;petiN[0]=0;petiS[0]=1;petiT[0]=3;petiA[0]=10;
-        petiM[1]=12;petiL[1]=5;petiE[1]=5;petiI[1]=2;petiF[1]=2;petiN[1]=3;petiS[1]=4;petiT[1]=3;petiA[1]=12;
-        petiM[2]=10;petiL[2]=7;petiE[2]=15;petiI[2]=9;petiF[2]=6;petiN[2]=5;petiS[2]=4;petiT[2]=3;petiA[2]=13;
-        petiM[3]=15;petiL[3]=7;petiE[3]=10;petiI[3]=14;petiF[3]=8;petiN[3]=2;petiS[3]=6;petiT[3]=13;petiA[3]=12;
+        int[] petiM= new int[4];
+        int[] petiL= new int[4];
+        int[] petiE= new int[4];
+        int[] petiI= new int[4];
+        int[] petiF= new int[4];
+        int[] petiN= new int[4];
+        int[] petiS= new int[4];
+        int[] petiT= new int[4];
+        int[] petiA= new int[4];
+        petiM=getIntent().getExtras().getIntArray("mate");
+        petiL=getIntent().getExtras().getIntArray("lengua");
+        petiI=getIntent().getExtras().getIntArray("ingles");
+        petiE=getIntent().getExtras().getIntArray("euskera");
+        petiF=getIntent().getExtras().getIntArray("fiki");
+        petiN=getIntent().getExtras().getIntArray("natura");
+        petiS=getIntent().getExtras().getIntArray("sociales");
+        petiT=getIntent().getExtras().getIntArray("tics");
+        petiA=getIntent().getExtras().getIntArray("apoyo");
 
 
         LineChart lineChart = findViewById(R.id.lineChart);
@@ -61,38 +67,7 @@ public class Graph_demanda_asig_annos extends AppCompatActivity {
             anno++;
             i++;
         }
-        /*entriesMate.add(new Entry(2020, 3));
-        entriesMate.add(new Entry(2021, 5));
-        entriesMate.add(new Entry(2022, 12));
-        entriesMate.add(new Entry(2023, 10));
-        entriesLengua.add(new Entry(2020,2));
-        entriesLengua.add(new Entry(2021, 3));
-        entriesLengua.add(new Entry(2022, 4));
-        entriesLengua.add(new Entry(2023, 2));
-        entriesEuskera.add(new Entry(2020,1));
-        entriesEuskera.add(new Entry(2021, 8));
-        entriesEuskera.add(new Entry(2022, 10));
-        entriesEuskera.add(new Entry(2023, 8));
-        entriesIngles.add(new Entry(2020,1));
-        entriesIngles.add(new Entry(2021, 3));
-        entriesIngles.add(new Entry(2022, 4));
-        entriesIngles.add(new Entry(2023, 1));
-        entriesFiki.add(new Entry(2020,1));
-        entriesFiki.add(new Entry(2021, 3));
-        entriesFiki.add(new Entry(2022, 10));
-        entriesFiki.add(new Entry(2023, 11));
-        entriesNatur.add(new Entry(2020,2));
-        entriesNatur.add(new Entry(2021, 3));
-        entriesNatur.add(new Entry(2022, 0));
-        entriesNatur.add(new Entry(2023, 1));
-        entriesSoc.add(new Entry(2020,2));
-        entriesSoc.add(new Entry(2021, 3));
-        entriesSoc.add(new Entry(2022, 0));
-        entriesSoc.add(new Entry(2023, 1));
-        entriesApoyo.add(new Entry(2020,12));
-        entriesApoyo.add(new Entry(2021, 13));
-        entriesApoyo.add(new Entry(2022, 10));
-        entriesApoyo.add(new Entry(2023, 11));*/
+
 
 
 // Configurar las líneas de datos

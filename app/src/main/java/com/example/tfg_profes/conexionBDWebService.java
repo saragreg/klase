@@ -35,6 +35,7 @@ public class conexionBDWebService extends Worker {
     private String usuario;
     private String latObt,lngObt;
     private String idCli="",val="",comentario="",fecha="";
+    private int[] resGraf=new int[4];
     private String usupend="",usuacept="";
     private String nombres="",imgs="",img="",filePath="";
     private String asigPet="",nombrePet="",fotoperPet="",duracionPet="",fechahoraPet="",intensivoPet="",diasPet="",idProfe="",idUsu="",feccrea="";
@@ -120,6 +121,12 @@ public class conexionBDWebService extends Worker {
                         .putString("lng",lngObt)
                         .build();
                 return Result.success(loca);
+            case "grafica":
+                String asiggraf = getInputData().getString("asignatura");
+                grafica(asiggraf);
+                Data graficares = new Data.Builder()
+                        .putIntArray("resGraf",resGraf).build();
+                return Result.success(graficares);
             case "pendientes":
                 String profe = getInputData().getString("profe");
                 pendientes(profe);
@@ -258,6 +265,41 @@ public class conexionBDWebService extends Worker {
                 return Result.failure();
         }
 
+    }
+
+    private void grafica(String asiggraf) {
+        String url = URL_BASE + "estadistica.php?asig="+asiggraf;
+        System.out.println("url: "+url);
+        HttpURLConnection urlConnection = null;
+        try {
+            URL requestUrl = new URL(url);
+            urlConnection = (HttpURLConnection) requestUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            int statusCode = urlConnection.getResponseCode();
+            if (statusCode == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String line, result = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+
+                JSONArray jsonArray = new JSONArray(result);
+                resGraf[0]=Integer.parseInt(jsonArray.getJSONObject(0).getString("2020"));
+                resGraf[1]=Integer.parseInt(jsonArray.getJSONObject(1).getString("2021"));
+                resGraf[2]=Integer.parseInt(jsonArray.getJSONObject(2).getString("2022"));
+                resGraf[3]=Integer.parseInt(jsonArray.getJSONObject(3).getString("2023"));
+
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
     }
 
     private void registrarHorario(String profeH, String l, String m, String x, String j, String vie, String s, String d, String desc) {
@@ -829,6 +871,7 @@ public class conexionBDWebService extends Worker {
                     Imagenes.lisContactos.add(imagenes);
                 }else {
                     Usuario.usuariosLis.get(0).setImagen(img);
+                    Imagenes.perfilusuario=new Imagenes(user,img);
                 }
             }
         } catch (IOException | JSONException e) {

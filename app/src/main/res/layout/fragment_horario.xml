@@ -11,8 +11,8 @@
        android:id="@+id/linearLayout14"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:layout_marginStart="40dp"
-       android:layout_marginEnd="40dp"
+       android:layout_marginStart="32dp"
+       android:layout_marginEnd="32dp"
        android:orientation="vertical"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintStart_toStartOf="parent"
@@ -94,9 +94,9 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:text="13:00"
              android:ems="10"
-             android:inputType="time" />
+             android:inputType="time"
+             android:text="13:00" />
 
          <TextView
              android:id="@+id/aa2"
@@ -111,9 +111,9 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:text="19:00"
              android:ems="10"
-             android:inputType="time" />
+             android:inputType="time"
+             android:text="19:00" />
 
       </LinearLayout>
 
@@ -129,7 +129,6 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:paddingRight="15dp"
              android:text="@string/miercoles" />
 
          <TextView
@@ -193,9 +192,9 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:text="13:00"
              android:ems="10"
-             android:inputType="time" />
+             android:inputType="time"
+             android:text="13:00" />
 
          <TextView
              android:id="@+id/a4"
@@ -210,9 +209,9 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:text="19:00"
              android:ems="10"
-             android:inputType="time" />
+             android:inputType="time"
+             android:text="19:00" />
 
       </LinearLayout>
 
@@ -243,9 +242,9 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:text="16:00"
              android:ems="10"
-             android:inputType="time" />
+             android:inputType="time"
+             android:text="16:00" />
 
          <TextView
              android:id="@+id/aa5"
@@ -260,9 +259,9 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:text="17:30"
              android:ems="10"
-             android:inputType="time" />
+             android:inputType="time"
+             android:text="17:30" />
 
       </LinearLayout>
 

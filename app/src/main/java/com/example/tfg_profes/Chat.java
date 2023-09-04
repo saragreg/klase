@@ -241,10 +241,9 @@ public class Chat extends AppCompatActivity {
 
         return Bitmap.createBitmap(bitmap, 0, 0, width, length, matrix, true);
     }
-    private void enviarnotificacion(String usuIntro) {
-        usuIntro="monica";
+    private void enviarnotificacion(String usuNoti) {
         Data inputData = new Data.Builder()
-                .putString("usuario",usuIntro)
+                .putString("usuario",usuNoti)
                 .putString("descr",usermail+" te ha enviado un mensaje")
                 .build();
 
